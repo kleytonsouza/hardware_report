@@ -1,0 +1,20 @@
+equip_user_id;patrimony;brand;model;registry;general_description;type
+1;12;Dell;Inspiron 24 500;16/11/2021;computador desktop meio sujo meio quebrado que bla bla bla;computers
+1;23;Dell;Vostro Small Desktop v3681;12/11/2021;desktop usado na edição de vidos com ios rodando;computers
+1;32;hp;HP 400 G5 mini;02/12/2021;desktop da hp;computers
+2;24;hp;HP 280 G5 SFF;20/12/2021;desktop da hp;computers
+2;56;lenovo;thinkCentre M920q;14/12/2021;desktop lenovo;computers
+2;234;logitech;C920;12/12/2021;webcam logitech;webcams
+3;56;toshiba;HDTB410XK3AA;10/12/2021;hd externo preto e branco edição especial;equipments
+45;78;LG;IPS234V;21/12/2021;monitor ultrawide com som;monitors
+51;98;Samsung;t4300;21/12/2021;samsung notebook;computers
+34;90;Sony;Alpha 6400;20/12/2021;camera profissional manual;equipments
+32;3;Dell;Inspiron 24 500;23/11/2021;notebook Dell;computers
+5;4;Microsoft;keyboard 600;21/11/2021;teclado padrão abnt 102 teclas;equipments
+6;5;Microsoft;keyboard 600;29/11/2021;teclado padrão abnt 102 teclas;equipments
+9;77;Sony;Alpha 6400;22/11/2021;camera profissional manual;equipments
+10;88;Samsung;t4300;25/11/2021;samsung notebook;computers
+10;99;Dell;Vostro Small Desktop v3681;20/01/2021;desktop Dell;computers
+10;145;Compaq;Presario 420;02/11/2021;Notebook Compaq;computers
+10;345;IBM;IBM X3100;20/11/2021;Servidos IBM com licença de windows server 2008;computers
+2;34565;Canon;imageFORMULA DR-G2090;22/11/2021;Scanner profissional;equipments

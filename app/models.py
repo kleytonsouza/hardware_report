@@ -1,4 +1,5 @@
-from . import db
+from . import db, login_manager
+from flask_login import UserMixin
 from sqlalchemy import DDL, event
 
 
@@ -9,7 +10,7 @@ class Equipment(db.Model):
     patrimony = db.Column(db.Integer, nullable=True)
     brand = db.Column(db.String(64))
     model = db.Column(db.String(64))
-    registry = db.Column(db.String(64))
+    equip_registry = db.Column(db.String(64))#data que o resgitro foi criado
     general_description = db.Column(db.String(64))
     type = db.Column(db.String(64))
     all_calls = db.relationship("Call", backref="equipments")
@@ -55,10 +56,10 @@ class Fone(Equipment):
     __tablename__ = "fones"
     __mapper_args__ = {'polymorphic_identity': 'fones'}
     fone_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), primary_key=True)
-    fone_frequency = db.Column(db.String(64))
-    fone_impedance = db.Column(db.String(64))
-    fone_driver = db.Column(db.String(64))
-    fone_noise_cancellation = db.Column(db.String(64))
+    fone_frequency = db.Column(db.String(64), nullable=True)
+    fone_impedance = db.Column(db.String(64), nullable=True)
+    fone_driver = db.Column(db.String(64), nullable=True)
+    fone_noise_cancellation = db.Column(db.String(64), nullable=True)
     fone_mic = db.Column(db.Integer, db.ForeignKey('mics.mic_id'), nullable=True)
 
 
@@ -103,7 +104,7 @@ class SubTeam(db.Model):
     __tablename__ = "subteams"
     subteam_team_id = db.Column(db.ForeignKey("teams.team_id"))
     subteam_id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    subtime_name = db.Column(db.String(64), nullable=False)
+    subteam_name = db.Column(db.String(64), nullable=False)
 
 
 class User(db.Model):
@@ -119,16 +120,35 @@ class User(db.Model):
             user_register, user_name),
     )
 
+    def __repr__(self):
+        return '<Usuário %r>' % self.user_name
 
-class Admin(db.Model):
+
+class Admin(UserMixin, User):
     __tablename__ = 'admins'
-    admin_id = db.Column(db.Integer, primary_key=True)
+    admin_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), primary_key=True)
     admin_name = db.Column(db.String(64), unique=True, index=True)
-    admin_pass_wd = db.Column(db.String(64))
+    admin_pass_wd = db.Column(db.String(64), nullable=False)
+
+    @property
+    def password(self):
+        raise AttributeError('não é permitido ler a senha')
+
+    def verify_password(self, password):
+        if self.admin_pass_wd == password and self.admin_pass_wd is not None:
+            return True
+        return False
+
+    def get_id(self):
+        return self.admin_id
 
     def __repr__(self):
         return '<Admin %r>' % self.admin_name
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Admin.query.filter_by(admin_id=user_id).first()
 
 #
 # @event.listens_for(Team.__table__, 'after_create')

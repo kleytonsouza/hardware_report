@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .btn-right {
+            float: right;
+        }
+    </style>
+{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-md-offset-2 col-md-8">
+        <div class="panel panel-primary">
+              <div class="panel-heading text-center">
+                  Bem vindo(a) ao Sistema de Controle de Equipamentos da PROGRAD
+              </div>
+              <div class="panel-body">
+                  Para ter acesso as informações dos Usuários, Chamados e composição dos esquipametos,
+                  por favor realize o login no sistema.
+              </div>
+        </div>
+    </div>
+</div>
+    <div class="row">
+        <div class="col-md-4">
+             {{
+                 wtf.quick_form(
+                    form, action="/auth/login", method="post",
+                    button_map={'submit': 'success btn-lg btn-right '}
+                 )
+             }}
+        </div>
+    </div>
+{% endblock %}

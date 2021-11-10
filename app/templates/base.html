@@ -1,10 +1,11 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}Hardware_Report{% endblock %}
 
 {% block head %}
 {{ super() }}
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='ufpr_ico.gif') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='ufpr_ico.gif') }}" type="image/x-icon">
 
 {% endblock %}
 
@@ -20,10 +21,19 @@
             </button>
             <a class="navbar-brand" href="{{ url_for('main.index') }}">Hardware_Report</a>
         </div>
-{#        <div class="navbar-collapse collapse">#}
-{#            <ul class="nav navbar-nav">#}
-{#                <li><a href="{{ url_for('main.index') }}">Home</a></li>#}
-{#            </ul>#}
+        <div class="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="#"  data-toggle="dropdown"><h5>{{ current_user.user_name|truncate(20) }}<b class="caret"></b></h5></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="btn bg-danger" href="{{ url_for('auth.logout') }}">Sair</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                    <li><a class="btn btn-primary" style="color: white" href="{{ url_for('auth.login') }}">Entrar</a></li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 </div>
