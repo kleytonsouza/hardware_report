@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+
+{% block page_content %}
+    <div class="col-md-2">
+        <div class="panel panel-info ">
+            <a href="{{ url_for('auth.equips_list' ) }}">
+                <div class="panel-heading text-center">
+                          Equipamentos
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="panel panel-default ">
+            <a href="{{ url_for('auth.users_list') }}">
+                <div class="panel-heading text-center">
+                          Usuários
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="panel panel-success">
+            <a href="{{ url_for('auth.calls_list' ) }}">
+                <div class="panel-heading text-center">
+                          Chamados
+                </div>
+            </a>
+        </div>
+    </div>
+<table id="data" class="display">
+    <thead>
+        <tr>
+            <th>call_id</th>
+            <th>call_equipment_id</th>
+            <th>call_open</th>
+            <th>call_close</th>
+            <th>call_solution</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%  for call in calls %}
+        <tr>
+            <td>{{ call.call_id }}</td>
+            <td>{{ call.call_equipment_id }}</td>
+            <td>{{ call.call_open }}</td>
+            <td>{{ call.call_close }}</td>
+            <td>{{ call.call_solution }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        ajax: '/api/calls',
+        serverSide: true,
+        columns: [
+          {data: 'call_id'},
+          {data: 'call_equipment_id'},
+          {data: 'call_open'},
+          {data: 'call_close'},
+          {data: 'call_solution'}
+        ],
+      });
+    });
+  </script>
+{% endblock %}

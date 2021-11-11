@@ -10,6 +10,29 @@
 {% endblock %}
 
 {% block page_content %}
+    <div class="row panel">
+        <div class="col-md-2">
+            <a href="{{ url_for('auth.equips_list' ) }}">
+                <button class="btn btn-primary">
+                          Equipamentos
+                </button>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('auth.users_list' ) }}">
+                <button class="btn btn-info">
+                          Usuários
+                </button>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('auth.calls_list' ) }}">
+                <button class="btn btn-success">
+                          Chamados
+                </button>
+            </a>
+        </div>
+    </div>
 <table id="data" class="display">
     <thead>
         <tr>
@@ -40,7 +63,7 @@
   <script>
     $(document).ready(function () {
       $('#data').DataTable({
-        ajax: '/api/data',
+        ajax: '/api/equips',
         serverSide: true,
         columns: [
           {data: 'equip_name'},

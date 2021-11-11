@@ -94,6 +94,16 @@ class Call(db.Model):
     call_close = db.Column(db.String(64))
     call_solution = db.Column(db.String(700))
 
+    def to_dict(self):
+        return {
+            'call_id': self.call_id,
+            'call_equipment_id': self.call_equipment_id,
+            'call_open': self.call_open,
+            'call_close': self.call_close,
+            'call_solution': self.call_solution
+
+        }
+
 
 class Connection(db.Model):
     __tablename__ = "connections"
@@ -133,6 +143,16 @@ class User(db.Model):
         db.UniqueConstraint(
             user_register, user_name),
     )
+
+    def to_dict(self):
+        return {
+            'user_id': self.user_id,
+            'user_register': self.user_register,
+            'user_name': self.user_name,
+            'user_team_id': self.user_team_id,
+            'user_subteam_id': self.user_subteam_id
+
+        }
 
     def __repr__(self):
         return '<Usuário %r>' % self.user_name

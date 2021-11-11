@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+
+{% block page_content %}
+    <div class="col-md-2">
+        <div class="panel panel-info ">
+            <a href="{{ url_for('auth.equips_list' ) }}">
+                <div class="panel-heading text-center">
+                          Equipamentos
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="panel panel-default ">
+            <a href="{{ url_for('auth.users_list') }}">
+                <div class="panel-heading text-center">
+                          Usuários
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="panel panel-success">
+            <a href="{{ url_for('auth.calls_list' ) }}">
+                <div class="panel-heading text-center">
+                          Chamados
+                </div>
+            </a>
+        </div>
+    </div>
+<table id="data" class="display">
+    <thead>
+        <tr>
+            <th>user_id</th>
+            <th>user_register</th>
+            <th>user_name</th>
+            <th>user_team_id</th>
+            <th>user_subteam_id</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%  for user in users %}
+        <tr>
+            <td>{{ user.user_id }}</td>
+            <td>{{ user.user_register }}</td>
+            <td>{{ user.user_name }}</td>
+            <td>{{ user.user_team_id }}</td>
+            <td>{{ user.user_subteam_id }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        ajax: '/api/users',
+        serverSide: true,
+        columns: [
+          {data: 'user_id'},
+          {data: 'user_register'},
+          {data: 'user_name'},
+          {data: 'user_team_id'},
+          {data: 'user_subteam_id'}
+        ],
+      });
+    });
+  </script>
+{% endblock %}

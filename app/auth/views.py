@@ -23,7 +23,7 @@ def login():
             login_user(admin)
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
-                next = url_for('auth.equip_list')
+                next = url_for('auth.equips_list')
             flash('Login efetuado, bem vindo!!', 'login')
             return redirect(next)
         flash('Usuário ou senha errado(s).', "wrong")
@@ -33,52 +33,68 @@ def login():
 
 
 @login_required
-@auth.route('/equip_list', methods=['GET', 'POST'])
-def equip_list():
+@auth.route('/equips_list', methods=['GET', 'POST'])
+def equips_list():
     equipments = Equipment.query
-    return render_template('auth/equip_list.html', equipments=equipments)
+    return render_template('auth/equips_list.html', equipments=equipments)
 
 
-@auth.route('/api/data')
-def data():
-    query = Equipment.query
+@login_required
+@auth.route('/users_list', methods=['GET', 'POST'])
+def users_list():
+    users = User.query
+    return render_template('auth/users_list.html', users=users)
 
-    search = request.args.get('search[value]')
-    if search:
-        query = query.filter(db.or_(
-            Equipment.type.like(f'%{search}%'),
-            Equipment.equip_registry.like(f'%{search}%')
-        ))
 
-    total_filtered = query.count()
+@login_required
+@auth.route('/calls_list', methods=['GET', 'POST'])
+def calls_list():
+    calls = Call.query
+    return render_template('auth/calls_list.html', calls=calls)
 
-    order = []
-    i = 0
-    while True:
-        col_index = request.args.get(f'order[{i}][column]')
-        if col_index is None:
-            break
-        col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['name', 'age', 'email']:
-            col_name = 'name'
-        descending = request.args.get(f'order[{i}][dir]') == 'desc'
-        col = getattr(Equipment, col_name)
-        if descending:
-            col = col.desc()
-        order.append(col)
-        i += 1
-    if order:
-        query = query.order_by(*order)
 
-    # pagination
-    start = request.args.get('start', type=int)
-    length = request.args.get('length', type=int)
-    query = query.offset(start).limit(length)
+# @auth.route('/api/equips')
+# def data():
+#     query = Equipment.query
+#
+#     search = request.args.get('search[value]')
+#     if search:
+#         query = query.filter(db.or_(
+#             Equipment.type.like(f'%{search}%'),
+#             Equipment.equip_registry.like(f'%{search}%')
+#         ))
+#
+#     total_filtered = query.count()
+#
+#     order = []
+#     i = 0
+#     while True:
+#         col_index = request.args.get(f'order[{i}][column]')
+#         if col_index is None:
+#             break
+#         col_name = request.args.get(f'columns[{col_index}][data]')
+#         if col_name not in ['name', 'age', 'email']:
+#             col_name = 'name'
+#         descending = request.args.get(f'order[{i}][dir]') == 'desc'
+#         col = getattr(Equipment, col_name)
+#         if descending:
+#             col = col.desc()
+#         order.append(col)
+#         i += 1
+#     if order:
+#         query = query.order_by(*order)
+#
+#     # pagination
+#     start = request.args.get('start', type=int)
+#     length = request.args.get('length', type=int)
+#     query = query.offset(start).limit(length)
+#
+#     # response
+#     return {
+#         'data': [equip.to_dict() for equip in query],
+#         'recordsFiltered': total_filtered,
+#         'recordsTotal': Equipment.query.count(),
+#         'draw': request.args.get('draw', type=int),
+#     }
 
-    # response
-    return {
-        'data': [equip.to_dict() for equip in query],
-        'recordsFiltered': total_filtered,
-        'recordsTotal': Equipment.query.count(),
-        'draw': request.args.get('draw', type=int),
-    }
+
