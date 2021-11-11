@@ -16,6 +16,20 @@ class Equipment(db.Model):
     all_calls = db.relationship("Call", backref="equipments")
     all_connections = db.relationship("EquipmentConnection", backref="equipments")
 
+    def to_dict(self):
+        return {
+            'equip_id': self.equip_id,
+            'equip_user_id': self.equip_user_idm,
+            'patrimony': self.patrimony,
+            'brand': self.brand,
+            'model': self.model,
+            'equip_registry': self.equip_registry,
+            'general_description': self.general_description,
+            'type': self.type,
+            'all_calls': self.all_calls,
+            'all_connections': self.all_connections
+        }
+
     __mapper_args__ = {
         'polymorphic_identity': 'equipments',
         'polymorphic_on': type

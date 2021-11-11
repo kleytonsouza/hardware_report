@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+
+{% block page_content %}
+<table id="data" class="display">
+    <thead>
+        <tr>
+            <th>equip_id</th>
+            <th>patrimony</th>
+            <th>brand</th>
+            <th>model</th>
+            <th>equip_registry</th>
+            <th>type</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%  for equip in equipments %}
+        <tr>
+            <td>{{ equip.equip_id }}</td>
+            <td>{{ equip.patrimony }}</td>
+            <td>{{ equip.brand }}</td>
+            <td>{{ equip.model }}</td>
+            <td>{{ equip.equip_registry }}</td>
+            <td>{{ equip.type }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        ajax: '/api/data',
+        serverSide: true,
+        columns: [
+          {data: 'equip_name'},
+          {data: 'equip_user_id'},
+          {data: 'patrimony', orderable: false},
+          {data: 'model', orderable: false},
+          {data: 'equip_registry', orderable: false},
+          {data: 'type'}
+        ],
+      });
+    });
+  </script>
+{% endblock %}

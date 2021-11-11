@@ -19,20 +19,19 @@
                   Bem vindo(a) ao Sistema de Controle de Equipamentos da PROGRAD
               </div>
               <div class="panel-body">
-                  Para ter acesso as informações dos Usuários, Chamados e composição dos esquipametos,
-                  por favor realize o login no sistema.
+                  Para ter acesso as informações dos Usuários, Chamados e a Composição dos Equipametos,
+                  por favor realize o login.
               </div>
         </div>
     </div>
 </div>
-    <div class="row">
-        <div class="col-md-4">
-             {{
-                 wtf.quick_form(
-                    form, action="/auth/login", method="post",
-                    button_map={'submit': 'success btn-lg btn-right '}
-                 )
-             }}
-        </div>
+<div class="row">
+    <div class="col-md-4">
+         {{ wtf.quick_form(
+                form, action="/auth/login", method="post",
+                button_map={'submit': 'success btn-lg btn-right '}
+             )
+         }}
     </div>
+</div>
 {% endblock %}
