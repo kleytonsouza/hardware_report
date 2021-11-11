@@ -10,62 +10,53 @@
 {% endblock %}
 
 {% block page_content %}
-    <div class="col-md-2">
-        <div class="panel panel-info ">
+    <div class="row panel" >
+        <h3>Usuários</h3>
+    </div>
+    <div class="row panel">
+        <div class="col-md-2">
             <a href="{{ url_for('auth.equips_list' ) }}">
-                <div class="panel-heading text-center">
+                <button class="btn btn-primary">
                           Equipamentos
-                </div>
+                </button>
             </a>
         </div>
-    </div>
-    <div class="col-md-2">
-        <div class="panel panel-default ">
-            <a href="{{ url_for('auth.users_list') }}">
-                <div class="panel-heading text-center">
+        <div class="col-md-2">
+            <a href="{{ url_for('auth.users_list' ) }}">
+                <button class="btn btn-info">
                           Usuários
-                </div>
+                </button>
             </a>
         </div>
-    </div>
-    <div class="col-md-2">
-        <div class="panel panel-success">
+        <div class="col-md-2">
             <a href="{{ url_for('auth.calls_list' ) }}">
-                <div class="panel-heading text-center">
+                <button class="btn btn-success">
                           Chamados
-                </div>
+                </button>
             </a>
         </div>
     </div>
-<table id="data" class="display">
-    <thead>
-        <tr>
-            <th>user_id</th>
-            <th>user_register</th>
-            <th>user_name</th>
-            <th>user_team_id</th>
-            <th>user_subteam_id</th>
-        </tr>
-    </thead>
-    <tbody>
-        {%  for user in users %}
-        <tr>
-            <td>{{ user.user_id }}</td>
-            <td>{{ user.user_register }}</td>
-            <td>{{ user.user_name }}</td>
-            <td>{{ user.user_team_id }}</td>
-            <td>{{ user.user_subteam_id }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+    <table id="data" class="display">
+        <thead>
+            <tr>
+                <th>ID do Usuário</th>
+                <th>Registro Funcional</th>
+                <th>Nome</th>
+                <th>Coordenção</th>
+                <th>Sub Coordenação</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block scripts %}
   <script>
     $(document).ready(function () {
       $('#data').DataTable({
-        ajax: '/api/users',
+        ajax: '/auth/api/users',
         serverSide: true,
         columns: [
           {data: 'user_id'},

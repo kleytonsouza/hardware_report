@@ -7,9 +7,13 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block page_content %}
+    <div class="row panel" >
+        <h3>Equipamentos</h3>
+    </div>
     <div class="row panel">
         <div class="col-md-2">
             <a href="{{ url_for('auth.equips_list' ) }}">
@@ -33,47 +37,42 @@
             </a>
         </div>
     </div>
-<table id="data" class="display">
-    <thead>
-        <tr>
-            <th>equip_id</th>
-            <th>patrimony</th>
-            <th>brand</th>
-            <th>model</th>
-            <th>equip_registry</th>
-            <th>type</th>
-        </tr>
-    </thead>
-    <tbody>
-        {%  for equip in equipments %}
-        <tr>
-            <td>{{ equip.equip_id }}</td>
-            <td>{{ equip.patrimony }}</td>
-            <td>{{ equip.brand }}</td>
-            <td>{{ equip.model }}</td>
-            <td>{{ equip.equip_registry }}</td>
-            <td>{{ equip.type }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+    <table id="data" class="display">
+        <thead>
+            <tr>
+                <th>ID do Equipamento</th>
+                <th>Usuário</th>
+                <th>Patrimônio</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Data de Registro</th>
+                <th>Tipo</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
 {% endblock %}
 
 {% block scripts %}
-  <script>
-    $(document).ready(function () {
-      $('#data').DataTable({
-        ajax: '/api/equips',
-        serverSide: true,
-        columns: [
-          {data: 'equip_name'},
-          {data: 'equip_user_id'},
-          {data: 'patrimony', orderable: false},
-          {data: 'model', orderable: false},
-          {data: 'equip_registry', orderable: false},
-          {data: 'type'}
-        ],
-      });
-    });
-  </script>
+    <script>
+        $(document).ready(function () {
+          $('#data').DataTable({
+            ajax: '/auth/api/equips',
+            serverSide: true,
+            columns: [
+              {data: 'equip_id'},
+              {data: 'equip_user_id'},
+              {data: 'patrimony', orderable: false},
+              {data: 'brand'},
+              {data: 'model', orderable: false},
+              {data: 'equip_registry', orderable: false},
+              {data: 'type'}
+            ],
+          });
+        });
+    </script>
+
 {% endblock %}

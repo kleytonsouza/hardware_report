@@ -1,12 +1,19 @@
 {% extends "bootstrap/base.html" %}
 
+{% block html_attribs %}
+    lang="pt-br"
+{% endblock %}
+
+{% block metas %}
+    <meta charset="utf-8">
+{% endblock %}
+
 {% block title %}Hardware_Report{% endblock %}
 
 {% block head %}
-{{ super() }}
-<link rel="shortcut icon" href="{{ url_for('static', filename='ufpr_ico.gif') }}" type="image/x-icon">
-<link rel="icon" href="{{ url_for('static', filename='ufpr_ico.gif') }}" type="image/x-icon">
-
+    <link rel="shortcut icon" href="{{ url_for('static', filename='ufpr_ico.gif') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='ufpr_ico.gif') }}" type="image/x-icon">
+    {{ super() }}
 {% endblock %}
 
 {% block navbar %}

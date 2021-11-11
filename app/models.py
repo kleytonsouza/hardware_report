@@ -19,16 +19,20 @@ class Equipment(db.Model):
     def to_dict(self):
         return {
             'equip_id': self.equip_id,
-            'equip_user_id': self.equip_user_idm,
+            'equip_user_id': self.equip_user_id,
             'patrimony': self.patrimony,
             'brand': self.brand,
             'model': self.model,
             'equip_registry': self.equip_registry,
-            'general_description': self.general_description,
-            'type': self.type,
-            'all_calls': self.all_calls,
-            'all_connections': self.all_connections
+            #'general_description': self.general_description,
+            'type': self.type
+
         }
+
+    def edit_equip(self):
+        equip_new = Equipment.query.filter(Equipment.equip_id == self.equip_id).first()
+        db.session.add(equip_new)
+        db.session.commit()
 
     __mapper_args__ = {
         'polymorphic_identity': 'equipments',
