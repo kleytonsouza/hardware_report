@@ -14,7 +14,8 @@ def make_shell_context():
                 Computer=Computer, Monitor=Monitor,
                 Fone=Fone, Mic=Mic, Call=Call,
                 WebCam=WebCam, Connection=Connection,
-                User=User, Admin=Admin, EquipmentConnection=EquipmentConnection)
+                User=User, Admin=Admin, EquipmentConnection=EquipmentConnection,
+                Team=Team, SubTeam=SubTeam)
 
 
 @app.cli.command()

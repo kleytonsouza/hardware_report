@@ -10,7 +10,7 @@ class Equipment(db.Model):
     patrimony = db.Column(db.Integer, nullable=True)
     brand = db.Column(db.String(64))
     model = db.Column(db.String(64))
-    equip_registry = db.Column(db.String(64))#data que o resgitro foi criado
+    equip_registry = db.Column(db.String(64))  # data que o resgitro foi criado
     general_description = db.Column(db.String(64))
     type = db.Column(db.String(64))
     all_calls = db.relationship("Call", backref="equipments")
@@ -19,12 +19,12 @@ class Equipment(db.Model):
     def to_dict(self):
         return {
             'equip_id': self.equip_id,
-            'equip_user_id': self.equip_user_id,
+            'equip_user_id': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
             'patrimony': self.patrimony,
             'brand': self.brand,
             'model': self.model,
             'equip_registry': self.equip_registry,
-            #'general_description': self.general_description,
+            # 'general_description': self.general_description,
             'type': self.type
 
         }
@@ -127,12 +127,18 @@ class Team(db.Model):
     team_name = db.Column(db.String(64), nullable=False)
     team_leader = db.Column(db.String(64), nullable=False)
 
+    def __repr__(self):
+        return '<Nome %r>' % self.team_name
+
 
 class SubTeam(db.Model):
     __tablename__ = "subteams"
     subteam_team_id = db.Column(db.ForeignKey("teams.team_id"))
     subteam_id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     subteam_name = db.Column(db.String(64), nullable=False)
+
+    def __repr__(self):
+        return '<Nome %r>' % self.subteam_name
 
 
 class User(db.Model):
@@ -149,12 +155,18 @@ class User(db.Model):
     )
 
     def to_dict(self):
+
+        get_subteam_name = self.user_subteam_id
+
+        if get_subteam_name is not None:
+            get_subteam_name = SubTeam.query.filter(SubTeam.subteam_id == self.user_subteam_id).first().subteam_name
+
         return {
             'user_id': self.user_id,
             'user_register': self.user_register,
             'user_name': self.user_name,
-            'user_team_id': self.user_team_id,
-            'user_subteam_id': self.user_subteam_id
+            'user_team_id': Team.query.filter(Team.team_id == self.user_team_id).first().team_name,
+            'user_subteam_id': get_subteam_name
 
         }
 

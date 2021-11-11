@@ -62,6 +62,7 @@ def equips_data():
     if search:
         query = query.filter(db.or_(
             Equipment.type.like(f'%{search}%'),
+            Equipment.brand.like(f'%{search}%'),
 
         ))
 
@@ -105,10 +106,10 @@ def users_data():
     query = User.query
 
     search = request.args.get('search[value]')
+    print(search)
     if search:
         query = query.filter(db.or_(
             User.user_name.like(f'%{search}%'),
-
         ))
 
     total_filtered = query.count()
@@ -120,7 +121,8 @@ def users_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['user_id', 'user_name', 'user_team_id', 'user_subteam_id']:
+        print(col_name)
+        if col_name not in ['user_id', 'user_register', 'user_name', 'user_team_id', 'user_subteam_id']:
             col_name = 'user_name'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(User, col_name)
