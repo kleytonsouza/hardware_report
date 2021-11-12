@@ -94,6 +94,7 @@ class Call(db.Model):
     __tablename__ = "calls"
     call_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     call_equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), nullable=False)
+    call_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     call_open = db.Column(db.String(64))
     call_close = db.Column(db.String(64))
     call_solution = db.Column(db.String(700))
@@ -104,7 +105,8 @@ class Call(db.Model):
             'call_equipment_id': self.call_equipment_id,
             'call_open': self.call_open,
             'call_close': self.call_close,
-            'call_solution': self.call_solution
+            'call_solution': self.call_solution,
+            'call_user_id': User.query.filter(User.user_id == self.call_user_id).first().user_name,
 
         }
 

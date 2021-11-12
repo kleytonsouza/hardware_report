@@ -156,8 +156,9 @@ def calls_data():
 
     search = request.args.get('search[value]')
     if search:
-        query = query.filter(db.or_(
+        query = db.session.query(Call).join(User).filter(db.or_(
             Call.call_open.like(f'%{search}%'),
+            User.user_name.like(f'%{search}%'),
 
         ))
 
