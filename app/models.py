@@ -53,6 +53,7 @@ class Computer(Equipment):
     computer_memory = db.Column(db.String(64))
     computer_hd = db.Column(db.String(64))
     computer_vga = db.Column(db.String(64))
+    computer_ip = db.Column(db.String(64))
 
 
 class Monitor(Equipment):
