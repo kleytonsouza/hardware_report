@@ -40,6 +40,41 @@ def equips_list():
 
 
 @login_required
+@auth.route('/monitors_list', methods=['GET', 'POST'])
+def monitors_list():
+    monitors = Monitor.query
+    return render_template('auth/monitors_list.html', monitors=monitors)
+
+
+@login_required
+@auth.route('/fones_list', methods=['GET', 'POST'])
+def fones_list():
+    fones = Monitor.query
+    return render_template('auth/fones_list.html', fones=fones)
+
+
+@login_required
+@auth.route('/mics_list', methods=['GET', 'POST'])
+def mics_list():
+    mics = Mic.query
+    return render_template('auth/mics_list.html', mics=mics)
+
+
+@login_required
+@auth.route('/webcams_list', methods=['GET', 'POST'])
+def webcams_list():
+    webcams = WebCam.query
+    return render_template('auth/webcams_list.html', webcams=webcams)
+
+
+@login_required
+@auth.route('/computers_list', methods=['GET', 'POST'])
+def computers_list():
+    computers = Computer.query
+    return render_template('auth/computers_list.html', computers=computers)
+
+
+@login_required
 @auth.route('/users_list', methods=['GET', 'POST'])
 def users_list():
     users = User.query
@@ -191,5 +226,54 @@ def calls_data():
         'data': [call.to_dict() for call in query],
         'recordsFiltered': total_filtered,
         'recordsTotal': Call.query.count(),
+        'draw': request.args.get('draw', type=int),
+    }
+
+
+@auth.route('/api/monitors')
+def monitors_data():
+
+    query = Monitor.query
+
+    search = request.args.get('search[value]')
+    if search:
+        query = db.session.query(Monitor).join(User).filter(db.or_(
+            Monitor.patrimony.like(f'%{search}%'),
+            Monitor.monitor_size.like(f'%{search}%'),
+            Monitor.brand.like(f'%{search}%'),
+            User.user_name.like(f'%{search}%')
+        ))
+
+    total_filtered = query.count()
+
+    order = []
+    i = 0
+    while True:
+        col_index = request.args.get(f'order[{i}][column]')
+        if col_index is None:
+            break
+        col_name = request.args.get(f'columns[{col_index}][data]')
+        if col_name not in ['equip_id', 'equip_user_id', 'model', 'brand', 'monitor_size']:
+            col_name = 'equip_id'
+        descending = request.args.get(f'order[{i}][dir]') == 'desc'
+        col = getattr(Monitor, col_name)
+        if descending:
+            col = col.desc()
+        order.append(col)
+        i += 1
+    if order:
+        query = query.order_by(*order)
+
+    # pagination
+    start = request.args.get('start', type=int)
+    length = request.args.get('length', type=int)
+    query = query.offset(start).limit(length)
+
+    # response
+
+    return {
+        'data': [monitor.to_dict() for monitor in query],
+        'recordsFiltered': total_filtered,
+        'recordsTotal': Monitor.query.count(),
         'draw': request.args.get('draw', type=int),
     }

@@ -37,7 +37,7 @@
             </a>
         </div>
     </div>
-    <div class="row panel">
+     <div class="row panel">
         <div class="col-md-2">
             <a href="{{ url_for('auth.computers_list' ) }}">
                 <button class="btn btn-primary">
@@ -78,13 +78,14 @@
     <table id="data" class="display">
         <thead>
             <tr>
-                <th>ID do Equipamento</th>
+                <th>ID do Monitor</th>
                 <th>Usuário</th>
                 <th>Patrimônio</th>
                 <th>Marca</th>
                 <th>Modelo</th>
                 <th>Data de Registro</th>
-                <th>Tipo</th>
+                <th>Tamanho</th>
+                <th>Resolução</th>
             </tr>
         </thead>
         <tbody>
@@ -97,16 +98,17 @@
     <script>
         $(document).ready(function () {
           $('#data').DataTable({
-            ajax: '/auth/api/equips',
+            ajax: '/auth/api/monitors',
             serverSide: true,
             columns: [
               {data: 'equip_id'},
               {data: 'equip_user_id'},
               {data: 'patrimony', orderable: false},
               {data: 'brand'},
-              {data: 'model', orderable: false},
+              {data: 'model'},
               {data: 'equip_registry', orderable: false},
-              {data: 'type'}
+              {data: 'monitor_size'},
+              {data: 'monitor_resolution'}
             ],
           });
         });
