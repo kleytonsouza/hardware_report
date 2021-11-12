@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from ..models import *
 from . import auth
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, login_required
 from ..auth.forms import LoginForm
 
 
@@ -60,10 +60,11 @@ def equips_data():
 
     search = request.args.get('search[value]')
     if search:
-        query = query.filter(db.or_(
+        query = db.session.query(Equipment).join(User).filter(db.or_(
+            Equipment.patrimony.like(f'%{search}%'),
             Equipment.type.like(f'%{search}%'),
             Equipment.brand.like(f'%{search}%'),
-
+            User.user_name.like(f'%{search}%')
         ))
 
     total_filtered = query.count()
@@ -106,10 +107,11 @@ def users_data():
     query = User.query
 
     search = request.args.get('search[value]')
-    print(search)
     if search:
-        query = query.filter(db.or_(
+        query = db.session.query(User).join(Team).filter(db.or_(
             User.user_name.like(f'%{search}%'),
+            User.user_register.like(f'%{search}%'),
+            Team.team_name.like(f'%{search}%')
         ))
 
     total_filtered = query.count()
