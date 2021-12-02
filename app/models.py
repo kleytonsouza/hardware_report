@@ -30,10 +30,10 @@ class Equipment(db.Model):
 
         }
 
-    def edit_equip(self):
-        equip_new = Equipment.query.filter(Equipment.equip_id == self.equip_id).first()
-        db.session.add(equip_new)
-        db.session.commit()
+    # def edit_equip(self):
+    #     equip_new = Equipment.query.filter(Equipment.equip_id == self.equip_id).first()
+    #     db.session.add(equip_new)
+    #     db.session.commit()
 
     __mapper_args__ = {
         'polymorphic_identity': 'equipments',
@@ -57,6 +57,7 @@ class Computer(Equipment):
     computer_memory = db.Column(db.String(64))
     computer_hd = db.Column(db.String(64))
     computer_vga = db.Column(db.String(64))
+<<<<<<< HEAD
     computer_macaddress = db.Column(db.String(64))
     computer_capacity_memory = db.Column(db.String(64))
     computer_storages = db.relationship("Storage", backref="computers")
@@ -69,6 +70,9 @@ class Storage(db.Model):
     storage_size = db.Column(db.String(64), nullable=False)
     storage_type = db.Column(db.String(64))
     storage_computer = db.Column(db.Integer, db.ForeignKey('computers.computer_id'), nullable=True)
+=======
+    computer_ip = db.Column(db.String(64))
+>>>>>>> erros_ajax_equipments
 
 
 class Monitor(Equipment):
@@ -78,6 +82,17 @@ class Monitor(Equipment):
     monitor_size = db.Column(db.String(64))
     monitor_resolution = db.Column(db.String(64))
 
+    def to_dict(self):
+        return {
+            'equip_id': self.equip_id,
+            'equip_user_id': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
+            'patrimony': self.patrimony,
+            'brand': self.brand,
+            'model': self.model,
+            'equip_registry': self.equip_registry,
+            'monitor_size': self.monitor_size,
+            'monitor_resolution': self.monitor_resolution
+        }
 
 class WebCam(Equipment):
     __tablename__ = "webcams"
