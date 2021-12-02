@@ -8,11 +8,12 @@ class Equipment(db.Model):
     equip_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     equip_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     patrimony = db.Column(db.Integer, nullable=True)
-    brand = db.Column(db.String(64))
-    model = db.Column(db.String(64))
+    brand = db.Column(db.String(64), nullable=True)
+    model = db.Column(db.String(64), nullable=True)
+    position = db.Column(db.String(64), nullable=True)
     equip_registry = db.Column(db.String(64))  # data que o resgitro foi criado
-    general_description = db.Column(db.String(64))
-    type = db.Column(db.String(64))
+    general_description = db.Column(db.String(64), nullable=True)
+    type = db.Column(db.String(64), nullable=True)
     all_calls = db.relationship("Call", backref="equipments")
     all_connections = db.relationship("EquipmentConnection", backref="equipments")
 
@@ -49,10 +50,25 @@ class Computer(Equipment):
     __tablename__ = "computers"
     __mapper_args__ = {'polymorphic_identity': 'computers'}
     computer_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), primary_key=True)
+    computer_name = db.Column(db.String(64), nullable=False, unique=True)
     computer_cpu = db.Column(db.String(64))
+    computer_so = db.Column(db.String(64))
+    computer_bios = db.Column(db.String(64))
     computer_memory = db.Column(db.String(64))
     computer_hd = db.Column(db.String(64))
     computer_vga = db.Column(db.String(64))
+    computer_macaddress = db.Column(db.String(64))
+    computer_capacity_memory = db.Column(db.String(64))
+    computer_storages = db.relationship("Storage", backref="computers")
+
+
+class Storage(db.Model):
+    __tablename__ = "storages"
+    storage_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), primary_key=True)
+    storage_name = db.Column(db.String(64))
+    storage_size = db.Column(db.String(64), nullable=False)
+    storage_type = db.Column(db.String(64))
+    storage_computer = db.Column(db.Integer, db.ForeignKey('computers.computer_id'), nullable=True)
 
 
 class Monitor(Equipment):
@@ -202,117 +218,117 @@ class Admin(UserMixin, User):
 def load_user(user_id):
     return Admin.query.filter_by(admin_id=user_id).first()
 
-#
-# @event.listens_for(Team.__table__, 'after_create')
-# def insert_initial_values(*args, **kwargs):
-#     db.session.add(Team(team_id=1, team_name="Gabinete", team_leader="Maria Josele Bucco Coelho"))
-#     db.session.add(Team(team_id=2, team_name="COPEG", team_leader="Maria Tereza Carneiro Soares"))
-#     db.session.add(Team(team_id=3, team_name="COPAC", team_leader="Eliane Felisbino"))
-#     db.session.add(Team(team_id=4, team_name="COPAP", team_leader="José Carlos Eidam"))
-#     db.session.add(Team(team_id=5, team_name="COAFE", team_leader="Leonir Lorenzetti"))
-#     db.session.add(Team(team_id=6, team_name="COSIS", team_leader="Rafaela Mantovani Fontana"))
-#     db.session.add(Team(team_id=7, team_name="CIPEAD", team_leader="Geovana Gentili Santos"))
-#     db.session.add(Team(team_id=8, team_name="NC", team_leader="Alexandre Trovon de Carvalho"))
-#     db.session.commit()
-#
-#
-# @event.listens_for(SubTeam.__table__, 'after_create')
-# def insert_initial_values2(*args, **kwargs):
-#     db.session.add(SubTeam(subteam_id=1, subteam_team_id=1, subtime_name="Financeiro"))
-#     db.session.add(SubTeam(subteam_id=2, subteam_team_id=1, subtime_name="Secretaria"))
-#     db.session.add(SubTeam(subteam_id=3, subteam_team_id=4, subtime_name="Seção de Acompanhamento Acadêmico (SAAC)"))
-#     db.session.add(SubTeam(subteam_id=4, subteam_team_id=4, subtime_name="Seção de Gerenciamento Acadêmico (SGA)"))
-#     db.session.add(SubTeam(subteam_id=5, subteam_team_id=4, subtime_name="Unidade de Diplomas (UD)"))
-#     db.session.add(SubTeam(subteam_id=6, subteam_team_id=4, subtime_name="Seção de Ocupação de Vaga (SOCV)"))
-#     db.session.add(SubTeam(subteam_id=7, subteam_team_id=5, subtime_name="Unidade de Estágios (UE)"))
-#     db.session.add(SubTeam(subteam_id=8, subteam_team_id=5, subtime_name="Unidades de Atividades Formativas (UAF)"))
-#     db.session.add(SubTeam(subteam_id=9, subteam_team_id=7, subtime_name="Unidade Administrativa"))
-#     db.session.add(SubTeam(subteam_id=10, subteam_team_id=7, subtime_name="Unidade Pedagógica"))
-#     db.session.add(SubTeam(subteam_id=11, subteam_team_id=7, subtime_name="LabCIPEAD"))
-#     db.session.add(SubTeam(subteam_id=12, subteam_team_id=7, subtime_name="Equipe Multidisciplinar"))
-#     db.session.commit()
-#
-#
-# @event.listens_for(User.__table__, 'after_create')
-# def insert_initial_values3(*ars, **kwargs):
-#     db.session.add(User(user_register="1",
-#                         user_name="Jaqueline Cavalari Sales de Almeida", user_team_id=1, user_subteam_id=1))
-#     db.session.add(User(user_register="2",
-#                         user_name="Cristiano Rodrigues Amorim", user_team_id=1, user_subteam_id=1))
-#     db.session.add(User(user_register="3",
-#                         user_name="Isaque Moraes dos Santos", user_team_id=1, user_subteam_id=1))
-#     db.session.add(User(user_register="4",
-#                         user_name="Mariane de Siqueira", user_team_id=1, user_subteam_id=2))
-#     db.session.add(User(user_register="5",
-#                         user_name="Luana Moraes Costa", user_team_id=2))
-#     db.session.add(User(user_register="6",
-#                         user_name="Paulo Feres Bockor", user_team_id=3))
-#     db.session.add(User(user_register="7",
-#                         user_name="Tommaso Lilli", user_team_id=3))
-#     db.session.add(User(user_register="8",
-#                         user_name="Viviane Vidal Pereira dos Santos", user_team_id=3))
-#     db.session.add(User(user_register="9", user_name="Gislaine Pereira Ramos", user_team_id=4, user_subteam_id=3))
-#     db.session.add(User(user_register="10", user_name="Isabelle Aparecida Borges", user_team_id=4, user_subteam_id=3))
-#     db.session.add(User(user_register="11", user_name="Evaldo Amaral", user_team_id=4, user_subteam_id=4))
-#     db.session.add(User(user_register="12",
-#                         user_name="Laysla Fernanda Silva Viveiros", user_team_id=4, user_subteam_id=4))
-#     db.session.add(User(user_register="13", user_name="Tatyane Nunes", user_team_id=4, user_subteam_id=4))
-#     db.session.add(User(user_register="14",
-#                         user_name="Valéria da Silva Leite Ravanello", user_team_id=4, user_subteam_id=4))
-#     db.session.add(User(user_register="15",
-#                         user_name="Leonilda Ianckievicz Pacheco de Andrade", user_team_id=4, user_subteam_id=5))
-#     db.session.add(User(user_register="16", user_name="Luciano Vans", user_team_id=4, user_subteam_id=5))
-#     db.session.add(User(user_register="17", user_name="Marco Antonio Weber Jorge", user_team_id=4, user_subteam_id=5))
-#     db.session.add(User(user_register="18", user_name="Simone Aparecida Verchai", user_team_id=4, user_subteam_id=5))
-#     db.session.add(User(user_register="19",
-#                         user_name="Kelly Cristine Schibelbain Santos", user_team_id=4, user_subteam_id=5))
-#     db.session.add(User(user_register="20", user_name="Wender Ribeiro", user_team_id=4, user_subteam_id=5))
-#     db.session.add(User(user_register="21",
-#                         user_name="Adriana Cristina Wasuaski Riechter", user_team_id=4, user_subteam_id=6))
-#     db.session.add(User(user_register="22", user_name="Lairdes Figueredo Cheke", user_team_id=4, user_subteam_id=6))
-#     db.session.add(User(user_register="23",
-#                         user_name="Gina Marcela Marcassi Rodrigues de Lima", user_team_id=4, user_subteam_id=6))
-#     db.session.add(User(user_register="24", user_name="Flavia Vieira", user_team_id=4, user_subteam_id=6))
-#     db.session.add(User(user_register="25", user_name="Tânia Lazier Gabardo", user_team_id=5, user_subteam_id=7))
-#     db.session.add(User(user_register="26", user_name="Eliane Cristina Depetris", user_team_id=5, user_subteam_id=7))
-#     db.session.add(User(user_register="27", user_name="Franciane Retslaff", user_team_id=5, user_subteam_id=7))
-#     db.session.add(User(user_register="28",
-#                         user_name="Jocimara Rodrigues Cardoso dos Santos", user_team_id=5, user_subteam_id=7))
-#     db.session.add(User(user_register="29", user_name="Paulo César de Freitas", user_team_id=5, user_subteam_id=7))
-#     db.session.add(User(user_register="30", user_name="Laura Somoza", user_team_id=5, user_subteam_id=8))
-#     db.session.add(User(user_register="31", user_name="Eversong Paulo Zuba", user_team_id=5, user_subteam_id=8))
-#     db.session.add(User(user_register="32", user_name="Bruna Coutrim de Oliveira", user_team_id=5, user_subteam_id=8))
-#     db.session.add(User(user_register="33", user_name="Cesar Augustus Akatsu", user_team_id=6))
-#     db.session.add(User(user_register="34", user_name="Me. Josemar Pereira da Silva", user_team_id=6))
-#     db.session.add(User(user_register="35", user_name="Kleyton Lucas de Souza", user_team_id=6))
-#     db.session.add(User(user_register="36", user_name="Lorena Kruger", user_team_id=6))
-#     db.session.add(User(user_register="37",
-#                         user_name="Rafael Casale Sartor de Oliveira ", user_team_id=7, user_subteam_id=9))
-#     db.session.add(User(user_register="38",
-#                         user_name="Naia Paula Yolanda Bittencourt Tortato", user_team_id=7, user_subteam_id=9))
-#     db.session.add(User(user_register="39", user_name="Anna Jungbluth", user_team_id=7, user_subteam_id=10))
-#     db.session.add(User(user_register="40", user_name="Marina Lupepso", user_team_id=7, user_subteam_id=10))
-#     db.session.add(User(user_register="41",
-#                         user_name="Tatiana Raquel Baptista Greff", user_team_id=7, user_subteam_id=10))
-#     db.session.add(User(user_register="42", user_name="Elizabete Gomes", user_team_id=7, user_subteam_id=11))
-#     db.session.add(User(user_register="43",
-#                         user_name="Erick Martins do Nascimento", user_team_id=7, user_subteam_id=11))
-#     db.session.add(User(user_register="44",
-#                         user_name="Lucas Vinicius Vebber Caroenas", user_team_id=7, user_subteam_id=11))
-#     db.session.add(User(user_register="45",
-#                         user_name="Fernanda Cristina Dalazen Fernandes", user_team_id=7, user_subteam_id=11))
-#     db.session.add(User(user_register="46",
-#                         user_name="Piero Enrico Ribas Salamone", user_team_id=7, user_subteam_id=11))
-#     db.session.add(User(user_register="47",
-#                         user_name="Gabriely Woiciekowski Colares", user_team_id=7, user_subteam_id=11))
-#     db.session.add(User(user_register="47",
-#                         user_name="Tacila Fernanda Carneiro Evangelhista", user_team_id=7, user_subteam_id=11))
-#     db.session.add(User(user_register="48", user_name="Fabiano Francisco Amaral", user_team_id=7, user_subteam_id=11))
-#     db.session.add(User(user_register="50", user_name="Rodrigo Dittmar", user_team_id=7, user_subteam_id=11))
-#     db.session.add(User(user_register="51",
-#                         user_name="Ana Carolina de Araújo Silva", user_team_id=7, user_subteam_id=12))
-#     db.session.add(User(user_register="52", user_name="Celso Yoshikazu Ishida", user_team_id=7, user_subteam_id=12))
-#     db.session.add(User(user_register="53", user_name="Geovana Gentili Santos", user_team_id=7, user_subteam_id=12))
-#     db.session.add(User(user_register="54",
-#                         user_name="Kelly Priscilla Loddo Cezar", user_team_id=7, user_subteam_id=12))
-#     db.session.commit()
+
+@event.listens_for(Team.__table__, 'after_create')
+def insert_initial_values(*args, **kwargs):
+    db.session.add(Team(team_id=1, team_name="Gabinete", team_leader="Maria Josele Bucco Coelho"))
+    db.session.add(Team(team_id=2, team_name="COPEG", team_leader="Maria Tereza Carneiro Soares"))
+    db.session.add(Team(team_id=3, team_name="COPAC", team_leader="Eliane Felisbino"))
+    db.session.add(Team(team_id=4, team_name="COPAP", team_leader="José Carlos Eidam"))
+    db.session.add(Team(team_id=5, team_name="COAFE", team_leader="Leonir Lorenzetti"))
+    db.session.add(Team(team_id=6, team_name="COSIS", team_leader="Rafaela Mantovani Fontana"))
+    db.session.add(Team(team_id=7, team_name="CIPEAD", team_leader="Geovana Gentili Santos"))
+    db.session.add(Team(team_id=8, team_name="NC", team_leader="Alexandre Trovon de Carvalho"))
+    db.session.commit()
+
+
+@event.listens_for(SubTeam.__table__, 'after_create')
+def insert_initial_values2(*args, **kwargs):
+    db.session.add(SubTeam(subteam_id=1, subteam_team_id=1, subteam_name="Financeiro"))
+    db.session.add(SubTeam(subteam_id=2, subteam_team_id=1, subteam_name="Secretaria"))
+    db.session.add(SubTeam(subteam_id=3, subteam_team_id=4, subteam_name="Seção de Acompanhamento Acadêmico (SAAC)"))
+    db.session.add(SubTeam(subteam_id=4, subteam_team_id=4, subteam_name="Seção de Gerenciamento Acadêmico (SGA)"))
+    db.session.add(SubTeam(subteam_id=5, subteam_team_id=4, subteam_name="Unidade de Diplomas (UD)"))
+    db.session.add(SubTeam(subteam_id=6, subteam_team_id=4, subteam_name="Seção de Ocupação de Vaga (SOCV)"))
+    db.session.add(SubTeam(subteam_id=7, subteam_team_id=5, subteam_name="Unidade de Estágios (UE)"))
+    db.session.add(SubTeam(subteam_id=8, subteam_team_id=5, subteam_name="Unidades de Atividades Formativas (UAF)"))
+    db.session.add(SubTeam(subteam_id=9, subteam_team_id=7, subteam_name="Unidade Administrativa"))
+    db.session.add(SubTeam(subteam_id=10, subteam_team_id=7, subteam_name="Unidade Pedagógica"))
+    db.session.add(SubTeam(subteam_id=11, subteam_team_id=7, subteam_name="LabCIPEAD"))
+    db.session.add(SubTeam(subteam_id=12, subteam_team_id=7, subteam_name="Equipe Multidisciplinar"))
+    db.session.commit()
+
+
+@event.listens_for(User.__table__, 'after_create')
+def insert_initial_values3(*ars, **kwargs):
+    db.session.add(User(user_register="1",
+                        user_name="Jaqueline Cavalari Sales de Almeida", user_team_id=1, user_subteam_id=1))
+    db.session.add(User(user_register="2",
+                        user_name="Cristiano Rodrigues Amorim", user_team_id=1, user_subteam_id=1))
+    db.session.add(User(user_register="3",
+                        user_name="Isaque Moraes dos Santos", user_team_id=1, user_subteam_id=1))
+    db.session.add(User(user_register="4",
+                        user_name="Mariane de Siqueira", user_team_id=1, user_subteam_id=2))
+    db.session.add(User(user_register="5",
+                        user_name="Luana Moraes Costa", user_team_id=2))
+    db.session.add(User(user_register="6",
+                        user_name="Paulo Feres Bockor", user_team_id=3))
+    db.session.add(User(user_register="7",
+                        user_name="Tommaso Lilli", user_team_id=3))
+    db.session.add(User(user_register="8",
+                        user_name="Viviane Vidal Pereira dos Santos", user_team_id=3))
+    db.session.add(User(user_register="9", user_name="Gislaine Pereira Ramos", user_team_id=4, user_subteam_id=3))
+    db.session.add(User(user_register="10", user_name="Isabelle Aparecida Borges", user_team_id=4, user_subteam_id=3))
+    db.session.add(User(user_register="11", user_name="Evaldo Amaral", user_team_id=4, user_subteam_id=4))
+    db.session.add(User(user_register="12",
+                        user_name="Laysla Fernanda Silva Viveiros", user_team_id=4, user_subteam_id=4))
+    db.session.add(User(user_register="13", user_name="Tatyane Nunes", user_team_id=4, user_subteam_id=4))
+    db.session.add(User(user_register="14",
+                        user_name="Valéria da Silva Leite Ravanello", user_team_id=4, user_subteam_id=4))
+    db.session.add(User(user_register="15",
+                        user_name="Leonilda Ianckievicz Pacheco de Andrade", user_team_id=4, user_subteam_id=5))
+    db.session.add(User(user_register="16", user_name="Luciano Vans", user_team_id=4, user_subteam_id=5))
+    db.session.add(User(user_register="17", user_name="Marco Antonio Weber Jorge", user_team_id=4, user_subteam_id=5))
+    db.session.add(User(user_register="18", user_name="Simone Aparecida Verchai", user_team_id=4, user_subteam_id=5))
+    db.session.add(User(user_register="19",
+                        user_name="Kelly Cristine Schibelbain Santos", user_team_id=4, user_subteam_id=5))
+    db.session.add(User(user_register="20", user_name="Wender Ribeiro", user_team_id=4, user_subteam_id=5))
+    db.session.add(User(user_register="21",
+                        user_name="Adriana Cristina Wasuaski Riechter", user_team_id=4, user_subteam_id=6))
+    db.session.add(User(user_register="22", user_name="Lairdes Figueredo Cheke", user_team_id=4, user_subteam_id=6))
+    db.session.add(User(user_register="23",
+                        user_name="Gina Marcela Marcassi Rodrigues de Lima", user_team_id=4, user_subteam_id=6))
+    db.session.add(User(user_register="24", user_name="Flavia Vieira", user_team_id=4, user_subteam_id=6))
+    db.session.add(User(user_register="25", user_name="Tânia Lazier Gabardo", user_team_id=5, user_subteam_id=7))
+    db.session.add(User(user_register="26", user_name="Eliane Cristina Depetris", user_team_id=5, user_subteam_id=7))
+    db.session.add(User(user_register="27", user_name="Franciane Retslaff", user_team_id=5, user_subteam_id=7))
+    db.session.add(User(user_register="28",
+                        user_name="Jocimara Rodrigues Cardoso dos Santos", user_team_id=5, user_subteam_id=7))
+    db.session.add(User(user_register="29", user_name="Paulo César de Freitas", user_team_id=5, user_subteam_id=7))
+    db.session.add(User(user_register="30", user_name="Laura Somoza", user_team_id=5, user_subteam_id=8))
+    db.session.add(User(user_register="31", user_name="Eversong Paulo Zuba", user_team_id=5, user_subteam_id=8))
+    db.session.add(User(user_register="32", user_name="Bruna Coutrim de Oliveira", user_team_id=5, user_subteam_id=8))
+    db.session.add(User(user_register="33", user_name="Cesar Augustus Akatsu", user_team_id=6))
+    db.session.add(User(user_register="34", user_name="Me. Josemar Pereira da Silva", user_team_id=6))
+    db.session.add(User(user_register="35", user_name="Kleyton Lucas de Souza", user_team_id=6))
+    db.session.add(User(user_register="36", user_name="Lorena Kruger", user_team_id=6))
+    db.session.add(User(user_register="37",
+                        user_name="Rafael Casale Sartor de Oliveira ", user_team_id=7, user_subteam_id=9))
+    db.session.add(User(user_register="38",
+                        user_name="Naia Paula Yolanda Bittencourt Tortato", user_team_id=7, user_subteam_id=9))
+    db.session.add(User(user_register="39", user_name="Anna Jungbluth", user_team_id=7, user_subteam_id=10))
+    db.session.add(User(user_register="40", user_name="Marina Lupepso", user_team_id=7, user_subteam_id=10))
+    db.session.add(User(user_register="41",
+                        user_name="Tatiana Raquel Baptista Greff", user_team_id=7, user_subteam_id=10))
+    db.session.add(User(user_register="42", user_name="Elizabete Gomes", user_team_id=7, user_subteam_id=11))
+    db.session.add(User(user_register="43",
+                        user_name="Erick Martins do Nascimento", user_team_id=7, user_subteam_id=11))
+    db.session.add(User(user_register="44",
+                        user_name="Lucas Vinicius Vebber Caroenas", user_team_id=7, user_subteam_id=11))
+    db.session.add(User(user_register="45",
+                        user_name="Fernanda Cristina Dalazen Fernandes", user_team_id=7, user_subteam_id=11))
+    db.session.add(User(user_register="46",
+                        user_name="Piero Enrico Ribas Salamone", user_team_id=7, user_subteam_id=11))
+    db.session.add(User(user_register="47",
+                        user_name="Gabriely Woiciekowski Colares", user_team_id=7, user_subteam_id=11))
+    db.session.add(User(user_register="47",
+                        user_name="Tacila Fernanda Carneiro Evangelhista", user_team_id=7, user_subteam_id=11))
+    db.session.add(User(user_register="48", user_name="Fabiano Francisco Amaral", user_team_id=7, user_subteam_id=11))
+    db.session.add(User(user_register="50", user_name="Rodrigo Dittmar", user_team_id=7, user_subteam_id=11))
+    db.session.add(User(user_register="51",
+                        user_name="Ana Carolina de Araújo Silva", user_team_id=7, user_subteam_id=12))
+    db.session.add(User(user_register="52", user_name="Celso Yoshikazu Ishida", user_team_id=7, user_subteam_id=12))
+    db.session.add(User(user_register="53", user_name="Geovana Gentili Santos", user_team_id=7, user_subteam_id=12))
+    db.session.add(User(user_register="54",
+                        user_name="Kelly Priscilla Loddo Cezar", user_team_id=7, user_subteam_id=12))
+    db.session.commit()
