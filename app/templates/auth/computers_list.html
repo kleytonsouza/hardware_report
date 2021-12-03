@@ -38,14 +38,14 @@
         </div>
     </div>
      <div class="row panel">
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2">
             <a href="{{ url_for('auth.computers_list' ) }}">
                 <button class="btn btn-primary">
                           Computadores
                 </button>
             </a>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2 h3" style="margin-top: 50px">
             <a href="{{ url_for('auth.monitors_list' ) }}">
                 <button class="btn btn-primary">
                           Monitores
@@ -79,14 +79,14 @@
         <table id="data" class="display">
             <thead>
                 <tr>
-                    <th>ID do Monitor</th>
-                    <th>Usuário</th>
+                    <th>ID do Computador</th>
+                    <th>Nome</th>
                     <th>Patrimônio</th>
                     <th>Marca</th>
-                    <th>Modelo</th>
+                    <th>CPU</th>
+                    <th>Memória</th>
+                    <th>Mac Address</th>
                     <th>Data de Registro</th>
-                    <th>Tamanho</th>
-                    <th>Resolução</th>
                 </tr>
             </thead>
             <tbody>

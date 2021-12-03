@@ -90,7 +90,6 @@ def calls_list():
 
 @auth.route('/api/equips')
 def equips_data():
-
     query = Equipment.query
 
     search = request.args.get('search[value]')
@@ -270,11 +269,212 @@ def monitors_data():
     length = request.args.get('length', type=int)
     query = query.offset(start).limit(length)
 
-    # response
 
     return {
         'data': [monitor.to_dict() for monitor in query],
         'recordsFiltered': total_filtered,
         'recordsTotal': Monitor.query.count(),
+        'draw': request.args.get('draw', type=int),
+    }
+
+
+@auth.route('/api/computers')
+def computers_data():
+
+    query = Computer.query
+
+    search = request.args.get('search[value]')
+    if search:
+        query = db.session.query(Monitor).join(User).filter(db.or_(
+            Computer.patrimony.like(f'%{search}%'),
+            Computer.computer_hd.like(f'%{search}%'),
+            Computer.computer_memory.like(f'%{search}%'),
+            Computer.computer_so.like(f'%{search}%'),
+            Computer.computer_cpu.like(f'%{search}%'),
+            Computer.patrimony.like(f'%{search}%'),
+            User.user_name.like(f'%{search}%')
+        ))
+
+    total_filtered = query.count()
+
+    order = []
+    i = 0
+    while True:
+        col_index = request.args.get(f'order[{i}][column]')
+        if col_index is None:
+            break
+        col_name = request.args.get(f'columns[{col_index}][data]')
+        if col_name not in ['equip_id', 'equip_user_id', 'computer_so', 'brand', 'computer_cpu', 'computer_memory']:
+            col_name = 'equip_id'
+        descending = request.args.get(f'order[{i}][dir]') == 'desc'
+        col = getattr(Computer, col_name)
+        if descending:
+            col = col.desc()
+        order.append(col)
+        i += 1
+    if order:
+        query = query.order_by(*order)
+
+    # pagination
+    start = request.args.get('start', type=int)
+    length = request.args.get('length', type=int)
+    query = query.offset(start).limit(length)
+
+    # response
+
+    return {
+        'data': [computer.to_dict() for computer in query],
+        'recordsFiltered': total_filtered,
+        'recordsTotal': Computer.query.count(),
+        'draw': request.args.get('draw', type=int),
+    }
+
+
+@auth.route('/api/fones')
+def fones_data():
+
+    query = Fone.query
+
+    search = request.args.get('search[value]')
+    if search:
+        query = db.session.query(Monitor).join(User).filter(db.or_(
+            Fone.patrimony.like(f'%{search}%'),
+            Fone.brand.like(f'%{search}%'),
+            Fone.fone_driver.like(f'%{search}%'),
+            Fone.fone_frequency.like(f'%{search}%'),
+            Fone.all_connections.like(f'%{search}%'),
+            User.user_name.like(f'%{search}%')
+        ))
+
+    total_filtered = query.count()
+
+    order = []
+    i = 0
+    while True:
+        col_index = request.args.get(f'order[{i}][column]')
+        if col_index is None:
+            break
+        col_name = request.args.get(f'columns[{col_index}][data]')
+        if col_name not in ['equip_id', 'equip_user_id', 'fone_driver', 'brand', 'all_connections', 'fone_frequency']:
+            col_name = 'equip_id'
+        descending = request.args.get(f'order[{i}][dir]') == 'desc'
+        col = getattr(Fone, col_name)
+        if descending:
+            col = col.desc()
+        order.append(col)
+        i += 1
+    if order:
+        query = query.order_by(*order)
+
+    # pagination
+    start = request.args.get('start', type=int)
+    length = request.args.get('length', type=int)
+    query = query.offset(start).limit(length)
+
+    # response
+
+    return {
+        'data': [fone.to_dict() for fone in query],
+        'recordsFiltered': total_filtered,
+        'recordsTotal': Fone.query.count(),
+        'draw': request.args.get('draw', type=int),
+    }
+
+
+@auth.route('/api/mics')
+def mics_data():
+
+    query = Mic.query
+
+    search = request.args.get('search[value]')
+    if search:
+        query = db.session.query(Monitor).join(User).filter(db.or_(
+            Mic.patrimony.like(f'%{search}%'),
+            Mic.mic_frequency.like(f'%{search}%'),
+            Mic.mic_noise_cancellation.like(f'%{search}%'),
+            Mic.mic_impedance.like(f'%{search}%'),
+            User.user_name.like(f'%{search}%')
+        ))
+
+    total_filtered = query.count()
+
+    order = []
+    i = 0
+    while True:
+        col_index = request.args.get(f'order[{i}][column]')
+        if col_index is None:
+            break
+        col_name = request.args.get(f'columns[{col_index}][data]')
+        if col_name not in ['equip_id', 'equip_user_id', 'mic_frequency', 'brand', 'mic_noise_cancellation', 'mic_impedance']:
+            col_name = 'equip_id'
+        descending = request.args.get(f'order[{i}][dir]') == 'desc'
+        col = getattr(Mic, col_name)
+        if descending:
+            col = col.desc()
+        order.append(col)
+        i += 1
+    if order:
+        query = query.order_by(*order)
+
+    # pagination
+    start = request.args.get('start', type=int)
+    length = request.args.get('length', type=int)
+    query = query.offset(start).limit(length)
+
+    # response
+
+    return {
+        'data': [mic.to_dict() for mic in query],
+        'recordsFiltered': total_filtered,
+        'recordsTotal': Mic.query.count(),
+        'draw': request.args.get('draw', type=int),
+    }
+
+
+@auth.route('/api/webcams')
+def webcams_data():
+
+    query = WebCam.query
+
+    search = request.args.get('search[value]')
+    if search:
+        query = db.session.query(Monitor).join(User).filter(db.or_(
+            WebCam.patrimony.like(f'%{search}%'),
+            WebCam.brand.like(f'%{search}%'),
+            WebCam.webcam_resolution.like(f'%{search}%'),
+            User.user_name.like(f'%{search}%')
+        ))
+
+    total_filtered = query.count()
+
+    order = []
+    i = 0
+    while True:
+        col_index = request.args.get(f'order[{i}][column]')
+        if col_index is None:
+            break
+        col_name = request.args.get(f'columns[{col_index}][data]')
+        if col_name not in ['equip_id', 'equip_user_id', 'webcam_resolution', 'brand']:
+            col_name = 'equip_id'
+        descending = request.args.get(f'order[{i}][dir]') == 'desc'
+        col = getattr(WebCam, col_name)
+        if descending:
+            col = col.desc()
+        order.append(col)
+        i += 1
+    if order:
+        query = query.order_by(*order)
+
+    # pagination
+    start = request.args.get('start', type=int)
+    length = request.args.get('length', type=int)
+    query = query.offset(start).limit(length)
+
+    # response
+
+    return {
+        'data': [webcam.to_dict() for webcam in query],
+        'recordsFiltered': total_filtered,
+        'recordsTotal': WebCam.query.count(),
         'draw': request.args.get('draw', type=int),
     }

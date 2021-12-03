@@ -91,6 +91,7 @@ class Monitor(Equipment):
             'monitor_resolution': self.monitor_resolution
         }
 
+
 class WebCam(Equipment):
     __tablename__ = "webcams"
     __mapper_args__ = {'polymorphic_identity': 'webcams'}
