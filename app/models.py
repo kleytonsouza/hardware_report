@@ -57,7 +57,6 @@ class Computer(Equipment):
     computer_memory = db.Column(db.String(64))
     computer_hd = db.Column(db.String(64))
     computer_vga = db.Column(db.String(64))
-<<<<<<< HEAD
     computer_macaddress = db.Column(db.String(64))
     computer_capacity_memory = db.Column(db.String(64))
     computer_storages = db.relationship("Storage", backref="computers")
@@ -70,9 +69,7 @@ class Storage(db.Model):
     storage_size = db.Column(db.String(64), nullable=False)
     storage_type = db.Column(db.String(64))
     storage_computer = db.Column(db.Integer, db.ForeignKey('computers.computer_id'), nullable=True)
-=======
     computer_ip = db.Column(db.String(64))
->>>>>>> erros_ajax_equipments
 
 
 class Monitor(Equipment):
