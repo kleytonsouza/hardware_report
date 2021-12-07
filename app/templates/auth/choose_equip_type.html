@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block head %}
+    {{ super() }}
+{#    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">#}
+{#    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>#}
+{#    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>#}
+{#    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row panel" >
+        <h3>Adicionar Equipamento(s)</h3>
+    </div>
+    <form method="POST" action="{{ url_for('auth.choose_equip_type') }}">
+        {{ form.csrf_token }}
+        <div class="row panel">
+            {% for tp in form.type %}
+                <div class="form-group text-center col-xs-6 col-sm-6 col-md-4 col-lg-4" style="padding-left:5px; padding-top:20px">
+                    <label for="{{ tp.id }}">{{ tp.data }}
+                            <input style="height: 25px; box-shadow: none" class="form-control" name="{{ tp.name }}"
+                               type="radio" id="{{ tp.id }}" value="{{ tp.data }}" >
+                    </label>
+                </div>
+            {% endfor %}
+            <div class="form-group text-center col-xs-6 col-sm-6 col-md-4 col-lg-4" style="padding-left:5px; padding-top:20px">
+                <label for="general1">Genérico
+                        <input style="height: 25px; box-shadow: none" class="form-control" name="general"
+                           type="radio" id="general1" value="general" >
+                </label>
+            </div>
+        </div>
+        <div class="panel-footer" style="background-color: white; border-top:0 ">
+            <div class="text-right">
+                <input class="btn btn-md btn-primary" type="submit" value="Registrar">
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

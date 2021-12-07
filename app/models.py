@@ -69,7 +69,7 @@ class Storage(db.Model):
     storage_size = db.Column(db.String(64), nullable=False)
     storage_type = db.Column(db.String(64))
     storage_computer = db.Column(db.Integer, db.ForeignKey('computers.computer_id'), nullable=True)
-    computer_ip = db.Column(db.String(64))
+    # computer_ip = db.Column(db.String(64))
 
 
 class Monitor(Equipment):

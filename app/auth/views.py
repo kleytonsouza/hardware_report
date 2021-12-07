@@ -1,8 +1,9 @@
+import requests
 from flask import render_template, redirect, url_for, flash, request
 from ..models import *
 from . import auth
-from flask_login import login_user, logout_user, login_required
-from ..auth.forms import LoginForm
+from flask_login import login_user, logout_user, login_required, current_user
+from ..auth.forms import LoginForm, add_type_equip, add_equip
 
 
 @auth.route('/logout')
@@ -15,7 +16,12 @@ def logout():
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+
+    if current_user.is_authenticated:
+        return redirect(url_for('auth.equips_list'))
+
     form = LoginForm()
+
     if form.validate_on_submit():
         admin = Admin.query.filter_by(admin_name=form.user.data).first()
         passwordb = form.password.data
@@ -28,7 +34,7 @@ def login():
             return redirect(next)
         flash('Usuário ou senha errado(s).', "wrong")
     if request.args.get("next"):
-        flash("Faça login para responder ao questionário.", 'cad')
+        flash("Faça login para acessar os dados.", 'cad')
     return render_template('auth/login.html', form=form)
 
 
@@ -478,3 +484,30 @@ def webcams_data():
         'recordsTotal': WebCam.query.count(),
         'draw': request.args.get('draw', type=int),
     }
+
+
+@auth.route('/choose_equip_type', methods=['GET', 'POST'])
+def choose_equip_type():
+
+    type_equips = [cls.__name__ for cls in Equipment.__subclasses__()]
+
+    form_add_equip = add_type_equip()
+
+    form_add_equip.type.choices = type_equips
+
+    if form_add_equip.validate_on_submit():
+        return render_template("auth.add_equip", type=request.form.get("type"))
+
+    return render_template("auth/choose_equip_type.html", type_equips=type_equips, form=form_add_equip)
+
+
+@auth.route('/add_equip/<type>', methods=['GET', 'POST'])
+def add_equip(type):
+
+    form_add_equip = add_equip(type)
+
+    if form_add_equip.validate_on_submit():
+        print()
+        return redirect(url_for("auth.equips_list"))
+
+    return render_template("auth/choose_equip_type.html", form=form_add_equip)

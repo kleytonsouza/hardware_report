@@ -4,7 +4,7 @@
 
 {% block head %}
     {{ super() }}
-    <style type="text/css">
+    <style>
         .btn-right {
             float: right;
         }
@@ -12,20 +12,20 @@
 {% endblock %}
 
 {% block page_content %}
-<div class="row">
-    <div class="col-md-offset-2 col-md-8">
-        <div class="panel panel-primary">
-              <div class="panel-heading text-center">
-                  Bem vindo(a) ao Sistema de Controle de Equipamentos da PROGRAD
-              </div>
-              <div class="panel-body">
-                  Para ter acesso as informações dos Usuários, Chamados e a Composição dos Equipametos,
-                  por favor realize o login.
-              </div>
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="panel panel-primary">
+                  <div class="panel-heading text-center">
+                      Bem vindo(a) ao Sistema de Controle de Equipamentos da PROGRAD
+                  </div>
+                  <div class="panel-body">
+                      Para ter acesso as informações dos Usuários, Chamados e a Composição dos Equipametos,
+                      por favor realize o login.
+                  </div>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
+    <div class="row">
     <div class="col-md-4">
          {{ wtf.quick_form(
                 form, action="/auth/login", method="post",
