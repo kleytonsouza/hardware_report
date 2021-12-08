@@ -295,6 +295,8 @@ def computers_data():
             Computer.patrimony.like(f'%{search}%'),
             Computer.computer_hd.like(f'%{search}%'),
             Computer.computer_memory.like(f'%{search}%'),
+            Computer.brand.like(f'%{search}%'),
+            Computer.model.like(f'%{search}%'),
             Computer.computer_name.like(f'%{search}%'),
             Computer.computer_so.like(f'%{search}%'),
             Computer.computer_cpu.like(f'%{search}%'),
@@ -311,7 +313,8 @@ def computers_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['computer_id', 'computer_user', 'computer_name', 'computer_so', 'brand', 'computer_cpu', 'computer_memory']:
+        if col_name not in ['computer_id', 'model', 'computer_user', 'computer_name',
+                            'computer_so', 'brand', 'computer_cpu', 'computer_memory']:
             col_name = 'computer_id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(Computer, col_name)
