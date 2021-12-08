@@ -22,21 +22,21 @@
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.users_list' ) }}">
-                <button class="btn btn-info">
+                <button class="btn btn-default">
                           Usuários
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.calls_list' ) }}">
-                <button class="btn btn-warning">
+                <button class="btn btn-default">
                           Chamados
                 </button>
             </a>
         </div>
-        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 50px">
+        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
             <a href="{{ url_for('auth.choose_equip_type' ) }}">
                 <button class="btn btn-success">
                           Adicionar
@@ -92,6 +92,7 @@
                 <th>Modelo</th>
                 <th>Data de Registro</th>
                 <th>Tipo</th>
+                <th>Ação</th>
             </tr>
         </thead>
         <tbody>
@@ -111,9 +112,15 @@
               {data: 'equip_user_id'},
               {data: 'patrimony', orderable: false},
               {data: 'brand'},
-              {data: 'model', orderable: false},
+              {data: 'model'},
               {data: 'equip_registry', orderable: false},
-              {data: 'type'}
+              {data: 'type'},
+              {data: "sdfsdf", "defaultContent":
+                  "<button class='btn-warning' onclick='edititem();'>Editar</button> ", orderable: false}
+                  {#" <button class='btn-danger' onclick='edititem();'>Delete</button>" }  #}
+              {#{data: '', render: (data, type, row) =>#}
+              {#    {return `<a href='/api/equips/delete/${row.id}'>Del</a>#}
+              {#             <a href='/api/equips/delete/${row.id}'>Edit</a>`;}#}
             ],
           });
         });

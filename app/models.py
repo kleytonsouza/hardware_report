@@ -17,7 +17,7 @@ class Equipment(db.Model):
     all_calls = db.relationship("Call", backref="equipments")
     all_connections = db.relationship("EquipmentConnection", backref="equipments")
 
-    def to_dict(self):
+    def equip_to_dict(self):
         return {
             'equip_id': self.equip_id,
             'equip_user_id': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
@@ -62,6 +62,23 @@ class Computer(Equipment):
     computer_storages = db.relationship("Storage", backref="computers")
 
 
+    def to_dict(self):
+        return {
+            'computer_id': self.equip_id,
+            'computer_user': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
+            'computer_name': self.computer_name,
+            'patrimony': self.patrimony,
+            'brand': self.brand,
+            'model': self.model,
+            'computer_cpu': self.computer_cpu,
+            'computer_memory': self.computer_memory,
+            'computer_hd': self.computer_hd,
+            'computer_macaddress': self.computer_macaddress,
+            'computer_so': self.computer_so
+
+        }
+
+
 class Storage(db.Model):
     __tablename__ = "storages"
     storage_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), primary_key=True)
@@ -81,8 +98,8 @@ class Monitor(Equipment):
 
     def to_dict(self):
         return {
-            'equip_id': self.equip_id,
-            'equip_user_id': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
+            'monitor_id': self.monitor_id,
+            'monitor_user': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
             'patrimony': self.patrimony,
             'brand': self.brand,
             'model': self.model,
@@ -98,6 +115,17 @@ class WebCam(Equipment):
     webcam_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), primary_key=True)
     webcam_resolution = db.Column(db.String(64))
 
+    def to_dict(self):
+        return {
+            'webcam_id': self.equip_id,
+            'webcam_user': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
+            'patrimony': self.patrimony,
+            'brand': self.brand,
+            'model': self.model,
+            'equip_registry': self.equip_registry,
+            'webcam_resolution': self.webcam_resolution
+        }
+
 
 class Fone(Equipment):
     __tablename__ = "fones"
@@ -109,6 +137,20 @@ class Fone(Equipment):
     fone_noise_cancellation = db.Column(db.String(64), nullable=True)
     fone_mic = db.Column(db.Integer, db.ForeignKey('mics.mic_id'), nullable=True)
 
+    def to_dict(self):
+        return {
+            'fone_id': self.fone_id,
+            'fone_frequency': self.fone_frequency,
+            'fone_impedance': self.fone_impedance,
+            'fone_noise_cancellation': self.fone_noise_cancellation,
+            'fone_mic': self.fone_mic,
+            'fone_user': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
+            'patrimony': self.patrimony,
+            'brand': self.brand,
+            'model': self.model,
+            'equip_registry': self.equip_registry,
+        }
+
 
 class Mic(Equipment):
     __tablename__ = "mics"
@@ -117,6 +159,19 @@ class Mic(Equipment):
     mic_noise_cancellation = db.Column(db.String(64))
     mic_frequency = db.Column(db.String(64))
     mic_impedance = db.Column(db.String(64))
+
+    def to_dict(self):
+        return {
+            'mic_id': self.mic_id,
+            'mic_noise_cancellation': self.mic_noise_cancellation,
+            'mic_frequency': self.mic_frequency,
+            'mic_impedance': self.mic_impedance,
+            'mic_user': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
+            'patrimony': self.patrimony,
+            'brand': self.brand,
+            'model': self.model,
+            'equip_registry': self.equip_registry,
+        }
 
 
 class Call(db.Model):
@@ -135,7 +190,7 @@ class Call(db.Model):
             'call_open': self.call_open,
             'call_close': self.call_close,
             'call_solution': self.call_solution,
-            'call_user_id': User.query.filter(User.user_id == self.call_user_id).first().user_name,
+            'call_user': User.query.filter(User.user_id == self.call_user_id).first().user_name,
 
         }
 

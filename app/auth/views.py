@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, flash, request
 from ..models import *
 from . import auth
 from flask_login import login_user, logout_user, login_required, current_user
-from ..auth.forms import LoginForm, add_type_equip, add_equip
+from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip
 
 
 @auth.route('/logout')
@@ -48,8 +48,8 @@ def equips_list():
 @login_required
 @auth.route('/monitors_list', methods=['GET', 'POST'])
 def monitors_list():
-    monitors = Monitor.query
-    return render_template('auth/monitors_list.html', monitors=monitors)
+    # monitors = Monitor.query
+    return render_template('auth/monitors_list.html') #, monitors=monitors)
 
 
 @login_required
@@ -134,7 +134,7 @@ def equips_data():
 
     # response
     return {
-        'data': [equip.to_dict() for equip in query],
+        'data': [equip.equip_to_dict() for equip in query],
         'recordsFiltered': total_filtered,
         'recordsTotal': Equipment.query.count(),
         'draw': request.args.get('draw', type=int),
@@ -259,7 +259,7 @@ def monitors_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['equip_id', 'equip_user_id', 'model', 'brand', 'monitor_size']:
+        if col_name not in ['monitor_id', 'monitor_user', 'patrimony', 'model', 'brand', 'monitor_size']:
             col_name = 'equip_id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(Monitor, col_name)
@@ -291,10 +291,11 @@ def computers_data():
 
     search = request.args.get('search[value]')
     if search:
-        query = db.session.query(Monitor).join(User).filter(db.or_(
+        query = db.session.query(Computer).join(User).filter(db.or_(
             Computer.patrimony.like(f'%{search}%'),
             Computer.computer_hd.like(f'%{search}%'),
             Computer.computer_memory.like(f'%{search}%'),
+            Computer.computer_name.like(f'%{search}%'),
             Computer.computer_so.like(f'%{search}%'),
             Computer.computer_cpu.like(f'%{search}%'),
             Computer.patrimony.like(f'%{search}%'),
@@ -310,8 +311,8 @@ def computers_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['equip_id', 'equip_user_id', 'computer_so', 'brand', 'computer_cpu', 'computer_memory']:
-            col_name = 'equip_id'
+        if col_name not in ['computer_id', 'computer_user', 'computer_name', 'computer_so', 'brand', 'computer_cpu', 'computer_memory']:
+            col_name = 'computer_id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(Computer, col_name)
         if descending:
@@ -320,6 +321,7 @@ def computers_data():
         i += 1
     if order:
         query = query.order_by(*order)
+
 
     # pagination
     start = request.args.get('start', type=int)
@@ -460,8 +462,8 @@ def webcams_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['equip_id', 'equip_user_id', 'webcam_resolution', 'brand']:
-            col_name = 'equip_id'
+        if col_name not in ['webcam_id', 'webcam_user', 'patrimony', 'webcam_resolution', 'brand', 'model', 'equip_registry']:
+            col_name = 'webcam_id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(WebCam, col_name)
         if descending:
@@ -491,23 +493,49 @@ def choose_equip_type():
 
     type_equips = [cls.__name__ for cls in Equipment.__subclasses__()]
 
-    form_add_equip = add_type_equip()
+    type_equips.append("Equipment")
 
-    form_add_equip.type.choices = type_equips
+    form = form_add_type_equip()
 
-    if form_add_equip.validate_on_submit():
-        return render_template("auth.add_equip", type=request.form.get("type"))
+    form.type.choices = type_equips
 
-    return render_template("auth/choose_equip_type.html", type_equips=type_equips, form=form_add_equip)
+    if form.validate_on_submit():
+        return redirect(url_for("auth.add_equip", type=request.form.get("type")))
+
+    if request.method == 'POST':
+        flash('Preenchimento Obrigatório!', 'fill')
+        return redirect(url_for("auth.choose_equip_type"))
+
+    return render_template("auth/equip_add_choose_type.html", type_equips=type_equips, form=form)
 
 
 @auth.route('/add_equip/<type>', methods=['GET', 'POST'])
+@auth.route('/add_equip')
 def add_equip(type):
 
-    form_add_equip = add_equip(type)
+    classes_equips_list = Equipment.__subclasses__()
+    classes_equips_list.append(Equipment)
 
-    if form_add_equip.validate_on_submit():
-        print()
-        return redirect(url_for("auth.equips_list"))
+    for name_classe in classes_equips_list:
+        if name_classe.__name__ == type:
+            form = form_add_equip()
+            form.fields.choices = name_classe.__table__.columns.keys()
+            return render_template("auth/add_equip.html", form=form)
 
-    return render_template("auth/choose_equip_type.html", form=form_add_equip)
+    # if form.validate_on_submit():
+    #     print(type)
+    #     return redirect(url_for("auth.equips_list"))
+
+    # return render_template("auth/choose_equip_type.html", form=form)
+
+
+@auth.route('/user_add')
+def user_add():
+
+    return "add_user"
+
+
+@auth.route('/call_add')
+def call_add():
+
+    return "add_user"

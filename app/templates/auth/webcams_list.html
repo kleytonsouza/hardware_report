@@ -22,46 +22,53 @@
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.users_list' ) }}">
-                <button class="btn btn-info">
+                <button class="btn btn-default">
                           Usuários
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.calls_list' ) }}">
-                <button class="btn btn-success">
+                <button class="btn btn-default">
                           Chamados
+                </button>
+            </a>
+        </div>
+        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
+            <a href="{{ url_for('auth.choose_equip_type' ) }}">
+                <button class="btn btn-success">
+                          Adicionar
                 </button>
             </a>
         </div>
     </div>
      <div class="row panel">
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.computers_list' ) }}">
-                <button class="btn btn-primary">
+                <button class="btn btn-default">
                           Computadores
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.monitors_list' ) }}">
-                <button class="btn btn-primary">
+                <button class="btn btn-default">
                           Monitores
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.fones_list' ) }}">
-                <button class="btn btn-primary">
+                <button class="btn btn-default">
                           Fones
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.mics_list' ) }}">
-                <button class="btn btn-primary">
+                <button class="btn btn-default">
                           Microfones
                 </button>
             </a>
@@ -79,13 +86,12 @@
         <table id="data" class="display">
             <thead>
                 <tr>
-                    <th>ID do Monitor</th>
+                    <th>ID da Webcam</th>
                     <th>Usuário</th>
                     <th>Patrimônio</th>
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Data de Registro</th>
-                    <th>Tamanho</th>
                     <th>Resolução</th>
                 </tr>
             </thead>
@@ -100,17 +106,16 @@
     <script>
         $(document).ready(function () {
           $('#data').DataTable({
-            ajax: '/auth/api/monitors',
+            ajax: '/auth/api/webcams',
             serverSide: true,
             columns: [
-              {data: 'equip_id'},
-              {data: 'equip_user_id'},
+              {data: 'webcam_id'},
+              {data: 'webcam_user'},
               {data: 'patrimony', orderable: false},
               {data: 'brand'},
               {data: 'model'},
               {data: 'equip_registry', orderable: false},
-              {data: 'monitor_size'},
-              {data: 'monitor_resolution'}
+              {data: 'webcam_resolution'}
             ],
           });
         });

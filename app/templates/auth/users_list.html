@@ -14,9 +14,9 @@
         <h3>Usuários</h3>
     </div>
     <div class="row panel">
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.equips_list' ) }}">
-                <button class="btn btn-primary">
+                <button class="btn btn-default">
                           Equipamentos
                 </button>
             </a>
@@ -28,10 +28,17 @@
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.calls_list' ) }}">
-                <button class="btn btn-success">
+                <button class="btn btn-default">
                           Chamados
+                </button>
+            </a>
+        </div>
+        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
+            <a href="{{ url_for('auth.user_add' ) }}">
+                <button class="btn btn-success">
+                          Adicionar
                 </button>
             </a>
         </div>
@@ -45,6 +52,7 @@
                 <th>Nome</th>
                 <th>Coordenção</th>
                 <th>SubCoordenação</th>
+                <th>Ação</th>
             </tr>
         </thead>
         <tbody>
@@ -63,7 +71,10 @@
           {data: 'user_register'},
           {data: 'user_name'},
           {data: 'user_team_id'},
-          {data: 'user_subteam_id'}
+          {data: 'user_subteam_id'},
+          {data: "sdfsdf", "defaultContent":
+                  "<button class='btn-warning' onclick='edititem();'>Edit</button> " +
+                  " <button class='btn-danger' onclick='edititem();'>Delete</button>" }
         ],
       });
     });

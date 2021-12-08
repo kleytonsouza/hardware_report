@@ -14,24 +14,31 @@
         <h3>Chamados</h3>
     </div>
     <div class="row panel">
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.equips_list' ) }}">
-                <button class="btn btn-primary">
+                <button class="btn btn-default">
                           Equipamentos
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 50px">
+        <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.users_list' ) }}">
-                <button class="btn btn-info">
+                <button class="btn btn-default">
                           Usuários
                 </button>
             </a>
         </div>
         <div class="col-md-2">
             <a href="{{ url_for('auth.calls_list' ) }}">
-                <button class="btn btn-success">
+                <button class="btn btn-warning">
                           Chamados
+                </button>
+            </a>
+        </div>
+        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
+            <a href="{{ url_for('auth.call_add' ) }}">
+                <button class="btn btn-success btn-lg">
+                          Abrir
                 </button>
             </a>
         </div>

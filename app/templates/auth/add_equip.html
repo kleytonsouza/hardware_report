@@ -12,11 +12,11 @@
 
 {% block page_content %}
     <div class="row panel" >
-        <h3>Adicionar Equipamento(s)</h3>
+         <h3>Adicionar Equipamento Genérico</h3>
     </div>
-    <form method="POST" action="{{ url_for('auth.choose_equip_type') }}">
+    <form method="POST" action="{{ url_for('auth.add_equip') }}">
         {{ form.csrf_token }}
-        {{ wtf.quick_form(form, action="/auth/login", method="post", **{'ng-model': 'Equipment', 'class': 'Equipment'}) }}
+        {{ wtf.quick_form(form) }}
     </form>
 
 {% endblock %}

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField, RadioField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, RadioField
 from wtforms.validators import DataRequired
 from ..models import *
 
@@ -11,7 +11,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Go')
 
 
-def add_type_equip():
+def form_add_type_equip():
 
     class AddTypeEquip(FlaskForm):
         submit = SubmitField('Registrar')
@@ -21,23 +21,19 @@ def add_type_equip():
     return AddTypeEquip()
 
 
-def add_equip(type):
+def form_add_equip():
 
     class AddEquipForm(FlaskForm):
         submit = SubmitField("Registrar")
 
-    setattr(AddEquipForm, 'type', RadioField("", validators=[DataRequired()]))
+    setattr(AddEquipForm, "fields", TextAreaField(""))
 
-    return AddEquipForm
+    return "jiboia"
+    # return AddEquipForm
 
     # for name_class in Equipment.__subclasses__():
     #     if name_class.__name__ == type:
     #         return
-
-
-
-
-
 
     # patrimony = IntegerField('Patrimonio',
     #                    render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
