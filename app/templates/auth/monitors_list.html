@@ -86,7 +86,7 @@
         <table id="data" class="display">
             <thead>
                 <tr>
-                    <th>ID do Monitor</th>
+                    <th>Equip.</th>
                     <th>Usuário</th>
                     <th>Patrimônio</th>
                     <th>Marca</th>
@@ -94,6 +94,7 @@
                     <th>Data de Registro</th>
                     <th>Tamanho</th>
                     <th>Resolução</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -117,7 +118,9 @@
               {data: 'model'},
               {data: 'equip_registry', orderable: false},
               {data: 'monitor_size'},
-              {data: 'monitor_resolution'}
+              {data: 'monitor_resolution'},
+              {data: "sdfsdf", "defaultContent":
+                  "<button class='btn-warning' onclick='edititem();'>Editar</button> ", orderable: false }
             ],
           });
         });

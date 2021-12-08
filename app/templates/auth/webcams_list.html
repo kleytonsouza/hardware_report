@@ -86,13 +86,14 @@
         <table id="data" class="display">
             <thead>
                 <tr>
-                    <th>ID da Webcam</th>
+                    <th>Equip.</th>
                     <th>Usuário</th>
                     <th>Patrimônio</th>
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Data de Registro</th>
                     <th>Resolução</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,7 +116,9 @@
               {data: 'brand'},
               {data: 'model'},
               {data: 'equip_registry', orderable: false},
-              {data: 'webcam_resolution'}
+              {data: 'webcam_resolution'},
+              {data: "sdfsdf", "defaultContent":
+                  "<button class='btn-warning' onclick='edititem();'>Editar</button> ", orderable: false }
             ],
           });
         });

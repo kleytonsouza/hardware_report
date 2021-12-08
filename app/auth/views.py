@@ -41,8 +41,8 @@ def login():
 @login_required
 @auth.route('/equips_list', methods=['GET', 'POST'])
 def equips_list():
-    equipments = Equipment.query
-    return render_template('auth/equips_list.html', equipments=equipments)
+    # equipments = Equipment.query
+    return render_template('auth/equips_list.html') #, equipments=equipments)
 
 
 @login_required
@@ -55,43 +55,43 @@ def monitors_list():
 @login_required
 @auth.route('/fones_list', methods=['GET', 'POST'])
 def fones_list():
-    fones = Monitor.query
-    return render_template('auth/fones_list.html', fones=fones)
+    #fones = Monitor.query
+    return render_template('auth/fones_list.html') #, fones=fones)
 
 
 @login_required
 @auth.route('/mics_list', methods=['GET', 'POST'])
 def mics_list():
-    mics = Mic.query
-    return render_template('auth/mics_list.html', mics=mics)
+    # mics = Mic.query
+    return render_template('auth/mics_list.html') #, mics=mics)
 
 
 @login_required
 @auth.route('/webcams_list', methods=['GET', 'POST'])
 def webcams_list():
-    webcams = WebCam.query
-    return render_template('auth/webcams_list.html', webcams=webcams)
+    #webcams = WebCam.query
+    return render_template('auth/webcams_list.html')#, webcams=webcams)
 
 
 @login_required
 @auth.route('/computers_list', methods=['GET', 'POST'])
 def computers_list():
-    computers = Computer.query
-    return render_template('auth/computers_list.html', computers=computers)
+    #computers = Computer.query
+    return render_template('auth/computers_list.html') #, computers=computers)
 
 
 @login_required
 @auth.route('/users_list', methods=['GET', 'POST'])
 def users_list():
-    users = User.query
-    return render_template('auth/users_list.html', users=users)
+    #users = User.query
+    return render_template('auth/users_list.html') #, users=users)
 
 
 @login_required
 @auth.route('/calls_list', methods=['GET', 'POST'])
 def calls_list():
-    calls = Call.query
-    return render_template('auth/calls_list.html', calls=calls)
+    #calls = Call.query
+    return render_template('auth/calls_list.html') #, calls=calls)
 
 
 @auth.route('/api/equips')
@@ -345,7 +345,7 @@ def fones_data():
 
     search = request.args.get('search[value]')
     if search:
-        query = db.session.query(Monitor).join(User).filter(db.or_(
+        query = db.session.query(Fone).join(User).filter(db.or_(
             Fone.patrimony.like(f'%{search}%'),
             Fone.brand.like(f'%{search}%'),
             Fone.fone_driver.like(f'%{search}%'),
@@ -363,8 +363,9 @@ def fones_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['equip_id', 'equip_user_id', 'fone_driver', 'brand', 'all_connections', 'fone_frequency']:
-            col_name = 'equip_id'
+        if col_name not in ['fone_id', 'fone_user', 'fone_driver', 'brand',
+                            'model', 'fone_frequency', 'fone_impedance', 'fone_noise_cancellation']:
+            col_name = 'fone_id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(Fone, col_name)
         if descending:
@@ -396,7 +397,7 @@ def mics_data():
 
     search = request.args.get('search[value]')
     if search:
-        query = db.session.query(Monitor).join(User).filter(db.or_(
+        query = db.session.query(Mic).join(User).filter(db.or_(
             Mic.patrimony.like(f'%{search}%'),
             Mic.mic_frequency.like(f'%{search}%'),
             Mic.mic_noise_cancellation.like(f'%{search}%'),
@@ -413,8 +414,9 @@ def mics_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['equip_id', 'equip_user_id', 'mic_frequency', 'brand', 'mic_noise_cancellation', 'mic_impedance']:
-            col_name = 'equip_id'
+        if col_name not in ['mic_id', 'mic_user', 'mic_frequency', 'brand',
+                            'mic_noise_cancellation', 'mic_impedance', 'patrimony', 'mic_model']:
+            col_name = 'mic_id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(Mic, col_name)
         if descending:
@@ -424,6 +426,7 @@ def mics_data():
     if order:
         query = query.order_by(*order)
 
+    print(12)
     # pagination
     start = request.args.get('start', type=int)
     length = request.args.get('length', type=int)
