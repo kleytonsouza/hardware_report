@@ -2,8 +2,9 @@ import requests
 from flask import render_template, redirect, url_for, flash, request
 from ..models import *
 from . import auth
+from _datetime import datetime
 from flask_login import login_user, logout_user, login_required, current_user
-from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip
+from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip, form_add_computer
 
 
 @auth.route('/logout')
@@ -505,8 +506,11 @@ def choose_equip_type():
 
     form.type.choices = type_equips
 
-    if form.validate_on_submit():
-        return redirect(url_for("auth.add_equip", type=request.form.get("type")))
+    if form.validate_on_submit() and request.method == 'POST':
+        if request.form.get("type") == "Equipment":
+            return redirect(url_for("auth.add_equip"))
+        elif request.form.get("type") == "Computer" :
+            return redirect(url_for("auth.add_computer"))
 
     if request.method == 'POST':
         flash('Preenchimento Obrigatório!', 'fill')
@@ -515,24 +519,81 @@ def choose_equip_type():
     return render_template("auth/equip_add_choose_type.html", type_equips=type_equips, form=form)
 
 
-@auth.route('/add_equip/<type>', methods=['GET', 'POST'])
-@auth.route('/add_equip')
-def add_equip(type):
+# @auth.route('/add_equip/<type>', methods=['GET'])
+# @auth.route('/add_equip', methods=['POST'], defaults={'type': None})
+@auth.route('/add_equip', methods=['POST', 'GET'])
+def add_equip():
 
-    classes_equips_list = Equipment.__subclasses__()
-    classes_equips_list.append(Equipment)
+    # classes_equips_list = Equipment.__subclasses__()
+    # classes_equips_list.append(Equipment)
+    #
+    # for name_classe in classes_equips_list:
+    #     if name_classe.__name__ == type:
+    #         # form.fields.choices = name_classe.__table__.columns.keys()
+    #         return render_template("auth/add_equip.html", form=form)
 
-    for name_classe in classes_equips_list:
-        if name_classe.__name__ == type:
-            form = form_add_equip()
-            form.fields.choices = name_classe.__table__.columns.keys()
-            return render_template("auth/add_equip.html", form=form)
+    form_class = form_add_equip()
+    form = form_class()
 
-    # if form.validate_on_submit():
-    #     print(type)
-    #     return redirect(url_for("auth.equips_list"))
+    if form.validate_on_submit() and request.method == 'POST':
+        user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
+        novo_equip = Equipment(
+            equip_user_id=user,
+            patrimony=request.form.get("patrimony"),
+            brand=request.form.get("brand"),
+            position=request.form.get("position"),
+            equip_registry=datetime.today().strftime('%d/%m/%Y'),
+            general_description=request.form.get("general_description"),
+            type='equipments'
+        )
+        db.session.add(novo_equip)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            return render_template("add_error.html")
 
-    # return render_template("auth/choose_equip_type.html", form=form)
+        return render_template("auth/add_success.html")
+
+    return render_template("auth/add_equip.html", form=form)\
+
+
+
+# @auth.route('/add_computer/<type>', methods=['GET'])
+@auth.route('/add_computer', methods=['POST', 'GET'])
+def add_computer():
+
+    # classes_equips_list = Equipment.__subclasses__()
+    # classes_equips_list.append(Equipment)
+    #
+    # for name_classe in classes_equips_list:
+    #     if name_classe.__name__ == type:
+    #         # form.fields.choices = name_classe.__table__.columns.keys()
+    #         return render_template("auth/add_equip.html", form=form)
+
+    form = form_add_computer()
+
+    if form.validate_on_submit() and request.method == 'POST':
+        user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
+        novo_equip = Equipment(
+            equip_user_id=user,
+            patrimony=request.form.get("patrimony"),
+            brand=request.form.get("brand"),
+            position=request.form.get("position"),
+            equip_registry=datetime.today().strftime('%d/%m/%Y'),
+            general_description=request.form.get("general_description"),
+            type='equipments'
+        )
+        db.session.add(novo_equip)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            return render_template("add_error.html")
+
+        return render_template("auth/add_success.html")
+
+    return render_template("auth/add_computer.html", form=form)
 
 
 @auth.route('/user_add')

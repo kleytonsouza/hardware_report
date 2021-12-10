@@ -8,9 +8,9 @@
 
 {% block page_content %}
     <div class="row panel" >
-         <h3>Adicionar Equipamento Genérico</h3>
+         <h3>Adicionar Computador</h3>
     </div>
-    <form method="POST" action="{{ url_for('auth.add_equip') }}">
+    <form method="POST" action="{{ url_for('auth.add_computer') }}">
         {{ form.csrf_token }}
        <div class="row panel">
             <div class="form-group text-center col-xs-6 col-sm-6 col-md-4 col-lg-4" style="padding-left:5px; padding-top:20px">
@@ -37,6 +37,22 @@
               <fieldset class="form-field">
                   {{ form.general_description.label }}
                   {{ form.general_description }}
+              </fieldset>
+              <fieldset class="form-field">
+                  {{ form.computer_name.label }}
+                  {{ form.computer_name }}
+              </fieldset>
+              <fieldset class="form-field">
+                  {{ form.computer_so.label }}
+                  {{ form.computer_so }}
+              </fieldset>
+              <fieldset class="form-field">
+                  {{ form.computer_cpu.label }}
+                  {{ form.computer_cpu }}
+              </fieldset>
+              <fieldset class="form-field">
+                  {{ form.computer_memory.label }}
+                  {{ form.computer_memory }}
               </fieldset>
             </div>
         </div>

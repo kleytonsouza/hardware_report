@@ -257,7 +257,7 @@ class User(db.Model):
         }
 
     def __repr__(self):
-        return '<Usuário %r>' % self.user_name
+        return self.user_name
 
 
 class Admin(UserMixin, User):
