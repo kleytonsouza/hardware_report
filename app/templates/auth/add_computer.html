@@ -13,47 +13,112 @@
     <form method="POST" action="{{ url_for('auth.add_computer') }}">
         {{ form.csrf_token }}
        <div class="row panel">
-            <div class="form-group text-center col-xs-6 col-sm-6 col-md-4 col-lg-4" style="padding-left:5px; padding-top:20px">
-              <fieldset class="form-field">
-                  {{ form.equip_user.label }}
-                  {{ form.equip_user }}
-              </fieldset>
-              <fieldset class="form-field">
-                  {{ form.patrimony.label }}
-                  {{ form.patrimony(size=20) }}
-              </fieldset>
-              <fieldset class="form-field">
-                  {{ form.brand.label }}
-                  {{ form.brand }}
-              </fieldset>
-              <fieldset class="form-field">
-                  {{ form.model.label }}
-                  {{ form.model }}
-              </fieldset>
-              <fieldset class="form-field">
-                  {{ form.position.label }}
-                  {{ form.position }}
-              </fieldset>
-              <fieldset class="form-field">
-                  {{ form.general_description.label }}
-                  {{ form.general_description }}
-              </fieldset>
-              <fieldset class="form-field">
-                  {{ form.computer_name.label }}
-                  {{ form.computer_name }}
-              </fieldset>
-              <fieldset class="form-field">
-                  {{ form.computer_so.label }}
-                  {{ form.computer_so }}
-              </fieldset>
-              <fieldset class="form-field">
-                  {{ form.computer_cpu.label }}
-                  {{ form.computer_cpu }}
-              </fieldset>
-              <fieldset class="form-field">
-                  {{ form.computer_memory.label }}
-                  {{ form.computer_memory }}
-              </fieldset>
+            <div class="form-group col-xs-6 col-sm-6 col-md-4 col-lg-12" style="padding-left:5px; padding-top:20px">
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                      {{ form.equip_user.label }}
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        {{ form.equip_user(class="form-control", default="Selecione") }}
+                      </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                      {{ form.patrimony.label }}
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
+                        {{ form.patrimony(class="form-control") }}
+                      </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                      {{ form.brand.label }}
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
+                          {{ form.brand(class="form-control") }}
+                      </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                      {{ form.model.label }}
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-exclamation-sign"></i></span>
+                          {{ form.model(class="form-control") }}
+                      </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                      {{ form.position.label }}
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-plane"></i></span>
+                          {{ form.position(class="form-control") }}
+                      </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                      {{ form.general_description.label }}
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                          {{ form.general_description(class="form-control") }}
+                      </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                          {{ form.computer_name.label }}
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-flag"></i></span>
+                              {{ form.computer_name(class="form-control") }}
+                          </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                          {{ form.computer_so.label }}
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-modal-window"></i></span>
+                              {{ form.computer_so(class="form-control") }}
+                          </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                          {{ form.computer_cpu.label }}
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-tasks"></i></span>
+                              {{ form.computer_cpu(class="form-control") }}
+                          </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                          {{ form.computer_bios.label }}
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-folder-close"></i></span>
+                              {{ form.computer_bios(class="form-control") }}
+                          </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                          {{ form.computer_memory.label }}
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-transfer"></i></span>
+                              {{ form.computer_memory(class="form-control") }}
+                          </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                          {{ form.computer_hd.label }}
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-cd"></i></span>
+                              {{ form.computer_hd(class="form-control") }}
+                          </div>
+                  </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                          {{ form.computer_vga.label }}
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-hd-video"></i></span>
+                              {{ form.computer_vga(class="form-control") }}
+                          </div>
+                  </div>
+                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                          {{ form.computer_macaddress.label }}
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                              {{ form.computer_macaddress(class="form-control") }}
+                          </div>
+                  </div>
+                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                          {{ form.computer_capacity_memory.label }}
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-scale"></i></span>
+                              {{ form.computer_capacity_memory(class="form-control") }}
+                          </div>
+                  </div>
             </div>
         </div>
         <div class="panel-footer" style="background-color: white; border-top:0 ">

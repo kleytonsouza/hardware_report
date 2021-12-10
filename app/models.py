@@ -7,7 +7,7 @@ class Equipment(db.Model):
     __tablename__ = "equipments"
     equip_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     equip_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    patrimony = db.Column(db.Integer, nullable=True)
+    patrimony = db.Column(db.Integer, nullable=True, unique=True)
     brand = db.Column(db.String(64), nullable=True)
     model = db.Column(db.String(64), nullable=True)
     position = db.Column(db.String(64), nullable=True)
@@ -49,7 +49,7 @@ class Equipment(db.Model):
 class Computer(Equipment):
     __tablename__ = "computers"
     __mapper_args__ = {'polymorphic_identity': 'computers'}
-    computer_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), primary_key=True)
+    computer_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id', ondelete='CASCADE'), primary_key=True)
     computer_name = db.Column(db.String(64), nullable=False, unique=True)
     computer_cpu = db.Column(db.String(64))
     computer_so = db.Column(db.String(64))

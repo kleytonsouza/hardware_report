@@ -1,5 +1,7 @@
 import requests
 from flask import render_template, redirect, url_for, flash, request
+from sqlalchemy.exc import SQLAlchemyError
+
 from ..models import *
 from . import auth
 from _datetime import datetime
@@ -17,7 +19,6 @@ def logout():
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-
     if current_user.is_authenticated:
         return redirect(url_for('auth.equips_list'))
 
@@ -43,56 +44,56 @@ def login():
 @auth.route('/equips_list', methods=['GET', 'POST'])
 def equips_list():
     # equipments = Equipment.query
-    return render_template('auth/equips_list.html') #, equipments=equipments)
+    return render_template('auth/equips_list.html')  # , equipments=equipments)
 
 
 @login_required
 @auth.route('/monitors_list', methods=['GET', 'POST'])
 def monitors_list():
     # monitors = Monitor.query
-    return render_template('auth/monitors_list.html') #, monitors=monitors)
+    return render_template('auth/monitors_list.html')  # , monitors=monitors)
 
 
 @login_required
 @auth.route('/fones_list', methods=['GET', 'POST'])
 def fones_list():
-    #fones = Monitor.query
-    return render_template('auth/fones_list.html') #, fones=fones)
+    # fones = Monitor.query
+    return render_template('auth/fones_list.html')  # , fones=fones)
 
 
 @login_required
 @auth.route('/mics_list', methods=['GET', 'POST'])
 def mics_list():
     # mics = Mic.query
-    return render_template('auth/mics_list.html') #, mics=mics)
+    return render_template('auth/mics_list.html')  # , mics=mics)
 
 
 @login_required
 @auth.route('/webcams_list', methods=['GET', 'POST'])
 def webcams_list():
-    #webcams = WebCam.query
-    return render_template('auth/webcams_list.html')#, webcams=webcams)
+    # webcams = WebCam.query
+    return render_template('auth/webcams_list.html')  # , webcams=webcams)
 
 
 @login_required
 @auth.route('/computers_list', methods=['GET', 'POST'])
 def computers_list():
-    #computers = Computer.query
-    return render_template('auth/computers_list.html') #, computers=computers)
+    # computers = Computer.query
+    return render_template('auth/computers_list.html')  # , computers=computers)
 
 
 @login_required
 @auth.route('/users_list', methods=['GET', 'POST'])
 def users_list():
-    #users = User.query
-    return render_template('auth/users_list.html') #, users=users)
+    # users = User.query
+    return render_template('auth/users_list.html')  # , users=users)
 
 
 @login_required
 @auth.route('/calls_list', methods=['GET', 'POST'])
 def calls_list():
-    #calls = Call.query
-    return render_template('auth/calls_list.html') #, calls=calls)
+    # calls = Call.query
+    return render_template('auth/calls_list.html')  # , calls=calls)
 
 
 @auth.route('/api/equips')
@@ -144,7 +145,6 @@ def equips_data():
 
 @auth.route('/api/users')
 def users_data():
-
     query = User.query
 
     search = request.args.get('search[value]')
@@ -192,7 +192,6 @@ def users_data():
 
 @auth.route('/api/calls')
 def calls_data():
-
     query = Call.query
 
     search = request.args.get('search[value]')
@@ -239,7 +238,6 @@ def calls_data():
 
 @auth.route('/api/monitors')
 def monitors_data():
-
     query = Monitor.query
 
     search = request.args.get('search[value]')
@@ -276,7 +274,6 @@ def monitors_data():
     length = request.args.get('length', type=int)
     query = query.offset(start).limit(length)
 
-
     return {
         'data': [monitor.to_dict() for monitor in query],
         'recordsFiltered': total_filtered,
@@ -287,7 +284,6 @@ def monitors_data():
 
 @auth.route('/api/computers')
 def computers_data():
-
     query = Computer.query
 
     search = request.args.get('search[value]')
@@ -326,7 +322,6 @@ def computers_data():
     if order:
         query = query.order_by(*order)
 
-
     # pagination
     start = request.args.get('start', type=int)
     length = request.args.get('length', type=int)
@@ -344,7 +339,6 @@ def computers_data():
 
 @auth.route('/api/fones')
 def fones_data():
-
     query = Fone.query
 
     search = request.args.get('search[value]')
@@ -396,7 +390,6 @@ def fones_data():
 
 @auth.route('/api/mics')
 def mics_data():
-
     query = Mic.query
 
     search = request.args.get('search[value]')
@@ -448,7 +441,6 @@ def mics_data():
 
 @auth.route('/api/webcams')
 def webcams_data():
-
     query = WebCam.query
 
     search = request.args.get('search[value]')
@@ -469,7 +461,8 @@ def webcams_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['webcam_id', 'webcam_user', 'patrimony', 'webcam_resolution', 'brand', 'model', 'equip_registry']:
+        if col_name not in ['webcam_id', 'webcam_user', 'patrimony', 'webcam_resolution', 'brand', 'model',
+                            'equip_registry']:
             col_name = 'webcam_id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(WebCam, col_name)
@@ -497,7 +490,6 @@ def webcams_data():
 
 @auth.route('/choose_equip_type', methods=['GET', 'POST'])
 def choose_equip_type():
-
     type_equips = [cls.__name__ for cls in Equipment.__subclasses__()]
 
     type_equips.append("Equipment")
@@ -509,7 +501,7 @@ def choose_equip_type():
     if form.validate_on_submit() and request.method == 'POST':
         if request.form.get("type") == "Equipment":
             return redirect(url_for("auth.add_equip"))
-        elif request.form.get("type") == "Computer" :
+        elif request.form.get("type") == "Computer":
             return redirect(url_for("auth.add_computer"))
 
     if request.method == 'POST':
@@ -523,7 +515,6 @@ def choose_equip_type():
 # @auth.route('/add_equip', methods=['POST'], defaults={'type': None})
 @auth.route('/add_equip', methods=['POST', 'GET'])
 def add_equip():
-
     # classes_equips_list = Equipment.__subclasses__()
     # classes_equips_list.append(Equipment)
     #
@@ -549,20 +540,20 @@ def add_equip():
         db.session.add(novo_equip)
         try:
             db.session.commit()
-        except:
+        except SQLAlchemyError as e:
             db.session.rollback()
-            return render_template("add_error.html")
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error)
 
         return render_template("auth/add_success.html")
 
-    return render_template("auth/add_equip.html", form=form)\
+    return render_template("auth/add_equip.html", form=form) \
+ \
+        # @auth.route('/add_computer/<type>', methods=['GET'])
 
 
-
-# @auth.route('/add_computer/<type>', methods=['GET'])
 @auth.route('/add_computer', methods=['POST', 'GET'])
 def add_computer():
-
     # classes_equips_list = Equipment.__subclasses__()
     # classes_equips_list.append(Equipment)
     #
@@ -575,21 +566,31 @@ def add_computer():
 
     if form.validate_on_submit() and request.method == 'POST':
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
-        novo_equip = Equipment(
+        novo_equip = Computer(
             equip_user_id=user,
             patrimony=request.form.get("patrimony"),
             brand=request.form.get("brand"),
             position=request.form.get("position"),
+            computer_name=request.form.get("computer_name"),
             equip_registry=datetime.today().strftime('%d/%m/%Y'),
             general_description=request.form.get("general_description"),
-            type='equipments'
+            computer_cpu=request.form.get("computer_cpu"),
+            computer_so=request.form.get("computer_so"),
+            computer_bios=request.form.get("computer_bios"),
+            computer_memory=request.form.get("computer_memory"),
+            computer_hd=request.form.get("computer_hd"),
+            computer_vga=request.form.get("computer_vga"),
+            computer_macaddress=request.form.get("computer_macaddress"),
+            computer_capacity_memory=request.form.get("computer_capacity_memory"),
+            type='computers'
         )
         db.session.add(novo_equip)
         try:
             db.session.commit()
-        except:
+        except SQLAlchemyError as e:
             db.session.rollback()
-            return render_template("add_error.html")
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error)
 
         return render_template("auth/add_success.html")
 
@@ -598,11 +599,9 @@ def add_computer():
 
 @auth.route('/user_add')
 def user_add():
-
     return "add_user"
 
 
 @auth.route('/call_add')
 def call_add():
-
     return "add_user"

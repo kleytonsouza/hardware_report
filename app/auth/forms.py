@@ -24,8 +24,11 @@ def form_add_type_equip():
 def form_add_equip():
 
     class AddEquipForm(FlaskForm):
-        equip_user = SelectField('Usuário', coerce=int,
-                                 choices=[(s.user_id, s.user_name) for s in User.query.distinct(User.user_name).all()],
+        choices = [(s.user_id, s.user_name) for s in User.query.distinct(User.user_name).all()]
+        choices.append((" ", "Selecione o Usuário"))
+
+        equip_user = SelectField('Usuário',
+                                 choices=choices, default=" ",
                                  validators=[DataRequired()])
         patrimony = IntegerField('Patrimonio',
                                  render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
