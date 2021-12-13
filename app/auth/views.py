@@ -6,7 +6,7 @@ from ..models import *
 from . import auth
 from _datetime import datetime
 from flask_login import login_user, logout_user, login_required, current_user
-from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip, form_add_computer
+from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip, form_add_computer, form_add_user
 
 
 @auth.route('/logout')
@@ -545,7 +545,7 @@ def add_equip():
             error = str(e.__dict__['orig'])
             return render_template("auth/add_error.html", error=error)
 
-        return render_template("auth/add_success.html")
+        return render_template("auth/add_success.html", title="Equipamento Genérico")
 
     return render_template("auth/add_equip.html", form=form) \
  \
@@ -592,14 +592,35 @@ def add_computer():
             error = str(e.__dict__['orig'])
             return render_template("auth/add_error.html", error=error)
 
-        return render_template("auth/add_success.html")
+        return render_template("auth/add_success.html", title="Computador ")
 
     return render_template("auth/add_computer.html", form=form)
 
 
-@auth.route('/user_add')
+@auth.route('/user_add', methods=['POST', 'GET'])
 def user_add():
-    return "add_user"
+    form = form_add_user()
+
+    if form.validate_on_submit() and request.method == 'POST':
+
+        novo_user = User(
+            user_name=request.form.get("user_name"),
+            user_register=request.form.get("user_register"),
+            user_team_id=request.form.getlist("user_team_id")[0],
+            user_subteam_id=request.form.getlist("user_team_id")[1],
+
+        )
+        db.session.add(novo_user)
+        try:
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error)
+
+        return render_template("auth/add_success.html", title="Novo Usuário")
+
+    return render_template("auth/add_user.html", form=form)
 
 
 @auth.route('/call_add')

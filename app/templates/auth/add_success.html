@@ -7,27 +7,20 @@
 
 {% block page_content %}
     <div class="row panel text-left" >
-         <h1 class="btn btn-lg btn-success">Equipamento Genérico Adicionado</h1>
+         <h1 class="btn btn-lg btn-success">{{ title }} Adicionado</h1>
     </div>
    <div class="row panel">
         <div class="btn-group-lg">
            <div class="text-center">
-               <h3 class="btn btn-primary h1">Equipamento Generico Adicionado com Sucesso!</h3>
+               <h3 class="btn btn-primary h1">{{ title }} Adicionado com Sucesso!</h3>
            </div>
         </div>
    </div>
     <div class="panel-footer row" style="background-color: white; border-top:0 ">
         <div class="text-right col-md-offset-6 col-md-1">
-            <a href="{{ url_for('auth.equips_list') }}">
+            <a href="{{ url_for('auth.users_lists') }}">
                 <button type="button" class="btn btn-md btn-danger">
                     Voltar
-                </button>
-            </a>
-        </div>
-        <div class="text-right col-md-offset-2 col-md-1">
-            <a href="{{ url_for('auth.choose_equip_type') }}">
-                <button type="button" class="btn btn-md btn-primary">
-                    Adicionar outro
                 </button>
             </a>
         </div>
