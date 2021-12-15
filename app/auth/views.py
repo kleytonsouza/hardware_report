@@ -539,6 +539,14 @@ def add_equip():
 
     if form.validate_on_submit() and request.method == 'POST':
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
+
+        if request.form.get("patrimony") == "":
+            patrimony = None
+        else:
+            patrimony = request.form.get("patrimony")
+
+        print(request.form.get("patrimony"))
+        print(patrimony)
         novo_equip = Equipment(
             equip_user_id=user,
             patrimony=request.form.get("patrimony"),
@@ -576,6 +584,12 @@ def add_computer():
     form = form_add_computer()
 
     if form.validate_on_submit() and request.method == 'POST':
+
+        if request.form.get("patrimony") == "":
+            patrimony = None
+        else:
+            patrimony = request.form.get("patrimony")
+
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
         novo_equip = Computer(
             equip_user_id=user,
@@ -621,6 +635,12 @@ def add_monitor():
     form = form_add_monitor()
 
     if form.validate_on_submit() and request.method == 'POST':
+
+        if request.form.get("patrimony") == "":
+            patrimony = None
+        else:
+            patrimony = request.form.get("patrimony")
+
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
         novo_monitor = Monitor(
             equip_user_id=user,
@@ -660,6 +680,18 @@ def add_webcam():
 
     if form.validate_on_submit() and request.method == 'POST':
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
+
+        print(request.form.get("patrimony"))
+        print(1)
+
+        if request.form.get("patrimony") == "":
+            patrimony = None
+        else:
+            patrimony = request.form.get("patrimony")
+
+        print(patrimony)
+        print(type(patrimony))
+
         novo_webcam = WebCam(
             equip_user_id=user,
             patrimony=request.form.get("patrimony"),
@@ -697,6 +729,12 @@ def add_fone():
 
     if form.validate_on_submit() and request.method == 'POST':
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
+
+        if request.form.get("patrimony") == "":
+            patrimony = None
+        else:
+            patrimony = request.form.get("patrimony")
+
         novo_fone = Fone(
             equip_user_id=user,
             patrimony=request.form.get("patrimony"),

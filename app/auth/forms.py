@@ -94,7 +94,7 @@ def form_add_computer():
                                    render_kw={"placeholder": "Digite o modelo da placa de vídeo", "autocomplete": "on"})
         computer_macaddress = StringField('Mac Address',
                                           render_kw={"placeholder": "Digite o Mac Address", "autocomplete": "on"})
-        computer_capacity_memory = StringField('Capacidade de Memória', validators=[DataRequired()],
+        computer_capacity_memory = StringField('Capacidade de Memória',
                                                render_kw={"placeholder": "Digite a capacidade de Memória",
                                                           "autocomplete": "on"})
 

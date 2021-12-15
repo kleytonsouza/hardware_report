@@ -7,7 +7,7 @@ class Equipment(db.Model):
     __tablename__ = "equipments"
     equip_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     equip_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    patrimony = db.Column(db.String(64), nullable=True, unique=True)
+    patrimony = db.Column(db.String(64), nullable=True)
     brand = db.Column(db.String(64), nullable=True)
     model = db.Column(db.String(64), nullable=True)
     position = db.Column(db.String(64), nullable=True)
@@ -42,7 +42,7 @@ class Equipment(db.Model):
 
     __table_args__ = (
         db.UniqueConstraint(
-            patrimony, equip_user_id, equip_id),
+            patrimony, equip_user_id),
     )
 
 
