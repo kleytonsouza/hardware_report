@@ -6,7 +6,8 @@ from ..models import *
 from . import auth
 from _datetime import datetime
 from flask_login import login_user, logout_user, login_required, current_user
-from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip, form_add_computer, form_add_user
+from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip, form_add_computer, form_add_user, \
+    form_add_mic, form_add_fone, form_add_webcam, form_add_monitor
 
 
 @auth.route('/logout')
@@ -503,6 +504,16 @@ def choose_equip_type():
             return redirect(url_for("auth.add_equip"))
         elif request.form.get("type") == "Computer":
             return redirect(url_for("auth.add_computer"))
+        elif request.form.get("type") == "Monitor":
+            return redirect(url_for("auth.add_monitor"))
+        elif request.form.get("type") == "WebCam":
+            return redirect(url_for("auth.add_webcam"))
+        elif request.form.get("type") == "Fone":
+            return redirect(url_for("auth.add_fone"))
+        elif request.form.get("type") == "Mic":
+            return redirect(url_for("auth.add_mic"))
+        else:
+            return '<h1 class="btn btn-danger">Erro! Tipo de Equipamento não encontrado!</h1>'
 
     if request.method == 'POST':
         flash('Preenchimento Obrigatório!', 'fill')
@@ -595,6 +606,165 @@ def add_computer():
         return render_template("auth/add_success.html", title="Computador ")
 
     return render_template("auth/add_computer.html", form=form)
+
+
+@auth.route('/add_monitor', methods=['POST', 'GET'])
+def add_monitor():
+    # classes_equips_list = Equipment.__subclasses__()
+    # classes_equips_list.append(Equipment)
+    #
+    # for name_classe in classes_equips_list:
+    #     if name_classe.__name__ == type:
+    #         # form.fields.choices = name_classe.__table__.columns.keys()
+    #         return render_template("auth/add_equip.html", form=form)
+
+    form = form_add_monitor()
+
+    if form.validate_on_submit() and request.method == 'POST':
+        user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
+        novo_monitor = Monitor(
+            equip_user_id=user,
+            patrimony=request.form.get("patrimony"),
+            brand=request.form.get("brand"),
+            position=request.form.get("position"),
+            equip_registry=datetime.today().strftime('%d/%m/%Y'),
+            general_description=request.form.get("general_description"),
+            monitor_size=request.form.get("monitor_size"),
+            monitor_resolution=request.form.get("monitor_resolution"),
+            type='monitors'
+        )
+        db.session.add(novo_monitor)
+        try:
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error)
+
+        return render_template("auth/add_success.html", title="Monitor ")
+
+    return render_template("auth/add_monitor.html", form=form)
+
+
+@auth.route('/add_webcam', methods=['POST', 'GET'])
+def add_webcam():
+    # classes_equips_list = Equipment.__subclasses__()
+    # classes_equips_list.append(Equipment)
+    #
+    # for name_classe in classes_equips_list:
+    #     if name_classe.__name__ == type:
+    #         # form.fields.choices = name_classe.__table__.columns.keys()
+    #         return render_template("auth/add_equip.html", form=form)
+
+    form = form_add_webcam()
+
+    if form.validate_on_submit() and request.method == 'POST':
+        user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
+        novo_webcam = WebCam(
+            equip_user_id=user,
+            patrimony=request.form.get("patrimony"),
+            brand=request.form.get("brand"),
+            position=request.form.get("position"),
+            equip_registry=datetime.today().strftime('%d/%m/%Y'),
+            general_description=request.form.get("general_description"),
+            webcam_resolution=request.form.get("webcam_resolution"),
+            type='webcams'
+        )
+        db.session.add(novo_webcam)
+        try:
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error)
+
+        return render_template("auth/add_success.html", title="Webcam ")
+
+    return render_template("auth/add_webcam.html", form=form)
+
+
+@auth.route('/add_fone', methods=['POST', 'GET'])
+def add_fone():
+    # classes_equips_list = Equipment.__subclasses__()
+    # classes_equips_list.append(Equipment)
+    #
+    # for name_classe in classes_equips_list:
+    #     if name_classe.__name__ == type:
+    #         # form.fields.choices = name_classe.__table__.columns.keys()
+    #         return render_template("auth/add_equip.html", form=form)
+
+    form = form_add_fone()
+
+    if form.validate_on_submit() and request.method == 'POST':
+        user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
+        novo_fone = Fone(
+            equip_user_id=user,
+            patrimony=request.form.get("patrimony"),
+            brand=request.form.get("brand"),
+            position=request.form.get("position"),
+            equip_registry=datetime.today().strftime('%d/%m/%Y'),
+            general_description=request.form.get("general_description"),
+            fone_frequency=request.form.get("fone_frequency"),
+            fone_impedance=request.form.get("fone_impedance"),
+            fone_driver=request.form.get("fone_driver"),
+            fone_noise_cancellation=request.form.get("fone_noise_cancellation"),
+            type='fones'
+        )
+        db.session.add(novo_fone)
+        try:
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error)
+
+        return render_template("auth/add_success.html", title="Fone ")
+
+    return render_template("auth/add_fone.html", form=form)
+
+
+@auth.route('/add_mic', methods=['POST', 'GET'])
+def add_mic():
+    # classes_equips_list = Equipment.__subclasses__()
+    # classes_equips_list.append(Equipment)
+    #
+    # for name_classe in classes_equips_list:
+    #     if name_classe.__name__ == type:
+    #         # form.fields.choices = name_classe.__table__.columns.keys()
+    #         return render_template("auth/add_equip.html", form=form)
+    form = form_add_mic()
+
+    if form.validate_on_submit() and request.method == 'POST':
+
+        user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
+
+        if request.form.get("patrimony") == "":
+            patrimony = None
+        else:
+            patrimony = request.form.get("patrimony")
+
+        novo_mic = Mic(
+            equip_user_id=user,
+            patrimony=patrimony,
+            brand=request.form.get("brand"),
+            position=request.form.get("position"),
+            equip_registry=datetime.today().strftime('%d/%m/%Y'),
+            general_description=request.form.get("general_description"),
+            mic_frequency=request.form.get("mic_frequency"),
+            mic_impedance=request.form.get("mic_impedance"),
+            mic_noise_cancellation=request.form.get("mic_noise_cancellation"),
+            type='mics'
+        )
+        db.session.add(novo_mic)
+        try:
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error)
+
+        return render_template("auth/add_success.html", title="Mic ")
+    return render_template("auth/add_mic.html", form=form)
 
 
 @auth.route('/user_add', methods=['POST', 'GET'])

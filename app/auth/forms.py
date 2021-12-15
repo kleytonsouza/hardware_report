@@ -30,7 +30,6 @@ def form_add_user():
                     coords.append(([i.team_id, c.subteam_id], i.team_name + " - " + c.subteam_name))
             else:
                 coords.append((i.team_id, i.team_name))
-        print(coords)
 
         choices = coords
         choices.append((" ", "Selecione a Coordenação"))
@@ -60,7 +59,7 @@ def form_add_equip():
         equip_user = SelectField('Usuário',
                                  choices=choices, default=" ",
                                  validators=[DataRequired()])
-        patrimony = IntegerField('Patrimonio',
+        patrimony = StringField('Patrimonio',
                                  render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
         brand = StringField('Marca',
                             render_kw={"placeholder": "Digite a Marca", "autocomplete": "on"})
@@ -77,7 +76,7 @@ def form_add_equip():
 
 def form_add_computer():
     class AddComputerForm(form_add_equip()):
-        # computer_id =
+
         computer_name = StringField('Nome do Computador',
                                     render_kw={"placeholder": "Digite o nome do computador", "autocomplete": "on"})
         computer_so = StringField('Sistema Operacional',
@@ -100,3 +99,61 @@ def form_add_computer():
                                                           "autocomplete": "on"})
 
     return AddComputerForm()
+
+
+def form_add_monitor():
+    class AddMonitorForm(form_add_equip()):
+        # computer_id =
+        monitor_size = StringField('Tamanho do Monitor',
+                                   render_kw={"placeholder": "Digite o tamanho em polegas do monitor",
+                                              "autocomplete": "on"})
+        monitor_resolution = StringField('Resolução do Monitor',
+                                         render_kw={"placeholder": "Digite a resolução da tela", "autocomplete": "on"})
+
+    return AddMonitorForm()
+
+
+def form_add_webcam():
+    class AddWebcamForm(form_add_equip()):
+        # computer_id =
+        webcam_resolution = StringField('Resolução da Webcam',
+                                        render_kw={"placeholder": "Digite a resolução da webcam", "autocomplete": "on"})
+
+    return AddWebcamForm()
+
+
+def form_add_fone():
+    class AddFoneForm(form_add_equip()):
+        choices = [(m.mic_id, m.model) for m in Mic.query.distinct(Mic.model).all()]
+        choices.append((" ", "Selecione o Microfone"))
+
+        fone_frequency = StringField('Frequência do Fone',
+                                     render_kw={"placeholder": "Digite o nome a frequência do fone",
+                                                "autocomplete": "on"})
+
+        fone_impedance = StringField('Impedância do Fone',
+                                     render_kw={"placeholder": "Digite a impedância do fone", "autocomplete": "on"})
+
+        fone_driver = StringField('Driver do Fone',
+                                  render_kw={"placeholder": "Digite o driver do fone", "autocomplete": "on"})
+
+        fone_noise_cancellation = StringField('Cancelamento de Ruído',
+                                              render_kw={"placeholder": "Digite se possui cancelamento de ruído",
+                                                         "autocomplete": "on"})
+
+    return AddFoneForm()
+
+
+def form_add_mic():
+    class AddMicForm(form_add_equip()):
+        mic_frequency = StringField('Frequência do microfone',
+                                    render_kw={"placeholder": "Digite a Frequência do fone", "autocomplete": "on"})
+
+        mic_impedance = StringField('Impedância do microfone',
+                                    render_kw={"placeholder": "Digite a impedância do fone", "autocomplete": "on"})
+
+        mic_noise_cancellation = StringField('Cancelamento de ruído',
+                                             render_kw={"placeholder": "Digite se possui cancelamento de ruído",
+                                                        "autocomplete": "on"})
+
+    return AddMicForm()

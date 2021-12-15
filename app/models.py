@@ -7,7 +7,7 @@ class Equipment(db.Model):
     __tablename__ = "equipments"
     equip_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     equip_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    patrimony = db.Column(db.Integer, nullable=True, unique=True)
+    patrimony = db.Column(db.String(64), nullable=True, unique=True)
     brand = db.Column(db.String(64), nullable=True)
     model = db.Column(db.String(64), nullable=True)
     position = db.Column(db.String(64), nullable=True)
@@ -42,7 +42,7 @@ class Equipment(db.Model):
 
     __table_args__ = (
         db.UniqueConstraint(
-            patrimony, equip_user_id),
+            patrimony, equip_user_id, equip_id),
     )
 
 
@@ -135,7 +135,7 @@ class Fone(Equipment):
     fone_impedance = db.Column(db.String(64), nullable=True)
     fone_driver = db.Column(db.String(64), nullable=True)
     fone_noise_cancellation = db.Column(db.String(64), nullable=True)
-    fone_mic = db.Column(db.Integer, db.ForeignKey('mics.mic_id'), nullable=True)
+    # fone_mic = db.Column(db.Integer, db.ForeignKey('mics.mic_id'), nullable=True)
 
     def to_dict(self):
         return {
@@ -143,7 +143,7 @@ class Fone(Equipment):
             'fone_frequency': self.fone_frequency,
             'fone_impedance': self.fone_impedance,
             'fone_noise_cancellation': self.fone_noise_cancellation,
-            'fone_mic': self.fone_mic,
+            'fone_driver': self.fone_driver,
             'fone_user': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
             'patrimony': self.patrimony,
             'brand': self.brand,
