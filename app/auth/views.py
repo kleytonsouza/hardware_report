@@ -538,24 +538,30 @@ def add_equip():
     form = form_class()
 
     if form.validate_on_submit() and request.method == 'POST':
+
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
 
         if request.form.get("patrimony") == "":
-            patrimony = None
+            print("aqui")
+            novo_equip = Equipment(
+                equip_user_id=user,
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                type='equipments'
+            )
         else:
-            patrimony = request.form.get("patrimony")
-
-        print(request.form.get("patrimony"))
-        print(patrimony)
-        novo_equip = Equipment(
-            equip_user_id=user,
-            patrimony=request.form.get("patrimony"),
-            brand=request.form.get("brand"),
-            position=request.form.get("position"),
-            equip_registry=datetime.today().strftime('%d/%m/%Y'),
-            general_description=request.form.get("general_description"),
-            type='equipments'
-        )
+            print("test", request.form.get("patrimony"), "teste")
+            novo_equip = Equipment(
+                equip_user_id=user,
+                patrimony=request.form.get("patrimony"),
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                type='equipments'
+            )
         db.session.add(novo_equip)
         try:
             db.session.commit()
@@ -584,31 +590,45 @@ def add_computer():
     form = form_add_computer()
 
     if form.validate_on_submit() and request.method == 'POST':
+        user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
 
         if request.form.get("patrimony") == "":
-            patrimony = None
+            novo_equip = Computer(
+                equip_user_id=user,
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                computer_name=request.form.get("computer_name"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                computer_cpu=request.form.get("computer_cpu"),
+                computer_so=request.form.get("computer_so"),
+                computer_bios=request.form.get("computer_bios"),
+                computer_memory=request.form.get("computer_memory"),
+                computer_hd=request.form.get("computer_hd"),
+                computer_vga=request.form.get("computer_vga"),
+                computer_macaddress=request.form.get("computer_macaddress"),
+                computer_capacity_memory=request.form.get("computer_capacity_memory"),
+                type='computers'
+            )
         else:
-            patrimony = request.form.get("patrimony")
-
-        user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
-        novo_equip = Computer(
-            equip_user_id=user,
-            patrimony=request.form.get("patrimony"),
-            brand=request.form.get("brand"),
-            position=request.form.get("position"),
-            computer_name=request.form.get("computer_name"),
-            equip_registry=datetime.today().strftime('%d/%m/%Y'),
-            general_description=request.form.get("general_description"),
-            computer_cpu=request.form.get("computer_cpu"),
-            computer_so=request.form.get("computer_so"),
-            computer_bios=request.form.get("computer_bios"),
-            computer_memory=request.form.get("computer_memory"),
-            computer_hd=request.form.get("computer_hd"),
-            computer_vga=request.form.get("computer_vga"),
-            computer_macaddress=request.form.get("computer_macaddress"),
-            computer_capacity_memory=request.form.get("computer_capacity_memory"),
-            type='computers'
-        )
+            novo_equip = Computer(
+                equip_user_id=user,
+                patrimony=request.form.get("patrimony"),
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                computer_name=request.form.get("computer_name"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                computer_cpu=request.form.get("computer_cpu"),
+                computer_so=request.form.get("computer_so"),
+                computer_bios=request.form.get("computer_bios"),
+                computer_memory=request.form.get("computer_memory"),
+                computer_hd=request.form.get("computer_hd"),
+                computer_vga=request.form.get("computer_vga"),
+                computer_macaddress=request.form.get("computer_macaddress"),
+                computer_capacity_memory=request.form.get("computer_capacity_memory"),
+                type='computers'
+            )
         db.session.add(novo_equip)
         try:
             db.session.commit()
@@ -635,24 +655,32 @@ def add_monitor():
     form = form_add_monitor()
 
     if form.validate_on_submit() and request.method == 'POST':
+        user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
 
         if request.form.get("patrimony") == "":
-            patrimony = None
+            novo_monitor = Monitor(
+                equip_user_id=user,
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                monitor_size=request.form.get("monitor_size"),
+                monitor_resolution=request.form.get("monitor_resolution"),
+                type='monitors'
+            )
         else:
-            patrimony = request.form.get("patrimony")
+            novo_monitor = Monitor(
+                equip_user_id=user,
+                patrimony=request.form.get("patrimony"),
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                monitor_size=request.form.get("monitor_size"),
+                monitor_resolution=request.form.get("monitor_resolution"),
+                type='monitors'
+            )
 
-        user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
-        novo_monitor = Monitor(
-            equip_user_id=user,
-            patrimony=request.form.get("patrimony"),
-            brand=request.form.get("brand"),
-            position=request.form.get("position"),
-            equip_registry=datetime.today().strftime('%d/%m/%Y'),
-            general_description=request.form.get("general_description"),
-            monitor_size=request.form.get("monitor_size"),
-            monitor_resolution=request.form.get("monitor_resolution"),
-            type='monitors'
-        )
         db.session.add(novo_monitor)
         try:
             db.session.commit()
@@ -681,27 +709,28 @@ def add_webcam():
     if form.validate_on_submit() and request.method == 'POST':
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
 
-        print(request.form.get("patrimony"))
-        print(1)
-
         if request.form.get("patrimony") == "":
-            patrimony = None
+            novo_webcam = WebCam(
+                equip_user_id=user,
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                webcam_resolution=request.form.get("webcam_resolution"),
+                type='webcams'
+            )
         else:
-            patrimony = request.form.get("patrimony")
+            novo_webcam = WebCam(
+                equip_user_id=user,
+                patrimony=request.form.get("patrimony"),
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                webcam_resolution=request.form.get("webcam_resolution"),
+                type='webcams'
+            )
 
-        print(patrimony)
-        print(type(patrimony))
-
-        novo_webcam = WebCam(
-            equip_user_id=user,
-            patrimony=request.form.get("patrimony"),
-            brand=request.form.get("brand"),
-            position=request.form.get("position"),
-            equip_registry=datetime.today().strftime('%d/%m/%Y'),
-            general_description=request.form.get("general_description"),
-            webcam_resolution=request.form.get("webcam_resolution"),
-            type='webcams'
-        )
         db.session.add(novo_webcam)
         try:
             db.session.commit()
@@ -731,23 +760,32 @@ def add_fone():
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
 
         if request.form.get("patrimony") == "":
-            patrimony = None
+            novo_fone = Fone(
+                equip_user_id=user,
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                fone_frequency=request.form.get("fone_frequency"),
+                fone_impedance=request.form.get("fone_impedance"),
+                fone_driver=request.form.get("fone_driver"),
+                fone_noise_cancellation=request.form.get("fone_noise_cancellation"),
+                type='fones'
+            )
         else:
-            patrimony = request.form.get("patrimony")
-
-        novo_fone = Fone(
-            equip_user_id=user,
-            patrimony=request.form.get("patrimony"),
-            brand=request.form.get("brand"),
-            position=request.form.get("position"),
-            equip_registry=datetime.today().strftime('%d/%m/%Y'),
-            general_description=request.form.get("general_description"),
-            fone_frequency=request.form.get("fone_frequency"),
-            fone_impedance=request.form.get("fone_impedance"),
-            fone_driver=request.form.get("fone_driver"),
-            fone_noise_cancellation=request.form.get("fone_noise_cancellation"),
-            type='fones'
-        )
+            novo_fone = Fone(
+                equip_user_id=user,
+                patrimony=request.form.get("patrimony"),
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                fone_frequency=request.form.get("fone_frequency"),
+                fone_impedance=request.form.get("fone_impedance"),
+                fone_driver=request.form.get("fone_driver"),
+                fone_noise_cancellation=request.form.get("fone_noise_cancellation"),
+                type='fones'
+            )
         db.session.add(novo_fone)
         try:
             db.session.commit()
@@ -777,22 +815,30 @@ def add_mic():
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
 
         if request.form.get("patrimony") == "":
-            patrimony = None
+            novo_mic = Mic(
+                equip_user_id=user,
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                mic_frequency=request.form.get("mic_frequency"),
+                mic_impedance=request.form.get("mic_impedance"),
+                mic_noise_cancellation=request.form.get("mic_noise_cancellation"),
+                type='mics'
+            )
         else:
-            patrimony = request.form.get("patrimony")
-
-        novo_mic = Mic(
-            equip_user_id=user,
-            patrimony=patrimony,
-            brand=request.form.get("brand"),
-            position=request.form.get("position"),
-            equip_registry=datetime.today().strftime('%d/%m/%Y'),
-            general_description=request.form.get("general_description"),
-            mic_frequency=request.form.get("mic_frequency"),
-            mic_impedance=request.form.get("mic_impedance"),
-            mic_noise_cancellation=request.form.get("mic_noise_cancellation"),
-            type='mics'
-        )
+            novo_mic = Mic(
+                equip_user_id=user,
+                patrimony=request.form.get("patrimony"),
+                brand=request.form.get("brand"),
+                position=request.form.get("position"),
+                equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                general_description=request.form.get("general_description"),
+                mic_frequency=request.form.get("mic_frequency"),
+                mic_impedance=request.form.get("mic_impedance"),
+                mic_noise_cancellation=request.form.get("mic_noise_cancellation"),
+                type='mics'
+            )
         db.session.add(novo_mic)
         try:
             db.session.commit()
