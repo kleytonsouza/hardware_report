@@ -1,3 +1,5 @@
+import bdb
+
 import requests
 from flask import render_template, redirect, url_for, flash, request
 from sqlalchemy.exc import SQLAlchemyError
@@ -857,11 +859,12 @@ def user_add():
 
     if form.validate_on_submit() and request.method == 'POST':
 
+        lst_teams = request.form.get("user_team_id")
         novo_user = User(
             user_name=request.form.get("user_name"),
             user_register=request.form.get("user_register"),
-            user_team_id=request.form.getlist("user_team_id")[0],
-            user_subteam_id=request.form.getlist("user_team_id")[1],
+            user_team_id=lst_teams[1],
+            user_subteam_id=lst_teams[4] if len(lst_teams) == 5 else None
 
         )
         db.session.add(novo_user)
@@ -877,6 +880,26 @@ def user_add():
     return render_template("auth/add_user.html", form=form)
 
 
+@auth.route('/delete_user/<int:user_id>', methods=['POST', 'GET'])
+@auth.route('/delete_user/', methods=['POST', 'GET'])
+def delete_user(user_id):
+
+    print('chegou')
+    user = User.query.filter_by(user_id=user_id).first()
+    db.session.delete(user)
+
+    try:
+        db.session.commit()
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        error = str(e.__dict__['orig'])
+        return render_template("auth/add_error.html", error=error)
+
+    return render_template('users_list.html')
+
 @auth.route('/call_add')
 def call_add():
     return "add_user"
+
+
+
