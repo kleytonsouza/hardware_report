@@ -7,6 +7,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 {% endblock %}
 
 {% block page_content %}
@@ -58,6 +60,10 @@
         <tbody>
         </tbody>
     </table>
+{#    {% if error %}#}
+        <div class="col-md-12" id="result"></div>
+{#    {% endif %}#}
+    <div class="col-md-12" id="errormsg"></div>
 {#    <!-- Modal -->#}
 {#     <div class="modal modal-danger fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">#}
 {#      <div class="modal-dialog" role="document">#}
@@ -105,20 +111,34 @@
     });
 
 
+        var csrftoken = $('meta[name=csrf-token]').attr('content')
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                }
+            }
+        })
+
      $('#data').on('click', '#deleteitem', function() {
           table = $('#data').DataTable();
           user = table.row( $(this).parents('tr') ).data();
           user_id = user.user_id
 
-            console.log(user.user_id);
           if(confirm("Deseja excluir o Usuário: " + user.user_name)){
-              $.ajax({
-                  url: 'delete_user',
-                  headers: {"Content-Type": "application/json"},
-                  data: user_id,
+              var request = $.ajax({
+                  url: './delete_user/',
+                  data: JSON.stringify({user_id: user_id}),
+                  contentType: 'application/json;charset=utf-8',
                   type: 'POST',
-                  sucess: function (response){
-                      console.log(response)
+                  sucess: function (response) {
+                      console.log(response);
+                      $("#result").html(response)
+                  },
+                  error: function(xhr, ajaxOptions, thrownError) {
+                      console.log(xhr, ajaxOptions, thrownError);
+                      $("#errormsg").html('×ATENÇÃO! Contate o suporte técnico.');
                   }
               })
           }

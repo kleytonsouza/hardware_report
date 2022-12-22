@@ -61,7 +61,6 @@ class Computer(Equipment):
     computer_capacity_memory = db.Column(db.String(64))
     computer_storages = db.relationship("Storage", backref="computers")
 
-
     def to_dict(self):
         return {
             'computer_id': self.equip_id,
@@ -135,6 +134,7 @@ class Fone(Equipment):
     fone_impedance = db.Column(db.String(64), nullable=True)
     fone_driver = db.Column(db.String(64), nullable=True)
     fone_noise_cancellation = db.Column(db.String(64), nullable=True)
+
     # fone_mic = db.Column(db.Integer, db.ForeignKey('mics.mic_id'), nullable=True)
 
     def to_dict(self):
@@ -241,7 +241,6 @@ class User(db.Model):
     )
 
     def to_dict(self):
-
         get_subteam_name = self.user_subteam_id
 
         if get_subteam_name is not None:

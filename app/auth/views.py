@@ -1,9 +1,6 @@
-import bdb
 
-import requests
 from flask import render_template, redirect, url_for, flash, request
 from sqlalchemy.exc import SQLAlchemyError
-
 from ..models import *
 from . import auth
 from _datetime import datetime
@@ -167,7 +164,6 @@ def users_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        print(col_name)
         if col_name not in ['user_id', 'user_register', 'user_name', 'user_team_id', 'user_subteam_id']:
             col_name = 'user_name'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
@@ -426,7 +422,6 @@ def mics_data():
     if order:
         query = query.order_by(*order)
 
-    print(12)
     # pagination
     start = request.args.get('start', type=int)
     length = request.args.get('length', type=int)
@@ -544,7 +539,6 @@ def add_equip():
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
 
         if request.form.get("patrimony") == "":
-            print("aqui")
             novo_equip = Equipment(
                 equip_user_id=user,
                 brand=request.form.get("brand"),
@@ -554,7 +548,6 @@ def add_equip():
                 type='equipments'
             )
         else:
-            print("test", request.form.get("patrimony"), "teste")
             novo_equip = Equipment(
                 equip_user_id=user,
                 patrimony=request.form.get("patrimony"),
@@ -664,6 +657,7 @@ def add_monitor():
                 equip_user_id=user,
                 brand=request.form.get("brand"),
                 position=request.form.get("position"),
+                model=request.form.get("model"),
                 equip_registry=datetime.today().strftime('%d/%m/%Y'),
                 general_description=request.form.get("general_description"),
                 monitor_size=request.form.get("monitor_size"),
@@ -676,6 +670,7 @@ def add_monitor():
                 patrimony=request.form.get("patrimony"),
                 brand=request.form.get("brand"),
                 position=request.form.get("position"),
+                model=request.form.get("model"),
                 equip_registry=datetime.today().strftime('%d/%m/%Y'),
                 general_description=request.form.get("general_description"),
                 monitor_size=request.form.get("monitor_size"),
@@ -880,22 +875,33 @@ def user_add():
     return render_template("auth/add_user.html", form=form)
 
 
-@auth.route('/delete_user/<int:user_id>', methods=['POST', 'GET'])
+# @auth.route('/delete_user/<int:user_id>', methods=['POST', 'GET'])
 @auth.route('/delete_user/', methods=['POST', 'GET'])
-def delete_user(user_id):
+def delete_user():
 
-    print('chegou')
-    user = User.query.filter_by(user_id=user_id).first()
-    db.session.delete(user)
+    print(1)
+    if request.method == 'POST':
 
-    try:
+        user_id = request.get_json()["user_id"]
+
+        user = User.query.filter_by(user_id=user_id).first()
+
+        if Equipment.query.filter_by(equip_user_id=user_id).first():
+            print(3)
+            print("mememe")
+            return app.make_response('Hello, World', 201)
+
+        db.session.delete(user)
         db.session.commit()
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        error = str(e.__dict__['orig'])
-        return render_template("auth/add_error.html", error=error)
+        try:
+            db.session.commit()
+        except :
+            db.session.rollback()
+            # error = str(.__dict__['orig'])
+            return render_template("auth/add_error.html")
 
-    return render_template('users_list.html')
+    print("xx")
+    return render_template('auth/users_list.html')
 
 @auth.route('/call_add')
 def call_add():
