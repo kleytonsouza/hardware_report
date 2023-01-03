@@ -906,5 +906,23 @@ def delete_user():
 @auth.route('/call_add', methods=['POST', 'GET'])
 def call_add():
     form = form_add_call()
+    error = None
 
-    return "add_user"
+    if form.validate_on_submit() and request.method == "POST":
+        new_call = Call(call_equipment_id=request.form.get("call_equipment"),
+                        call_user_id=User.query.filter_by(user_name=request.form.get("call_user")).first().user_id,
+                        call_open=datetime.now().strftime("%d/%b/%y %H:%M:%S"),
+                        )
+        db.session.add(new_call)
+        try:
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error, element="Chamado em " + new_call.call_open)
+
+        return render_template("auth/add_success.html", title="Chamado")
+    elif request.method == "POST":
+        error = "problema ao criar chamado!!"
+
+    return render_template("auth/add_call.html", form=form, error=error)

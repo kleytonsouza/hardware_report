@@ -30,6 +30,9 @@ class Equipment(db.Model):
 
         }
 
+    def __repr__(self):
+        return str(self.equip_id)
+
     # def edit_equip(self):
     #     equip_new = Equipment.query.filter(Equipment.equip_id == self.equip_id).first()
     #     db.session.add(equip_new)
@@ -179,9 +182,10 @@ class Call(db.Model):
     call_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     call_equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), nullable=False)
     call_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    call_open = db.Column(db.String(64))
-    call_close = db.Column(db.String(64))
-    call_solution = db.Column(db.String(700))
+    call_open = db.Column(db.String(64), nullable=False)
+    call_close = db.Column(db.String(64), nullable=True)
+    call_technican = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, default=0)
+    call_solution = db.Column(db.String(700), nullable=True)
 
     def to_dict(self):
         return {
@@ -193,6 +197,9 @@ class Call(db.Model):
             'call_user': User.query.filter(User.user_id == self.call_user_id).first().user_name,
 
         }
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 
 class Connection(db.Model):

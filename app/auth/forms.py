@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, RadioField, IntegerField, SelectField
-from wtforms.validators import DataRequired
+from wtforms import StringField, PasswordField, SubmitField, RadioField, IntegerField, SelectField, TextAreaField
+from wtforms.validators import DataRequired, Length
 from ..models import *
 
 
@@ -38,7 +38,7 @@ def form_add_user():
         # choices_sub.append((" ", "Selecione a Subcoordenação"))
 
         user_register = IntegerField('Registro Funcional',
-                                     render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
+                                     render_kw={"placeholder": "Digite o Registro funcional", "autocomplete": "on"})
         user_name = StringField('Nome do Usuário',
                                 render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
         user_team_id = SelectField('Coordenação',
@@ -160,13 +160,16 @@ def form_add_mic():
 
 def form_add_call():
     class AddCallForm(FlaskForm):
-        call_user = SelectField('Identificação do Usuário', choices=User.query.all(),
-                                render_kw={"placeholder": "Usuário", "autocomplete": "on"})
-        call_equipment = SelectField('Nome do Usuário', choices=Equipment.query.all(),
+        call_user = StringField('Identificação do Usuário')
+        call_equipment = SelectField('Identificação do Equipamento', choices=Equipment.query.all(),
                                      render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
-        call_technician = SelectField('Coordenação', choices=Admin.query.all())
-        problem_description = StringField('Problema', render_kw={"placeholder": "Descreva o Problema",
-                                                                 "autocomplete": "on"})
-        fix_description = StringField('Solução', render_kw={"placeholder": "Descreva a Solução", "autocomplete": "on"})
+        # call_technician = SelectField('Coordenação', choices=Admin.query.all())
+        problem_description = TextAreaField('Problema', render_kw={"placeholder": "Descreva o Problema",
+                                                                   "autocomplete": "on"},
+                                            validators=[Length(min=10, max=370, message="Min 10 e max 370"),
+                                                        DataRequired()])
+        fix_description = TextAreaField('Solução',
+                                        render_kw={"placeholder": "Descreva a Solução", "autocomplete": "on"},
+                                        validators=[Length(min=0, max=370, message="Min 10 e max 370")])
 
     return AddCallForm()
