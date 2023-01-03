@@ -52,7 +52,7 @@
                 <th>Equipamento</th>
                 <th>Data de Abertura</th>
                 <th>Data de Fechamento</th>
-                <th>Solução</th>
+                <th>Ação</th>
             </tr>
         </thead>
         <tbody>
@@ -68,11 +68,13 @@
         serverSide: true,
         columns: [
           {data: 'call_id'},
-          {data: 'call_user_id'},
+          {data: 'call_user'},
           {data: 'call_equipment_id'},
           {data: 'call_open'},
           {data: 'call_close'},
-          {data: 'call_solution', orderable: false}
+          {data: "sdfsdf", "defaultContent":
+                  "<button class='col-lg-5 btn-warning'  onclick='edititem();'>Editar</button> "+
+                  "<button class='col-lg-offset-2 col-lg-5 btn-danger' id='deleteitem'>Fechar</button> </a>", orderable: false}
         ],
       });
     });
