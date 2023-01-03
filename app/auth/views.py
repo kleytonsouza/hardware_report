@@ -853,29 +853,27 @@ def user_add():
     form = form_add_user()
 
     if form.validate_on_submit() and request.method == 'POST':
-
         lst_teams = request.form.get("user_team_id")
         novo_user = User(
             user_name=request.form.get("user_name"),
             user_register=request.form.get("user_register"),
-            user_team_id=lst_teams[1],
+            user_team_id=lst_teams[1],  # lst_teams é uma string e não uma lista
             user_subteam_id=lst_teams[4] if len(lst_teams) == 5 else None
 
         )
         db.session.add(novo_user)
-        try:
-            db.session.commit()
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            error = str(e.__dict__['orig'])
-            return render_template("auth/add_error.html", error=error, element="Usuário " + novo_user.user_name)
+        # try:
+        db.session.commit()
+        # except SQLAlchemyError as e:
+        #     db.session.rollback()
+        #     error = str(e.__dict__['orig'])
+        #     return render_template("auth/add_error.html", error=error, element="Usuário " + novo_user.user_name)
 
         return render_template("auth/add_success.html", title="Novo Usuário")
 
     return render_template("auth/add_user.html", form=form)
 
 
-# @auth.route('/delete_user/<int:user_id>', methods=['POST', 'GET'])
 @auth.route('/delete_user/', methods=['POST', 'GET'])
 def delete_user():
     print(1)
@@ -891,16 +889,20 @@ def delete_user():
             return make_response('Hello, World', 201)
 
         db.session.delete(user)
+        #try:
         db.session.commit()
-        try:
-            db.session.commit()
-        except:
-            db.session.rollback()
+        #except:
+        #    db.session.rollback()
             # error = str(.__dict__['orig'])
-            return render_template("auth/add_error.html")
+        return render_template("auth/add_error.html")
 
     print("xx")
-    return render_template('auth/users_list.html')
+    return users_data()
+
+
+@auth.route('/del_success')
+def del_success():
+    return render_template("auth/del_success.html")
 
 
 @auth.route('/call_add', methods=['POST', 'GET'])

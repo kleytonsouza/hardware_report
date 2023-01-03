@@ -7,12 +7,12 @@
 
 {% block page_content %}
     <div class="row panel text-left" >
-         <h1 class="btn btn-lg btn-success">{{ title }} Adicionado</h1>
+         <h1 class="btn btn-lg btn-success">{{ title }} Deletado</h1>
     </div>
    <div class="row panel">
         <div class="btn-group-lg">
            <div class="text-center">
-               <p class="btn btn-primary h1">{{ title }} Adicionado com Sucesso!</p>
+               <p class="btn btn-primary h1">{{ title }} Deletado com Sucesso!</p>
            </div>
         </div>
    </div>
@@ -24,19 +24,18 @@
                         Voltar
                     </button>
                 </a>
-            {% elif title=='Novo Usuário' %}
+            {% elif title=='Usuário' %}
                 <a href="{{ url_for('auth.users_list') }}">
                     <button type="button" class="btn btn-md btn-danger">
                         Voltar
                     </button>
                 </a>
-            {% else %}
-                <a href="{{ url_for('auth.equips_list') }}">
-                    <button type="button" class="btn btn-md btn-danger">
-                        Voltar
-                    </button>
-                </a>
             {% endif %}
+            <a href="{{ url_for('auth.equips_list') }}">
+                <button type="button" class="btn btn-md btn-danger">
+                    Voltar
+                </button>
+            </a>
         </div>
     </div>
     {% for category, message in get_flashed_messages(with_categories=true) %}
