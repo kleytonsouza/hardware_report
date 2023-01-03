@@ -60,7 +60,7 @@ def form_add_equip():
                                  choices=choices, default=" ",
                                  validators=[DataRequired()])
         patrimony = StringField('Patrimonio',
-                                 render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
+                                render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
         brand = StringField('Marca',
                             render_kw={"placeholder": "Digite a Marca", "autocomplete": "on"})
         model = StringField('Modelo',
@@ -76,7 +76,6 @@ def form_add_equip():
 
 def form_add_computer():
     class AddComputerForm(form_add_equip()):
-
         computer_name = StringField('Nome do Computador',
                                     render_kw={"placeholder": "Digite o nome do computador", "autocomplete": "on"})
         computer_so = StringField('Sistema Operacional',
@@ -157,3 +156,17 @@ def form_add_mic():
                                                         "autocomplete": "on"})
 
     return AddMicForm()
+
+
+def form_add_call():
+    class AddCallForm(FlaskForm):
+        call_user = SelectField('Identificação do Usuário', choices=User.query.all(),
+                                render_kw={"placeholder": "Usuário", "autocomplete": "on"})
+        call_equipment = SelectField('Nome do Usuário', choices=Equipment.query.all(),
+                                     render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
+        call_technician = SelectField('Coordenação', choices=Admin.query.all())
+        problem_description = StringField('Problema', render_kw={"placeholder": "Descreva o Problema",
+                                                                 "autocomplete": "on"})
+        fix_description = StringField('Solução', render_kw={"placeholder": "Descreva a Solução", "autocomplete": "on"})
+
+    return AddCallForm()

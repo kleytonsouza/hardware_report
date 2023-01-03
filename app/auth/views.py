@@ -1,12 +1,12 @@
-
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, make_response
 from sqlalchemy.exc import SQLAlchemyError
+
 from ..models import *
 from . import auth
 from _datetime import datetime
 from flask_login import login_user, logout_user, login_required, current_user
 from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip, form_add_computer, form_add_user, \
-    form_add_mic, form_add_fone, form_add_webcam, form_add_monitor
+    form_add_mic, form_add_fone, form_add_webcam, form_add_monitor, form_add_call
 
 
 @auth.route('/logout')
@@ -868,7 +868,7 @@ def user_add():
         except SQLAlchemyError as e:
             db.session.rollback()
             error = str(e.__dict__['orig'])
-            return render_template("auth/add_error.html", error=error)
+            return render_template("auth/add_error.html", error=error, element="Usuário " + novo_user.user_name)
 
         return render_template("auth/add_success.html", title="Novo Usuário")
 
@@ -878,7 +878,6 @@ def user_add():
 # @auth.route('/delete_user/<int:user_id>', methods=['POST', 'GET'])
 @auth.route('/delete_user/', methods=['POST', 'GET'])
 def delete_user():
-
     print(1)
     if request.method == 'POST':
 
@@ -889,13 +888,13 @@ def delete_user():
         if Equipment.query.filter_by(equip_user_id=user_id).first():
             print(3)
             print("mememe")
-            return app.make_response('Hello, World', 201)
+            return make_response('Hello, World', 201)
 
         db.session.delete(user)
         db.session.commit()
         try:
             db.session.commit()
-        except :
+        except:
             db.session.rollback()
             # error = str(.__dict__['orig'])
             return render_template("auth/add_error.html")
@@ -903,9 +902,9 @@ def delete_user():
     print("xx")
     return render_template('auth/users_list.html')
 
-@auth.route('/call_add')
+
+@auth.route('/call_add', methods=['POST', 'GET'])
 def call_add():
+    form = form_add_call()
+
     return "add_user"
-
-
-

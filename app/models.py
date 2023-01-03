@@ -240,6 +240,9 @@ class User(db.Model):
             user_register, user_name),
     )
 
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+
     def to_dict(self):
         get_subteam_name = self.user_subteam_id
 

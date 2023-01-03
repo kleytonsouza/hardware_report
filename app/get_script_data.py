@@ -1,6 +1,6 @@
 import os
 
-all = os.listdir("./static/script_files/")
+all_example = os.listdir("./static/script_files/")
 
-for i in all:
+for i in all_example:
     print(i)
