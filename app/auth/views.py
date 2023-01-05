@@ -25,10 +25,10 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        admin = Admin.query.filter_by(admin_name=form.user.data).first()
+        user = User.query.filter_by(user_register=form.user.data).first()
         passwordb = form.password.data
-        if admin is not None and admin.verify_password(passwordb):
-            login_user(admin)
+        if user is not None and user.verify_password(passwordb):
+            login_user(user)
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
                 next = url_for('auth.equips_list')

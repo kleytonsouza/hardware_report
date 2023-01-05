@@ -184,7 +184,7 @@ class Call(db.Model):
     call_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     call_open = db.Column(db.String(64), nullable=False)
     call_close = db.Column(db.String(64), nullable=True)
-    call_technican = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, default=0)
+    call_technican = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, server_default="0")
     call_solution = db.Column(db.String(700), nullable=True)
 
     def to_dict(self):
@@ -234,11 +234,12 @@ class SubTeam(db.Model):
         return '<Nome %r>' % self.subteam_name
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "users"
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     user_register = db.Column(db.String(64), nullable=True)
     user_name = db.Column(db.String(64), nullable=False)
+    user_pass = db.Column(db.String(64), nullable=False, server_default="Dia 2 de fevereiro é o dia mais lindo que há")
     user_equipments = db.relationship("Equipment", backref="users")
     user_team_id = db.Column(db.Integer, db.ForeignKey('teams.team_id'), nullable=False)
     user_subteam_id = db.Column(db.Integer, db.ForeignKey('subteams.subteam_id'), nullable=True)
@@ -247,6 +248,18 @@ class User(db.Model):
         db.UniqueConstraint(
             user_register, user_name),
     )
+
+    @property
+    def password(self):
+        raise AttributeError('não é permitido ler a senha')
+
+    def verify_password(self, password):
+        if self.user_pass == password and self.user_pass is not None:
+            return True
+        return False
+
+    def get_id(self):
+        return self.user_id
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -270,23 +283,11 @@ class User(db.Model):
         return self.user_name
 
 
-class Admin(UserMixin, User):
+class Admin(User):
     __tablename__ = 'admins'
     admin_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), primary_key=True)
     admin_name = db.Column(db.String(64), unique=True, index=True)
-    admin_pass_wd = db.Column(db.String(64), nullable=False)
-
-    @property
-    def password(self):
-        raise AttributeError('não é permitido ler a senha')
-
-    def verify_password(self, password):
-        if self.admin_pass_wd == password and self.admin_pass_wd is not None:
-            return True
-        return False
-
-    def get_id(self):
-        return self.admin_id
+    #admin_pass_wd = db.Column(db.String(64), nullable=False)
 
     def __repr__(self):
         return '<Admin %r>' % self.admin_name
@@ -294,7 +295,7 @@ class Admin(UserMixin, User):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Admin.query.filter_by(admin_id=user_id).first()
+    return User.query.filter_by(user_id=user_id).first()
 
 
 @event.listens_for(Team.__table__, 'after_create')
