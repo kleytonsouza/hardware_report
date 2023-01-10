@@ -33,6 +33,13 @@ class Equipment(db.Model):
     def __repr__(self):
         return str(self.equip_id)
 
+    def is_admin(self):
+        admin = Admin.query.filter(Admin.user_id == self.equip_user_id).first()
+        if admin is not None:
+            return True
+        else:
+            return False
+
     # def edit_equip(self):
     #     equip_new = Equipment.query.filter(Equipment.equip_id == self.equip_id).first()
     #     db.session.add(equip_new)
@@ -249,8 +256,15 @@ class User(UserMixin, db.Model):
             user_register, user_name),
     )
 
+    def is_admin(self):
+        admin = Admin.query.filter(Admin.user_id == self.user_id).first()
+        if admin is not None:
+            return True
+        else:
+            return False
+
     @property
-    def password(self):
+    def user_pass(self):
         raise AttributeError('não é permitido ler a senha')
 
     def verify_password(self, password):

@@ -117,8 +117,9 @@
               {data: 'model'},
               {data: 'equip_registry', orderable: false},
               {data: 'type'},
-              {data: "sdfsdf", "defaultContent":
-                  "<button class='btn-warning' onclick='edititem();'>Editar</button> ", orderable: false}
+              {data: "editar", "defaultContent":
+                      "<button class='btn-warning' onclick='edititem();'>Editar</button>" +
+                  "<button class='btn-warning' onclick='edititem();'>Detalhes</button> ", orderable: false}
                   {#" <button class='btn-danger' onclick='edititem();'>Delete</button>" }  #}
               {#{data: '', render: (data, type, row) =>#}
               {#    {return `<a href='/api/equips/delete/${row.id}'>Del</a>#}
