@@ -264,7 +264,7 @@ class User(UserMixin, db.Model):
             return False
 
     @property
-    def user_pass(self):
+    def password(self):
         raise AttributeError('não é permitido ler a senha')
 
     def verify_password(self, password):

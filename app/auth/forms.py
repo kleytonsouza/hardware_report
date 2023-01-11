@@ -54,10 +54,9 @@ def form_add_user():
 def form_add_equip():
     class AddEquipForm(FlaskForm):
         choices = [(s.user_id, s.user_name) for s in User.query.distinct(User.user_name).all()]
-        choices.append((" ", "Selecione o Usuário"))
-
+        # choices.append((" ", "Selecione o Usuário"))
         equip_user = SelectField('Usuário',
-                                 choices=choices, default=" ",
+                                 choices=choices,  # default=35,
                                  validators=[DataRequired()])
         patrimony = StringField('Patrimonio',
                                 render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
@@ -68,6 +67,29 @@ def form_add_equip():
         position = StringField('Posição',
                                render_kw={"placeholder": "Posição do computador", "autocomplete": "on"})
         general_description = StringField('Descrição Geral', validators=[DataRequired()],
+                                          render_kw={"placeholder": "Descreva caracteristicas", "autocomplete": "on"})
+        submit = SubmitField("Registrar")
+
+    return AddEquipForm
+
+
+def form_edit_equip(equip):
+    class AddEquipForm(FlaskForm):
+        choices = [(s.user_id, s.user_name) for s in User.query.distinct(User.user_name).all()]
+        # choices.append((" ", "Selecione o Usuário"))
+        equip_user = SelectField('Usuário',
+                                 choices=choices, default=equip.equip_user_id,
+                                 validators=[DataRequired()])
+        patrimony = StringField('Patrimonio', default=equip.patrimony,
+                                render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
+        brand = StringField('Marca', default=equip.brand,
+                            render_kw={"placeholder": "Digite a Marca", "autocomplete": "on"})
+        model = StringField('Modelo', default=equip.model,
+                            render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
+        position = StringField('Posição', default=equip.position,
+                               render_kw={"placeholder": "Posição do computador", "autocomplete": "on"})
+        general_description = StringField('Descrição Geral', validators=[DataRequired()],
+                                          default=equip.general_description,
                                           render_kw={"placeholder": "Descreva caracteristicas", "autocomplete": "on"})
         submit = SubmitField("Registrar")
 
