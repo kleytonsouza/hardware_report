@@ -11,7 +11,7 @@ class Equipment(db.Model):
     brand = db.Column(db.String(64), nullable=True)
     model = db.Column(db.String(64), nullable=True)
     position = db.Column(db.String(64), nullable=True)
-    equip_registry = db.Column(db.String(64))  # data que o resgitro foi criado
+    equip_registry = db.Column(db.String(64))  # data que o registro foi criado
     general_description = db.Column(db.String(64), nullable=True)
     type = db.Column(db.String(64), nullable=True)
     all_calls = db.relationship("Call", backref="equipments")
@@ -59,7 +59,8 @@ class Equipment(db.Model):
 class Computer(Equipment):
     __tablename__ = "computers"
     __mapper_args__ = {'polymorphic_identity': 'computers'}
-    computer_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id', ondelete='CASCADE'), primary_key=True)
+    # computer_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id', ondelete='CASCADE'), primary_key=True)
+    computer_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), primary_key=True)
     computer_name = db.Column(db.String(64), nullable=False, unique=True)
     computer_cpu = db.Column(db.String(64))
     computer_so = db.Column(db.String(64))
@@ -73,7 +74,7 @@ class Computer(Equipment):
 
     def to_dict(self):
         return {
-            'computer_id': self.equip_id,
+            'computer_id': self.computer_id,
             'computer_user': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
             'computer_name': self.computer_name,
             'patrimony': self.patrimony,

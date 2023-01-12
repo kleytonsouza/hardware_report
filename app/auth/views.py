@@ -43,8 +43,8 @@ def login():
 @login_required
 @auth.route('/equips_list', methods=['GET', 'POST'])
 def equips_list():
-    equipments = Equipment.query
-    return render_template('auth/equips_list.html', equipments=equipments)
+    #equipments = Equipment.query
+    return render_template('auth/equips_list.html') #, equipments=equipments)
 
 
 @login_required
@@ -311,7 +311,7 @@ def computers_data():
         col_name = request.args.get(f'columns[{col_index}][data]')
         if col_name not in ['computer_id', 'model', 'computer_user', 'computer_name',
                             'computer_so', 'brand', 'computer_cpu', 'computer_memory']:
-            col_name = 'computer_id'
+            col_name = 'equip_id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(Computer, col_name)
         if descending:
@@ -946,7 +946,7 @@ def edit_item(id_equip):
             equip_to_edit.position = request.form.get("position"),
             equip_to_edit.equip_registry = datetime.today().strftime('%d/%m/%Y'),
             equip_to_edit.general_description = request.form.get("general_description"),
-            equip_to_edit.type = 'equipments'
+            #equip_to_edit.type = 'equipments'
             db.session.commit()
         except SQLAlchemyError as e:
             db.session.rollback()

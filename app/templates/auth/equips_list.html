@@ -86,16 +86,16 @@
     {% block table_content %}
         <table id="data" class="display">
             <thead>
-            <tr>
-                <th>Equip.</th>
-                <th>Usuário</th>
-                <th>Patrimônio</th>
-                <th>Marca</th>
-                <th>Modelo</th>
-                <th>Data de Registro</th>
-                <th>Tipo</th>
-                <th>Ação</th>
-            </tr>
+                <tr>
+                    <th>Equip.</th>
+                    <th>Usuário</th>
+                    <th>Patrimônio</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Data de Registro</th>
+                    <th>Tipo</th>
+                    <th>Ação</th>
+                </tr>
             </thead>
             <tbody>
             </tbody>
@@ -121,11 +121,10 @@
                     {
                         data: "actions", "defaultContent":
                             {% if (current_user.is_admin()) %}
-                                '<button class="btn btn-warning btnSelect" id="edit">Editar</button> ' +
-                                {#'<button class="btn btn-success" data-toggle="modal" data-target="#detailsModal">Detalhes</button>'#}
-                                '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
+                                '<span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
+                                '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span>'
                             {% else %}
-                                '<button class="btn btn-info" data-toggle="modal" data-target="#detailsModal">Detalhes</button>'
+                                '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
                             {% endif %}
                         , orderable: false
                     }
