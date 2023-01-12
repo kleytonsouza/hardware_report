@@ -6,7 +6,7 @@ from . import auth
 from _datetime import datetime
 from flask_login import login_user, logout_user, login_required, current_user
 from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip, form_add_computer, form_add_user, \
-    form_add_mic, form_add_fone, form_add_webcam, form_add_monitor, form_add_call, form_edit_equip
+    form_add_mic, form_add_fone, form_add_webcam, form_add_monitor, form_add_call, form_edit_equip, form_edit_computer
 
 
 @auth.route('/logout')
@@ -43,8 +43,8 @@ def login():
 @login_required
 @auth.route('/equips_list', methods=['GET', 'POST'])
 def equips_list():
-    #equipments = Equipment.query
-    return render_template('auth/equips_list.html') #, equipments=equipments)
+    # equipments = Equipment.query
+    return render_template('auth/equips_list.html')  # , equipments=equipments)
 
 
 @login_required
@@ -932,10 +932,30 @@ def call_add():
 
 @auth.route('/edit_item/<id_equip>', methods=['POST', 'GET'])
 def edit_item(id_equip):
-
     equip_to_edit = Equipment.query.filter_by(equip_id=id_equip).first()
-    form_class = form_edit_equip(equip_to_edit)
-    form = form_class()
+
+
+    def define_form_type(type_equip):
+        if type_equip.type == 'equipments':
+            form_class = form_edit_equip(equip_to_edit)
+            form_equip = form_class()
+            return form_equip
+        elif type_equip.type == 'computers':
+            # form_class = form_edit_computer(equip_to_edit)
+            # return form_class()
+            return None
+        elif type_equip.type == 'monitors':
+            return None
+        elif type_equip.type == 'webcams':
+            return None
+        elif type_equip.type == 'fones':
+            return None
+        elif type_equip.type == 'mics':
+            return None
+        else:
+            return None
+
+    form = define_form_type(equip_to_edit)
 
     if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
         user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
@@ -946,7 +966,7 @@ def edit_item(id_equip):
             equip_to_edit.position = request.form.get("position"),
             equip_to_edit.equip_registry = datetime.today().strftime('%d/%m/%Y'),
             equip_to_edit.general_description = request.form.get("general_description"),
-            #equip_to_edit.type = 'equipments'
+            # equip_to_edit.type = 'equipments'
             db.session.commit()
         except SQLAlchemyError as e:
             db.session.rollback()
@@ -958,7 +978,6 @@ def edit_item(id_equip):
 
 @auth.route('/detail_item/<id_equip>', methods=['POST', 'GET'])
 def detail_item(id_equip):
-
     equip_detail = Equipment.query.filter_by(equip_id=id_equip).first()
 
     return render_template("auth/detail_equip.html", equip_detail=equip_detail)

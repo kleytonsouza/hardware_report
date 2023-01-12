@@ -11,7 +11,7 @@
          <h3>Editar Equipamento</h3>
     </div>
     <form method="POST" action="{{ url_for('auth.edit_item', id_equip=equip_to_edit) }}">
-        {{ form.csrf_token }}
+       {{ form.csrf_token }}
        <div class="row panel">
             <div class="form-group col-xs-6 col-sm-6 col-md-4 col-lg-12" style="padding-left:5px; padding-top:20px">
                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">

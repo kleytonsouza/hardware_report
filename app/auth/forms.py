@@ -74,30 +74,58 @@ def form_add_equip():
 
 
 def form_edit_equip(equip):
+    class EditEquipForm(FlaskForm):
+        choices = [(s.user_id, s.user_name) for s in User.query.distinct(User.user_name).all()]
+        # choices.append((" ", "Selecione o Usuário"))
+        equip_user = SelectField('Usuário',
+                                 choices=choices, default=equip.equip_user_id,
+                                 validators=[DataRequired()])
+        patrimony = StringField('Patrimonio', default=equip.patrimony,
+                                render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
+        brand = StringField('Marca', default=equip.brand,
+                            render_kw={"placeholder": "Digite a Marca", "autocomplete": "on"})
+        model = StringField('Modelo', default=equip.model,
+                            render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
+        position = StringField('Posição', default=equip.position,
+                               render_kw={"placeholder": "Posição do computador", "autocomplete": "on"})
+        general_description = StringField('Descrição Geral', validators=[DataRequired()],
+                                          default=equip.general_description,
+                                          render_kw={"placeholder": "Descreva caracteristicas", "autocomplete": "on"})
+        submit = SubmitField("Registrar")
 
-    if equip.type == "equipments":
-        class EditEquipForm(FlaskForm):
-            choices = [(s.user_id, s.user_name) for s in User.query.distinct(User.user_name).all()]
-            # choices.append((" ", "Selecione o Usuário"))
-            equip_user = SelectField('Usuário',
-                                     choices=choices, default=equip.equip_user_id,
-                                     validators=[DataRequired()])
-            patrimony = StringField('Patrimonio', default=equip.patrimony,
-                                    render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
-            brand = StringField('Marca', default=equip.brand,
-                                render_kw={"placeholder": "Digite a Marca", "autocomplete": "on"})
-            model = StringField('Modelo', default=equip.model,
-                                render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
-            position = StringField('Posição', default=equip.position,
-                                   render_kw={"placeholder": "Posição do computador", "autocomplete": "on"})
-            general_description = StringField('Descrição Geral', validators=[DataRequired()],
-                                              default=equip.general_description,
-                                              render_kw={"placeholder": "Descreva caracteristicas", "autocomplete": "on"})
-            submit = SubmitField("Registrar")
+    return EditEquipForm
 
-        return EditEquipForm
-    print('zelda')
-    return None
+
+def form_edit_computer(equip):
+    edit_equip_form = form_edit_equip(equip)
+
+    class EditComputerForm(edit_equip_form):
+        computer = Computer.query.filter(Computer.computer_id == equip.equip_id).first()
+        computer_name = StringField('Nome do Computador', default=computer.computer_name,
+                                    render_kw={"placeholder": "Digite o nome do computador", "autocomplete": "on"})
+        computer_so = StringField('Sistema Operacional', default=computer.computer_so,
+                                  render_kw={"placeholder": "Digite o Sistema Operacional", "autocomplete": "on"})
+        computer_bios = StringField('BIOS', default=computer.computer_bios,
+                                    render_kw={"placeholder": "Digite o modelo e versão da BIOS", "autocomplete": "on"})
+        computer_cpu = StringField('Processador', default=computer.computer_cpu,
+                                   render_kw={"placeholder": "Digite o modelo do Processador", "autocomplete": "on"})
+        computer_memory = StringField('Memória', default=computer.computer_memory,
+                                      render_kw={"placeholder": "Digita a quantidade de memória RAM",
+                                                 "autocomplete": "on"})
+        computer_hd = StringField('Hard Disc', default=computer.computer_hd,
+                                  render_kw={"placeholder": "Digite o Tamanho do Armazenamento", "autocomplete": "on"})
+        computer_vga = StringField('Placa de Vídeo', default=computer.computer_vga,
+                                   render_kw={"placeholder": "Digite o modelo da placa de vídeo", "autocomplete": "on"})
+        computer_macaddress = StringField('Mac Address', default=computer.computer_macaddress,
+                                          render_kw={"placeholder": "Digite o Mac Address", "autocomplete": "on"})
+        computer_capacity_memory = StringField('Capacidade de Memória', default=computer.computer_capacity_memory,
+                                               render_kw={"placeholder": "Digite a capacidade de Memória",
+                                                          "autocomplete": "on"})
+        computer_storages = StringField('Capacidade de Memória', default=computer.computer_capacity_memory,
+                                        render_kw={"placeholder": "Digite a capacidade de Memória",
+                                                   "autocomplete": "on"})
+
+    return EditComputerForm()
 
 
 def form_add_computer():
