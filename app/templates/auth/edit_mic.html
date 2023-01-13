@@ -8,7 +8,7 @@
 
 {% block page_content %}
     <div class="row panel" >
-        <h3>Editar Computador</h3>
+        <h3>Editar Microfone</h3>
     </div>
     <form method="POST" action="{{ url_for('auth.edit_item', id_equip=equip_to_edit) }}">
         {{ form.csrf_token }}
@@ -50,73 +50,24 @@
                     </div>
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                    {{ form.general_description.label }}
+                    {{ form.mic_noise_cancellation.label }}
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                        {{ form.general_description(class="form-control") }}
+                        {{ form.mic_noise_cancellation(class="form-control") }}
                     </div>
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                    {{ form.computer_name.label }}
+                    {{ form.mic_impedance.label }}
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-flag"></i></span>
-                        {{ form.computer_name(class="form-control") }}
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-volume-up"></i></span>
+                        {{ form.mic_impedance(class="form-control") }}
                     </div>
                 </div>
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                    {{ form.computer_so.label }}
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-modal-window"></i></span>
-                        {{ form.computer_so(class="form-control") }}
-                    </div>
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                    {{ form.computer_cpu.label }}
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-tasks"></i></span>
-                        {{ form.computer_cpu(class="form-control") }}
-                    </div>
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                    {{ form.computer_bios.label }}
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-folder-close"></i></span>
-                        {{ form.computer_bios(class="form-control") }}
-                    </div>
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                    {{ form.computer_memory.label }}
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-transfer"></i></span>
-                        {{ form.computer_memory(class="form-control") }}
-                    </div>
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                    {{ form.computer_hd.label }}
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-cd"></i></span>
-                        {{ form.computer_hd(class="form-control") }}
-                    </div>
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                    {{ form.computer_vga.label }}
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-hd-video"></i></span>
-                        {{ form.computer_vga(class="form-control") }}
-                    </div>
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                    {{ form.computer_macaddress.label }}
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                        {{ form.computer_macaddress(class="form-control") }}
-                    </div>
-                </div>
-                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                    {{ form.computer_capacity_memory.label }}
+                    {{ form.mic_frequency.label }}
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-scale"></i></span>
-                        {{ form.computer_capacity_memory(class="form-control") }}
+                        {{ form.mic_frequency(class="form-control") }}
                     </div>
                 </div>
             </div>

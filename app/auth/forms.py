@@ -65,7 +65,7 @@ def form_add_equip():
         model = StringField('Modelo',
                             render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
         position = StringField('Posição',
-                               render_kw={"placeholder": "Posição do computador", "autocomplete": "on"})
+                               render_kw={"placeholder": "Posição do Equipamento", "autocomplete": "on"})
         general_description = StringField('Descrição Geral', validators=[DataRequired()],
                                           render_kw={"placeholder": "Descreva caracteristicas", "autocomplete": "on"})
         submit = SubmitField("Registrar")
@@ -87,7 +87,7 @@ def form_edit_equip(equip):
         model = StringField('Modelo', default=equip.model,
                             render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
         position = StringField('Posição', default=equip.position,
-                               render_kw={"placeholder": "Posição do computador", "autocomplete": "on"})
+                               render_kw={"placeholder": "Posição do Equipamento", "autocomplete": "on"})
         general_description = StringField('Descrição Geral', validators=[DataRequired()],
                                           default=equip.general_description,
                                           render_kw={"placeholder": "Descreva caracteristicas", "autocomplete": "on"})
@@ -154,6 +154,20 @@ def form_add_computer():
     return AddComputerForm()
 
 
+def form_edit_monitor(equip):
+    edit_equip_form = form_edit_equip(equip)
+
+    class EditMonitorForm(edit_equip_form):
+        monitor = Monitor.query.filter(Monitor.monitor_id == equip.equip_id).first()
+        monitor_size = StringField('Tamanho do Monitor', default=monitor.monitor_size,
+                                   render_kw={"placeholder": "Digite o tamanho em polegas do monitor",
+                                              "autocomplete": "on"})
+        monitor_resolution = StringField('Resolução do Monitor', default=monitor.monitor_resolution,
+                                         render_kw={"placeholder": "Digite a resolução da tela", "autocomplete": "on"})
+
+    return EditMonitorForm()
+
+
 def form_add_monitor():
     class AddMonitorForm(form_add_equip()):
         # computer_id =
@@ -173,6 +187,17 @@ def form_add_webcam():
                                         render_kw={"placeholder": "Digite a resolução da webcam", "autocomplete": "on"})
 
     return AddWebcamForm()
+
+
+def form_edit_webcam(equip):
+    edit_equip_form = form_edit_equip(equip)
+
+    class EditWebcamForm(edit_equip_form):
+        webcam = WebCam.query.filter(WebCam.webcam_id == equip.equip_id).first()
+        webcam_resolution = StringField('Resolução da Webcam', default=webcam.webcam_resolution,
+                                        render_kw={"placeholder": "Digite a resolução da webcam", "autocomplete": "on"})
+
+    return EditWebcamForm()
 
 
 def form_add_fone():
@@ -197,6 +222,31 @@ def form_add_fone():
     return AddFoneForm()
 
 
+def form_edit_fone(equip):
+    edit_equip_form = form_edit_equip(equip)
+
+    class EditFoneForm(edit_equip_form):
+        fone = Fone.query.filter(Fone.fone_id == equip.equip_id).first()
+        choices = [(m.mic_id, m.model) for m in Mic.query.distinct(Mic.model).all()]
+        choices.append((" ", "Selecione o Microfone"))
+
+        fone_frequency = StringField('Frequência do Fone', default=fone.fone_frequency,
+                                     render_kw={"placeholder": "Digite o nome a frequência do fone",
+                                                "autocomplete": "on"})
+
+        fone_impedance = StringField('Impedância do Fone', default=fone.fone_impedance,
+                                     render_kw={"placeholder": "Digite a impedância do fone", "autocomplete": "on"})
+
+        fone_driver = StringField('Driver do Fone', default=fone.fone_driver,
+                                  render_kw={"placeholder": "Digite o driver do fone", "autocomplete": "on"})
+
+        fone_noise_cancellation = StringField('Cancelamento de Ruído', default=fone.fone_noise_cancellation,
+                                              render_kw={"placeholder": "Digite se possui cancelamento de ruído",
+                                                         "autocomplete": "on"})
+
+    return EditFoneForm()
+
+
 def form_add_mic():
     class AddMicForm(form_add_equip()):
         mic_frequency = StringField('Frequência do microfone',
@@ -210,6 +260,24 @@ def form_add_mic():
                                                         "autocomplete": "on"})
 
     return AddMicForm()
+
+
+def form_edit_mic(equip):
+    edit_equip_form = form_edit_equip(equip)
+
+    class EditMicForm(edit_equip_form):
+        mic = Mic.query.filter(Mic.mic_id == equip.equip_id).first()
+        mic_frequency = StringField('Frequência do microfone', default=mic.mic_frequency,
+                                    render_kw={"placeholder": "Digite a Frequência do fone", "autocomplete": "on"})
+
+        mic_impedance = StringField('Impedância do microfone', default=mic.mic_impedance,
+                                    render_kw={"placeholder": "Digite a impedância do fone", "autocomplete": "on"})
+
+        mic_noise_cancellation = StringField('Cancelamento de ruído', default=mic.mic_noise_cancellation,
+                                             render_kw={"placeholder": "Digite se possui cancelamento de ruído",
+                                                        "autocomplete": "on"})
+
+    return EditMicForm()
 
 
 def form_add_call():

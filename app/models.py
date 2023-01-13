@@ -247,7 +247,7 @@ class User(UserMixin, db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     user_register = db.Column(db.String(64), nullable=True)
     user_name = db.Column(db.String(64), nullable=False)
-    user_pass = db.Column(db.String(64), nullable=False, server_default="Dia 2 de fevereiro é o dia mais lindo que há")
+    user_pass = db.Column(db.String(64), nullable=False, default="Dia 2 de fevereiro é o dia mais lindo que há")
     user_equipments = db.relationship("Equipment", backref="users")
     user_team_id = db.Column(db.Integer, db.ForeignKey('teams.team_id'), nullable=False)
     user_subteam_id = db.Column(db.Integer, db.ForeignKey('subteams.subteam_id'), nullable=True)
