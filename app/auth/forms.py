@@ -249,13 +249,13 @@ def form_edit_fone(equip):
 
 def form_add_mic():
     class AddMicForm(form_add_equip()):
-        mic_frequency = StringField('Frequência do microfone',
+        mic_frequency = StringField('Frequência do Microfone',
                                     render_kw={"placeholder": "Digite a Frequência do fone", "autocomplete": "on"})
 
-        mic_impedance = StringField('Impedância do microfone',
+        mic_impedance = StringField('Impedância do Microfone',
                                     render_kw={"placeholder": "Digite a impedância do fone", "autocomplete": "on"})
 
-        mic_noise_cancellation = StringField('Cancelamento de ruído',
+        mic_noise_cancellation = StringField('R',
                                              render_kw={"placeholder": "Digite se possui cancelamento de ruído",
                                                         "autocomplete": "on"})
 

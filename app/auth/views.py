@@ -1071,4 +1071,15 @@ def edit_item(id_equip):
 def detail_item(id_equip):
     equip_detail = Equipment.query.filter_by(equip_id=id_equip).first()
 
-    return render_template("auth/detail_equip.html", equip_detail=equip_detail)
+    if equip_detail.type == "equipments":
+        return render_template("auth/detail_equip.html", equip_detail=equip_detail)
+    elif equip_detail.type == "computers":
+        return render_template("auth/detail_computer.html", equip_detail=equip_detail)
+    elif equip_detail.type == "monitors":
+        return render_template("auth/detail_monitor.html", equip_detail=equip_detail)
+    elif equip_detail.type == "webcams":
+        return render_template("auth/detail_webcam.html", equip_detail=equip_detail)
+    elif equip_detail.type == "fones":
+        return render_template("auth/detail_fone.html", equip_detail=equip_detail)
+    elif equip_detail.type == "mics":
+        return render_template("auth/detail_mic.html", equip_detail=equip_detail)
