@@ -45,56 +45,56 @@ def login():
 @auth.route('/equips_list', methods=['GET', 'POST'])
 def equips_list():
     # equipments = Equipment.query
-    return render_template('auth/equips_list.html')  # , equipments=equipments)
+    return render_template('auth/list_equips.html')  # , equipments=equipments)
 
 
 @login_required
 @auth.route('/monitors_list', methods=['GET', 'POST'])
 def monitors_list():
     # monitors = Monitor.query
-    return render_template('auth/monitors_list.html')  # , monitors=monitors)
+    return render_template('auth/list_monitors.html')  # , monitors=monitors)
 
 
 @login_required
 @auth.route('/fones_list', methods=['GET', 'POST'])
 def fones_list():
     # fones = Monitor.query
-    return render_template('auth/fones_list.html')  # , fones=fones)
+    return render_template('auth/list_fones.html')  # , fones=fones)
 
 
 @login_required
 @auth.route('/mics_list', methods=['GET', 'POST'])
 def mics_list():
     # mics = Mic.query
-    return render_template('auth/mics_list.html')  # , mics=mics)
+    return render_template('auth/list_mics.html')  # , mics=mics)
 
 
 @login_required
 @auth.route('/webcams_list', methods=['GET', 'POST'])
 def webcams_list():
     # webcams = WebCam.query
-    return render_template('auth/webcams_list.html')  # , webcams=webcams)
+    return render_template('auth/list_webcams.html')  # , webcams=webcams)
 
 
 @login_required
 @auth.route('/computers_list', methods=['GET', 'POST'])
 def computers_list():
     # computers = Computer.query
-    return render_template('auth/computers_list.html')  # , computers=computers)
+    return render_template('auth/list_computers.html')  # , computers=computers)
 
 
 @login_required
 @auth.route('/users_list', methods=['GET', 'POST'])
 def users_list():
     # users = User.query
-    return render_template('auth/users_list.html')  # , users=users)
+    return render_template('auth/list_users.html')  # , users=users)
 
 
 @login_required
 @auth.route('/calls_list', methods=['GET', 'POST'])
 def calls_list():
     # calls = Call.query
-    return render_template('auth/calls_list.html')  # , calls=calls)
+    return render_template('auth/list_calls.html')  # , calls=calls)
 
 
 @auth.route('/api/equips')
@@ -517,7 +517,7 @@ def choose_equip_type():
         flash('Preenchimento Obrigatório!', 'fill')
         return redirect(url_for("auth.choose_equip_type"))
 
-    return render_template("auth/equip_add_choose_type.html", type_equips=type_equips, form=form)
+    return render_template("auth/add_equip_type.html", type_equips=type_equips, form=form)
 
 
 # @auth.route('/add_equip/<type>', methods=['GET'])

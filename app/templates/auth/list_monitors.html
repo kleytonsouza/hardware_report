@@ -12,89 +12,90 @@
 
 {% block page_content %}
     <div class="row panel" >
-        <h3>Equipamentos</h3>
+        <h3>Monitores</h3>
     </div>
     <div class="row panel">
         <div class="col-md-2">
             <a href="{{ url_for('auth.equips_list' ) }}">
                 <button class="btn btn-primary">
-                          Equipamentos
+                    Equipamentos
                 </button>
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.users_list' ) }}">
                 <button class="btn btn-default">
-                          Usuários
+                    Usuários
                 </button>
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.calls_list' ) }}">
                 <button class="btn btn-default">
-                          Chamados
+                    Chamados
                 </button>
             </a>
         </div>
         <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
             <a href="{{ url_for('auth.choose_equip_type' ) }}">
                 <button class="btn btn-success">
-                          Adicionar
+                    Adicionar
                 </button>
             </a>
         </div>
     </div>
-     <div class="row panel">
+    <div class="row panel">
         <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.computers_list' ) }}">
                 <button class="btn btn-default">
-                          Computadores
+                    Computadores
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 19px">
+        <div class="col-md-2">
             <a href="{{ url_for('auth.monitors_list' ) }}">
-                <button class="btn btn-default">
-                          Monitores
+                <button class="btn btn-primary">
+                    Monitores
                 </button>
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.fones_list' ) }}">
                 <button class="btn btn-default">
-                          Fones
+                    Fones
                 </button>
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.mics_list' ) }}">
                 <button class="btn btn-default">
-                          Microfones
+                    Microfones
                 </button>
             </a>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.webcams_list' ) }}">
-                <button class="btn btn-primary">
-                          Webcams
+                <button class="btn btn-default">
+                    Webcams
                 </button>
             </a>
         </div>
-     </div>
+    </div>
 
     {% block table_content %}
         <table id="data" class="display">
             <thead>
-                <tr>
-                    <th>Equip.</th>
-                    <th>Usuário</th>
-                    <th>Patrimônio</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Data de Registro</th>
-                    <th>Resolução</th>
-                    <th>Ação</th>
-                </tr>
+            <tr>
+                <th>Equip.</th>
+                <th>Usuário</th>
+                <th>Patrimônio</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Data de Registro</th>
+                <th>Tamanho</th>
+                <th>Resolução</th>
+                <th>Ação</th>
+            </tr>
             </thead>
             <tbody>
             </tbody>
@@ -106,21 +107,37 @@
 {% block scripts %}
     <script>
         $(document).ready(function () {
-          $('#data').DataTable({
-            ajax: '/auth/api/webcams',
-            serverSide: true,
-            columns: [
-              {data: 'webcam_id'},
-              {data: 'webcam_user'},
-              {data: 'patrimony', orderable: false},
-              {data: 'brand'},
-              {data: 'model'},
-              {data: 'equip_registry', orderable: false},
-              {data: 'webcam_resolution'},
-              {data: "sdfsdf", "defaultContent":
-                  "<button class='btn-warning' onclick='edititem();'>Editar</button> ", orderable: false }
-            ],
-          });
+            $('#data').DataTable({
+                ajax: '/auth/api/monitors',
+                serverSide: true,
+                columns: [
+                    {data: 'monitor_id'},
+                    {data: 'monitor_user'},
+                    {data: 'patrimony', orderable: false},
+                    {data: 'brand'},
+                    {data: 'model'},
+                    {data: 'equip_registry', orderable: false},
+                    {data: 'monitor_size'},
+                    {data: 'monitor_resolution'},
+                    {
+                        data: "actions", "defaultContent":
+                            {% if (current_user.is_admin()) %}
+                                    '<span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
+                                    '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span>'
+                            {% else %}
+                                '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
+                            {% endif %}
+                        , orderable: false
+                    }
+                ],
+            });
+        });
+        $("#data").on('click', '.btnSelect', function () {
+            const currentRow = $(this).closest("tr");
+            const id_equip = currentRow.find("td:eq(0)").html();
+            this.id =="edit"
+                ? window.location = '/auth/edit_item/' + id_equip
+                : window.location = '/auth/detail_item/' + id_equip;
         });
     </script>
 

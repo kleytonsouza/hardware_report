@@ -12,7 +12,7 @@
 
 {% block page_content %}
     <div class="row panel" >
-        <h3>Equipamentos</h3>
+        <h3>WebCams</h3>
     </div>
     <div class="row panel">
         <div class="col-md-2">
@@ -36,7 +36,7 @@
                 </button>
             </a>
         </div>
-        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25">
+        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
             <a href="{{ url_for('auth.choose_equip_type' ) }}">
                 <button class="btn btn-success">
                           Adicionar
@@ -59,9 +59,9 @@
                 </button>
             </a>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.fones_list' ) }}">
-                <button class="btn btn-primary">
+                <button class="btn btn-default">
                           Fones
                 </button>
             </a>
@@ -73,9 +73,9 @@
                 </button>
             </a>
         </div>
-        <div class="col-md-2 h3" style="margin-top: 19px">
+        <div class="col-md-2">
             <a href="{{ url_for('auth.webcams_list' ) }}">
-                <button class="btn btn-default">
+                <button class="btn btn-primary">
                           Webcams
                 </button>
             </a>
@@ -92,10 +92,7 @@
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Data de Registro</th>
-                    <th>Driver</th>
-                    <th>Impedância</th>
-                    <th>Frequência</th>
-                    <th>NC</th>
+                    <th>Resolução</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -110,23 +107,35 @@
     <script>
         $(document).ready(function () {
           $('#data').DataTable({
-            ajax: '/auth/api/fones',
+            ajax: '/auth/api/webcams',
             serverSide: true,
             columns: [
-              {data: 'fone_id'},
-              {data: 'fone_user'},
+              {data: 'webcam_id'},
+              {data: 'webcam_user'},
               {data: 'patrimony', orderable: false},
               {data: 'brand'},
               {data: 'model'},
               {data: 'equip_registry', orderable: false},
-              {data: 'fone_driver'},
-              {data: 'fone_impedance'},
-              {data: 'fone_frequency'},
-              {data: 'fone_noise_cancellation'},
-              {data: "sdfsdf", "defaultContent":
-                  "<button class='btn-warning' onclick='edititem();'>Editar</button> ", orderable: false }
+              {data: 'webcam_resolution'},
+                {
+                    data: "actions", "defaultContent":
+                        {% if (current_user.is_admin()) %}
+                                '<span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
+                                '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span>'
+                        {% else %}
+                            '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
+                        {% endif %}
+                    , orderable: false
+                }
             ],
           });
+        });
+        $("#data").on('click', '.btnSelect', function () {
+            const currentRow = $(this).closest("tr");
+            const id_equip = currentRow.find("td:eq(0)").html();
+            this.id =="edit"
+                ? window.location = '/auth/edit_item/' + id_equip
+                : window.location = '/auth/detail_item/' + id_equip;
         });
     </script>
 
