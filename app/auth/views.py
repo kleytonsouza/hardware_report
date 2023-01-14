@@ -7,7 +7,7 @@ from _datetime import datetime
 from flask_login import login_user, logout_user, login_required, current_user
 from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip, form_add_computer, form_add_user, \
     form_add_mic, form_add_fone, form_add_webcam, form_add_monitor, form_add_call, form_edit_equip, form_edit_computer, \
-    form_edit_monitor, form_edit_webcam, form_edit_fone, form_edit_mic
+    form_edit_monitor, form_edit_webcam, form_edit_fone, form_edit_mic, form_edit_user
 
 
 @auth.route('/logout')
@@ -935,6 +935,27 @@ def call_add():
         error = "problema ao criar chamado!!"
 
     return render_template("auth/add_call.html", form=form, error=error)
+
+
+@auth.route('user_edit/<id_user>', methods=['POST', 'GET'])
+def user_edit(id_user):
+    user_to_edit = User.query.filter_by(user_id=id_user).first()
+
+    form_class = form_edit_user(user_to_edit)
+    form = form_class()
+
+    if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
+        try:
+            user_to_edit.user_register = request.form.getlist("user_register"),
+            user_to_edit.user_name = request.form.get("user_name"),
+            user_to_edit.user_team_id = request.form.get("user_team_id"),
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error)
+        return render_template("auth/edit_success.html", title="Usuário Editado")
+    return render_template("auth/user_edit.html", form=form, user_to_edit=user_to_edit.user_id)
 
 
 @auth.route('/edit_item/<id_equip>', methods=['POST', 'GET'])

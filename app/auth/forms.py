@@ -33,10 +33,8 @@ def form_add_user():
 
         choices = coords
         choices.append((" ", "Selecione a Coordenação"))
-
         # choices_sub = [(t.team_id, t.team_name) for t in SubTeam.query.distinct(SubTeam.subteam_id).all()]
         # choices_sub.append((" ", "Selecione a Subcoordenação"))
-
         user_register = IntegerField('Registro Funcional',
                                      render_kw={"placeholder": "Digite o Registro funcional", "autocomplete": "on"})
         user_name = StringField('Nome do Usuário',
@@ -49,6 +47,32 @@ def form_add_user():
         #                               validators=[DataRequired()])
 
     return AddUserForm()
+
+
+def form_edit_user(user):
+    class EditUserForm(FlaskForm):
+        coords = []
+        for i in Team.query.all():
+            if SubTeam.query.filter(SubTeam.subteam_team_id == i.team_id).first() is not None:
+                for c in SubTeam.query.filter(SubTeam.subteam_team_id == i.team_id).all():
+                    coords.append(([i.team_id, c.subteam_id], i.team_name + " - " + c.subteam_name))
+            else:
+                coords.append((i.team_id, i.team_name))
+
+        choices = coords
+        choices.append((" ", "Selecione a Coordenação"))
+        # choices_sub = [(t.team_id, t.team_name) for t in SubTeam.query.distinct(SubTeam.subteam_id).all()]
+        # choices_sub.append((" ", "Selecione a Subcoordenação"))
+        user_register = IntegerField('Registro Funcional', default=user.user_register,
+                                     render_kw={"placeholder": "Digite o Registro funcional", "autocomplete": "on"})
+        user_name = StringField('Nome do Usuário', default=user.user_name,
+                                render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
+        user_team_id = SelectField('Coordenação', default=user.user_team_id,
+                                   choices=choices,
+                                   validators=[DataRequired()])
+        submit = SubmitField("Registrar")
+
+    return EditUserForm
 
 
 def form_add_equip():

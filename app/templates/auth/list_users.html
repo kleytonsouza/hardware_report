@@ -77,58 +77,70 @@
           {data: 'user_team_id'},
           {data: 'user_subteam_id'},
           {data: "action", "defaultContent":
-                  "<button class='btn-warning' id='edititem')>Edit</button> " +
-                  "<button class='btn-danger' id='deleteitem'>Delete</button> </a>" }
+                  {% if (current_user.is_admin()) %}
+                          '<span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
+                          '<button style="margin-left: 8px" class="btn btn-danger" id="deleteitem">Deletar</button></span>'
+                  {% else %}
+                      '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
+                  {% endif %}
+          }
         ],
       });
     });
+    $("#data").on('click', '.btnSelect', function () {
+        const currentRow = $(this).closest("tr");
+        const id_equip = currentRow.find("td:eq(0)").html();
+        this.id =="edit"
+            ? window.location = '/auth/user_edit/' + id_equip
+            : window.location = '/auth/detail_item/' + id_equip;
+    });
 
+    const csrftoken = $('meta[name=csrf-token]').attr('content')
 
-        var csrftoken = $('meta[name=csrf-token]').attr('content')
-
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken)
-                }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
             }
-        })
+        }
+    })
 
-     $('#data').on('click', '#deleteitem', function() {
-         table = $('#data').DataTable();
-         user = table.row( $(this).parents('tr') ).data();
-         user_id = user.user_id;
+    $('#data').on('click', '#deleteitem', function() {
+        const table = $('#data').DataTable();
+        const user = table.row( $(this).parents('tr') ).data();
+        const user_id = user.user_id;
 
-         console.log(user);
-         console.log(user.user_name);
-         //if(user.user_equipments.length > 0) {
+        console.log(user);
+        console.log(user.user_name);
 
-             if (confirm("Deseja excluir o Usuário: " + user.user_name)) {
-                 var request = $.ajax({
-                     url: './delete_user/',
-                     data: JSON.stringify({user_id: user_id}),
-                     contentType: 'application/json;charset=utf-8',
-                     type: 'POST',
-                     success: function (response) {
-                         table.clear();
-                         table.draw();
-                         console.log(response["data"]);
-                     },
-                     error: function (xhr, ajaxOptions, thrownError) {
-                         console.log(xhr, ajaxOptions, thrownError);
-                         $("#errormsg").html('×ATENÇÃO! Contate o suporte técnico.');
-                     }
-                 })
-             }
-         //}
-         else{}
-     })
+        if (confirm("Deseja excluir o Usuário: " + user.user_name)) {
+            const request = $.ajax({
+                url: './delete_user/',
+                data: JSON.stringify({user_id: user_id}),
+                contentType: 'application/json;charset=utf-8',
+                type: 'POST',
+                success: function (response) {
+                    table.clear();
+                    table.draw();
+                    console.log(response["data"]);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr, ajaxOptions, thrownError);
+                    $("#errormsg").html('×ATENÇÃO! Contate o suporte técnico.');
+                }
+            })
+        }
+        //}
+        else{}
+    })
 
-     $('#data').on('click', '#edititem', function() {
-          const table = $('#data').DataTable();
-          const row = $(this).parents('tr');
-          {#console.log(table.row( $(this).parents('tr') ).data().user_id);#}
-      })
+    {#
+        $('#data').on('click', '#edititem', function() {
+            const table = $('#data').DataTable();
+            const row = $(this).parents('tr');
+            console.log(table.row( $(this).parents('tr') ).data().user_id);
+        });
+    #}
 
 
   </script>
