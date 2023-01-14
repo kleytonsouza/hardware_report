@@ -11,93 +11,93 @@
 {% endblock %}
 
 {% block page_content %}
-    <div class="row panel" >
+    <div class="row panel">
         <h3>Fones</h3>
     </div>
     <div class="row panel">
         <div class="col-md-2">
             <a href="{{ url_for('auth.equips_list' ) }}">
                 <button class="btn btn-primary">
-                          Equipamentos
+                    Equipamentos
                 </button>
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.users_list' ) }}">
                 <button class="btn btn-default">
-                          Usuários
+                    Usuários
                 </button>
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.calls_list' ) }}">
                 <button class="btn btn-default">
-                          Chamados
+                    Chamados
                 </button>
             </a>
         </div>
-        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25">
+        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
             <a href="{{ url_for('auth.choose_equip_type' ) }}">
                 <button class="btn btn-success">
-                          Adicionar
+                    Adicionar
                 </button>
             </a>
         </div>
     </div>
-     <div class="row panel">
+    <div class="row panel">
         <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.computers_list' ) }}">
                 <button class="btn btn-default">
-                          Computadores
+                    Computadores
                 </button>
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.monitors_list' ) }}">
                 <button class="btn btn-default">
-                          Monitores
+                    Monitores
                 </button>
             </a>
         </div>
         <div class="col-md-2">
             <a href="{{ url_for('auth.fones_list' ) }}">
                 <button class="btn btn-primary">
-                          Fones
+                    Fones
                 </button>
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.mics_list' ) }}">
                 <button class="btn btn-default">
-                          Microfones
+                    Microfones
                 </button>
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.webcams_list' ) }}">
                 <button class="btn btn-default">
-                          Webcams
+                    Webcams
                 </button>
             </a>
         </div>
-     </div>
+    </div>
 
     {% block table_content %}
         <table id="data" class="display">
             <thead>
-                <tr>
-                    <th>Equip.</th>
-                    <th>Usuário</th>
-                    <th>Patrimônio</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Data de Registro</th>
-                    <th>Driver</th>
-                    <th>Impedância</th>
-                    <th>Frequência</th>
-                    <th>NC</th>
-                    <th>Ação</th>
-                </tr>
+            <tr>
+                <th>Equip.</th>
+                <th>Usuário</th>
+                <th>Patrimônio</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Data de Registro</th>
+                <th>Driver</th>
+                <th>Impedância</th>
+                <th>Frequência</th>
+                <th>NC</th>
+                <th>Ação</th>
+            </tr>
             </thead>
             <tbody>
             </tbody>
@@ -109,37 +109,36 @@
 {% block scripts %}
     <script>
         $(document).ready(function () {
-          $('#data').DataTable({
-            ajax: '/auth/api/fones',
-            serverSide: true,
-            columns: [
-              {data: 'fone_id'},
-              {data: 'fone_user'},
-              {data: 'patrimony', orderable: false},
-              {data: 'brand'},
-              {data: 'model'},
-              {data: 'equip_registry', orderable: false},
-              {data: 'fone_driver'},
-              {data: 'fone_impedance'},
-              {data: 'fone_frequency'},
-              {data: 'fone_noise_cancellation'},
-                {
-                    data: "actions", "defaultContent":
-                        {% if (current_user.is_admin()) %}
-                                '<span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
-                                '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span>'
-                        {% else %}
-                            '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
-                        {% endif %}
-                    , orderable: false
-                }
-            ],
-          });
+            $('#data').DataTable({
+                ajax: '/auth/api/fones',
+                serverSide: true,
+                columns: [
+                    {data: 'fone_id'},
+                    {data: 'fone_user'},
+                    {data: 'patrimony', orderable: false},
+                    {data: 'brand'},
+                    {data: 'model'},
+                    {data: 'equip_registry', orderable: false},
+                    {data: 'fone_driver'},
+                    {data: 'fone_impedance'},
+                    {data: 'fone_frequency'},
+                    {data: 'fone_noise_cancellation'},
+                    {data: "actions", "defaultContent":
+                            {% if (current_user.is_admin()) %}
+                                    '<div style="text-align: center"><span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
+                                    '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span></div>'
+                            {% else %}
+                                '<div style="text-align: center"><button class="btn btn-info btnSelect id"detail">Detalhes</button></div>'
+                            {% endif %}
+                        , orderable: false
+                    }
+                ],
+            });
         });
         $("#data").on('click', '.btnSelect', function () {
             const currentRow = $(this).closest("tr");
             const id_equip = currentRow.find("td:eq(0)").html();
-            this.id =="edit"
+            this.id === "edit"
                 ? window.location = '/auth/edit_item/' + id_equip
                 : window.location = '/auth/detail_item/' + id_equip;
         });

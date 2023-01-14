@@ -17,28 +17,28 @@
         <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.equips_list' ) }}">
                 <button class="btn btn-default">
-                          Equipamentos
+                    Equipamentos
                 </button>
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 25px">
             <a href="{{ url_for('auth.users_list' ) }}">
                 <button class="btn btn-default">
-                          Usuários
+                    Usuários
                 </button>
             </a>
         </div>
         <div class="col-md-2">
             <a href="{{ url_for('auth.calls_list' ) }}">
                 <button class="btn btn-warning">
-                          Chamados
+                    Chamados
                 </button>
             </a>
         </div>
         <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
             <a href="{{ url_for('auth.call_add' ) }}">
                 <button class="btn btn-success btn-lg">
-                          Abrir
+                    Abrir
                 </button>
             </a>
         </div>
@@ -46,14 +46,14 @@
 
     <table id="data" class="display">
         <thead>
-            <tr>
-                <th>ID do Chamado</th>
-                <th>Usuário</th>
-                <th>Equipamento</th>
-                <th>Data de Abertura</th>
-                <th>Data de Fechamento</th>
-                <th>Ação</th>
-            </tr>
+        <tr>
+            <th>ID do Chamado</th>
+            <th>Usuário</th>
+            <th>Equipamento</th>
+            <th>Data de Abertura</th>
+            <th>Data de Fechamento</th>
+            <th>Ação</th>
+        </tr>
         </thead>
         <tbody>
         </tbody>
@@ -61,22 +61,30 @@
 {% endblock %}
 
 {% block scripts %}
-  <script>
-    $(document).ready(function () {
-      $('#data').DataTable({
-        ajax: '/auth/api/calls',
-        serverSide: true,
-        columns: [
-          {data: 'call_id'},
-          {data: 'call_user'},
-          {data: 'call_equipment_id'},
-          {data: 'call_open'},
-          {data: 'call_close'},
-          {data: "sdfsdf", "defaultContent":
-                  "<button class='col-lg-5 btn-warning'  onclick='edititem();'>Editar</button> "+
-                  "<button class='col-lg-offset-2 col-lg-5 btn-danger' id='deleteitem'>Fechar</button> </a>", orderable: false}
-        ],
-      });
-    });
-  </script>
+    <script>
+        $(document).ready(function () {
+            $('#data').DataTable({
+                ajax: '/auth/api/calls',
+                serverSide: true,
+                columns: [
+                    {data: 'call_id'},
+                    {data: 'call_user'},
+                    {data: 'call_equipment_id'},
+                    {data: 'call_open'},
+                    {data: 'call_close'},
+                    {
+                        data: "actions", "defaultContent":
+                            {% if (current_user.is_admin()) %}
+                                    '<div style="text-align: center"><span style="white-space:nowrap;"><button class="btn btn-info btnSelect" id="edit">Detalhes</button>' +
+                                    '<button style="margin-left: 8px" class="btn btn-warning btnSelect" id"detail">Editar</button>' +
+                                    '<button style="margin-left: 8px" class="btn btn-danger btnSelect" id"detail">Fechar</button></span></div>'
+                            {% else %}
+                                '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
+                            {% endif %}
+                        , orderable: false
+                    }
+                ],
+            });
+        });
+    </script>
 {% endblock %}

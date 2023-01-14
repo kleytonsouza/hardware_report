@@ -117,16 +117,15 @@
               {data: 'model'},
               {data: 'equip_registry', orderable: false},
               {data: 'webcam_resolution'},
-                {
-                    data: "actions", "defaultContent":
-                        {% if (current_user.is_admin()) %}
-                                '<span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
-                                '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span>'
-                        {% else %}
-                            '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
-                        {% endif %}
-                    , orderable: false
-                }
+              {data: "actions", "defaultContent":
+                    {% if (current_user.is_admin()) %}
+                            '<div style="text-align: center"><span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
+                            '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span></div>'
+                    {% else %}
+                        '<div style="text-align: center"><button class="btn btn-info btnSelect id"detail">Detalhes</button></div>'
+                    {% endif %}
+                ,orderable: false
+              }
             ],
           });
         });

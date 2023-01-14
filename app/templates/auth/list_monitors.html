@@ -119,13 +119,12 @@
                     {data: 'equip_registry', orderable: false},
                     {data: 'monitor_size'},
                     {data: 'monitor_resolution'},
-                    {
-                        data: "actions", "defaultContent":
+                    {data: "actions", "defaultContent":
                             {% if (current_user.is_admin()) %}
-                                    '<span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
-                                    '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span>'
+                                    '<div style="text-align: center"><span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
+                                    '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span></div>'
                             {% else %}
-                                '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
+                                '<div style="text-align: center"><button class="btn btn-info btnSelect id"detail">Detalhes</button></div>'
                             {% endif %}
                         , orderable: false
                     }

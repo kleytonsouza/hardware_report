@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block page_content %}
-    <div class="row panel" >
+    <div class="row panel">
         <h3>Computadores</h3>
     </div>
     <div class="row panel">
@@ -36,7 +36,7 @@
                 </button>
             </a>
         </div>
-        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 19px">
+        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
             <a href="{{ url_for('auth.choose_equip_type' ) }}">
                 <button class="btn btn-success">
                     Adicionar
@@ -52,28 +52,28 @@
                 </button>
             </a>
         </div>
-        <div class="col-md-2" style="margin-top: 19px">
+        <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.monitors_list' ) }}">
                 <button class="btn btn-default">
                     Monitores
                 </button>
             </a>
         </div>
-        <div class="col-md-2" style="margin-top: 19px">
+        <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.fones_list' ) }}">
                 <button class="btn btn-default">
                     Fones
                 </button>
             </a>
         </div>
-        <div class="col-md-2" style="margin-top: 19px">
+        <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.mics_list' ) }}">
                 <button class="btn btn-default">
                     Microfones
                 </button>
             </a>
         </div>
-        <div class="col-md-2" style="margin-top: 19px">
+        <div class="col-md-2 h3" style="margin-top: 19px">
             <a href="{{ url_for('auth.webcams_list' ) }}">
                 <button class="btn btn-default">
                     Webcams
@@ -95,7 +95,7 @@
                 <th>CPU</th>
                 <th>Memória</th>
                 <th>S.O.</th>
-                <th>Mac Address</th>
+{#                <th>Mac Address</th>#}
                 <th>Ação</th>
             </tr>
             </thead>
@@ -109,11 +109,9 @@
 {% block scripts %}
     <script>
         $(document).ready(function () {
-            var table = $('#data').DataTable({
+            $('#data').DataTable({
                 ajax: '/auth/api/computers',
                 serverSide: true,
-                columnDefs: [{targets: [2], class: 'noQuebra'}
-                ],
                 columns: [
                     {data: 'computer_id'},
                     {data: 'patrimony', orderable: false},
@@ -124,26 +122,26 @@
                     {data: 'computer_cpu'},
                     {data: 'computer_memory'},
                     {data: 'computer_so'},
-                    {data: 'computer_macaddress', orderable: false},
+                    {#{data: 'computer_macaddress', orderable: false},#}
                     {data: "actions", "defaultContent":
                             {% if (current_user.is_admin()) %}
-                                '<span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
-                                '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span>'
+                                    '<div style="text-align: center"><span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
+                                    '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span></div>'
                             {% else %}
-                                '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
+                                '<div style="text-align: center"><button class="btn btn-info btnSelect id"detail">Detalhes</button></div>'
                             {% endif %}
                         ,orderable: false
                     }
                 ],
             });
-            $("#data").on('click', '.btnSelect', function () {
-                const currentRow = $(this).closest("tr");
-                const id_equip = currentRow.find("td:eq(0)").html();
-                this.id =="edit"
-                    ? window.location = '/auth/edit_item/' + id_equip
-                    : window.location = '/auth/detail_item/' + id_equip;
-            });
             {#table.columns.adjust().draw( false );#}
+        });
+        $("#data").on('click', '.btnSelect', function () {
+            const currentRow = $(this).closest("tr");
+            const id_equip = currentRow.find("td:eq(0)").html();
+            this.id === "edit"
+                ? window.location = '/auth/edit_item/' + id_equip
+                : window.location = '/auth/detail_item/' + id_equip;
         });
     </script>
 

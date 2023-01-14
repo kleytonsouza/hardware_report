@@ -312,7 +312,7 @@ def computers_data():
         col_name = request.args.get(f'columns[{col_index}][data]')
         if col_name not in ['computer_id', 'model', 'computer_user', 'computer_name',
                             'computer_so', 'brand', 'computer_cpu', 'computer_memory']:
-            col_name = 'equip_id'
+            col_name = 'computer_id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(Computer, col_name)
         if descending:
