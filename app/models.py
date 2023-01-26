@@ -192,7 +192,7 @@ class Call(db.Model):
     call_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     call_open = db.Column(db.String(64), nullable=False)
     call_close = db.Column(db.String(64), nullable=True)
-    call_technican = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, server_default="0")
+    call_technican = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, default="0")
     call_solution = db.Column(db.String(700), nullable=True)
 
     def to_dict(self):
