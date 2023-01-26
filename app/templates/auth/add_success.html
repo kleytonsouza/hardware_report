@@ -18,11 +18,25 @@
    </div>
     <div class="panel-footer row" style="background-color: white; border-top:0 ">
         <div class="text-right col-md-offset-9 col-md-1">
-            <a href="{{ url_for('auth.equips_list') }}">
-                <button type="button" class="btn btn-md btn-danger">
-                    Voltar
-                </button>
-            </a>
+            {% if title=='Chamado' %}
+                <a href="{{ url_for('auth.calls_list') }}">
+                    <button type="button" class="btn btn-md btn-danger">
+                        Voltar
+                    </button>
+                </a>
+            {% elif title=='Novo Usuário' %}
+                <a href="{{ url_for('auth.users_list') }}">
+                    <button type="button" class="btn btn-md btn-danger">
+                        Voltar
+                    </button>
+                </a>
+            {% else %}
+                <a href="{{ url_for('auth.equips_list') }}">
+                    <button type="button" class="btn btn-md btn-danger">
+                        Voltar
+                    </button>
+                </a>
+            {% endif %}
         </div>
     </div>
     {% for category, message in get_flashed_messages(with_categories=true) %}

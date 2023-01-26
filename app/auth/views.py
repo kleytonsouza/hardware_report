@@ -1,12 +1,13 @@
-
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, make_response
 from sqlalchemy.exc import SQLAlchemyError
+
 from ..models import *
 from . import auth
 from _datetime import datetime
 from flask_login import login_user, logout_user, login_required, current_user
 from ..auth.forms import LoginForm, form_add_equip, form_add_type_equip, form_add_computer, form_add_user, \
-    form_add_mic, form_add_fone, form_add_webcam, form_add_monitor
+    form_add_mic, form_add_fone, form_add_webcam, form_add_monitor, form_add_call, form_edit_equip, form_edit_computer, \
+    form_edit_monitor, form_edit_webcam, form_edit_fone, form_edit_mic, form_edit_user
 
 
 @auth.route('/logout')
@@ -25,10 +26,10 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        admin = Admin.query.filter_by(admin_name=form.user.data).first()
+        user = User.query.filter_by(user_register=form.user.data).first()
         passwordb = form.password.data
-        if admin is not None and admin.verify_password(passwordb):
-            login_user(admin)
+        if user is not None and user.verify_password(passwordb):
+            login_user(user)
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
                 next = url_for('auth.equips_list')
@@ -44,56 +45,56 @@ def login():
 @auth.route('/equips_list', methods=['GET', 'POST'])
 def equips_list():
     # equipments = Equipment.query
-    return render_template('auth/equips_list.html')  # , equipments=equipments)
+    return render_template('auth/list_equips.html')  # , equipments=equipments)
 
 
 @login_required
 @auth.route('/monitors_list', methods=['GET', 'POST'])
 def monitors_list():
     # monitors = Monitor.query
-    return render_template('auth/monitors_list.html')  # , monitors=monitors)
+    return render_template('auth/list_monitors.html')  # , monitors=monitors)
 
 
 @login_required
 @auth.route('/fones_list', methods=['GET', 'POST'])
 def fones_list():
     # fones = Monitor.query
-    return render_template('auth/fones_list.html')  # , fones=fones)
+    return render_template('auth/list_fones.html')  # , fones=fones)
 
 
 @login_required
 @auth.route('/mics_list', methods=['GET', 'POST'])
 def mics_list():
     # mics = Mic.query
-    return render_template('auth/mics_list.html')  # , mics=mics)
+    return render_template('auth/list_mics.html')  # , mics=mics)
 
 
 @login_required
 @auth.route('/webcams_list', methods=['GET', 'POST'])
 def webcams_list():
     # webcams = WebCam.query
-    return render_template('auth/webcams_list.html')  # , webcams=webcams)
+    return render_template('auth/list_webcams.html')  # , webcams=webcams)
 
 
 @login_required
 @auth.route('/computers_list', methods=['GET', 'POST'])
 def computers_list():
     # computers = Computer.query
-    return render_template('auth/computers_list.html')  # , computers=computers)
+    return render_template('auth/list_computers.html')  # , computers=computers)
 
 
 @login_required
 @auth.route('/users_list', methods=['GET', 'POST'])
 def users_list():
     # users = User.query
-    return render_template('auth/users_list.html')  # , users=users)
+    return render_template('auth/list_users.html')  # , users=users)
 
 
 @login_required
 @auth.route('/calls_list', methods=['GET', 'POST'])
 def calls_list():
     # calls = Call.query
-    return render_template('auth/calls_list.html')  # , calls=calls)
+    return render_template('auth/list_calls.html')  # , calls=calls)
 
 
 @auth.route('/api/equips')
@@ -516,7 +517,7 @@ def choose_equip_type():
         flash('Preenchimento Obrigatório!', 'fill')
         return redirect(url_for("auth.choose_equip_type"))
 
-    return render_template("auth/equip_add_choose_type.html", type_equips=type_equips, form=form)
+    return render_template("auth/add_equip_type.html", type_equips=type_equips, form=form)
 
 
 # @auth.route('/add_equip/<type>', methods=['GET'])
@@ -711,6 +712,7 @@ def add_webcam():
                 equip_user_id=user,
                 brand=request.form.get("brand"),
                 position=request.form.get("position"),
+                model=request.form.get("model"),
                 equip_registry=datetime.today().strftime('%d/%m/%Y'),
                 general_description=request.form.get("general_description"),
                 webcam_resolution=request.form.get("webcam_resolution"),
@@ -722,6 +724,7 @@ def add_webcam():
                 patrimony=request.form.get("patrimony"),
                 brand=request.form.get("brand"),
                 position=request.form.get("position"),
+                model=request.form.get("model"),
                 equip_registry=datetime.today().strftime('%d/%m/%Y'),
                 general_description=request.form.get("general_description"),
                 webcam_resolution=request.form.get("webcam_resolution"),
@@ -761,6 +764,7 @@ def add_fone():
                 equip_user_id=user,
                 brand=request.form.get("brand"),
                 position=request.form.get("position"),
+                model=request.form.get("model"),
                 equip_registry=datetime.today().strftime('%d/%m/%Y'),
                 general_description=request.form.get("general_description"),
                 fone_frequency=request.form.get("fone_frequency"),
@@ -775,6 +779,7 @@ def add_fone():
                 patrimony=request.form.get("patrimony"),
                 brand=request.form.get("brand"),
                 position=request.form.get("position"),
+                model=request.form.get("model"),
                 equip_registry=datetime.today().strftime('%d/%m/%Y'),
                 general_description=request.form.get("general_description"),
                 fone_frequency=request.form.get("fone_frequency"),
@@ -817,6 +822,7 @@ def add_mic():
                 brand=request.form.get("brand"),
                 position=request.form.get("position"),
                 equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                model=request.form.get("model"),
                 general_description=request.form.get("general_description"),
                 mic_frequency=request.form.get("mic_frequency"),
                 mic_impedance=request.form.get("mic_impedance"),
@@ -830,6 +836,7 @@ def add_mic():
                 brand=request.form.get("brand"),
                 position=request.form.get("position"),
                 equip_registry=datetime.today().strftime('%d/%m/%Y'),
+                model=request.form.get("model"),
                 general_description=request.form.get("general_description"),
                 mic_frequency=request.form.get("mic_frequency"),
                 mic_impedance=request.form.get("mic_impedance"),
@@ -853,32 +860,29 @@ def user_add():
     form = form_add_user()
 
     if form.validate_on_submit() and request.method == 'POST':
-
         lst_teams = request.form.get("user_team_id")
         novo_user = User(
             user_name=request.form.get("user_name"),
             user_register=request.form.get("user_register"),
-            user_team_id=lst_teams[1],
+            user_team_id=lst_teams[1],  # lst_teams é uma 'string' e não uma lista
             user_subteam_id=lst_teams[4] if len(lst_teams) == 5 else None
 
         )
         db.session.add(novo_user)
-        try:
-            db.session.commit()
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            error = str(e.__dict__['orig'])
-            return render_template("auth/add_error.html", error=error)
+        # try:
+        db.session.commit()
+        # except SQLAlchemyError as e:
+        #     db.session.rollback()
+        #     error = str(e.__dict__['orig'])
+        #     return render_template("auth/add_error.html", error=error, element="Usuário " + novo_user.user_name)
 
         return render_template("auth/add_success.html", title="Novo Usuário")
 
     return render_template("auth/add_user.html", form=form)
 
 
-# @auth.route('/delete_user/<int:user_id>', methods=['POST', 'GET'])
 @auth.route('/delete_user/', methods=['POST', 'GET'])
 def delete_user():
-
     print(1)
     if request.method == 'POST':
 
@@ -889,23 +893,214 @@ def delete_user():
         if Equipment.query.filter_by(equip_user_id=user_id).first():
             print(3)
             print("mememe")
-            return app.make_response('Hello, World', 201)
+            return make_response('Hello, World', 201)
 
         db.session.delete(user)
+        # try:
         db.session.commit()
-        try:
-            db.session.commit()
-        except :
-            db.session.rollback()
-            # error = str(.__dict__['orig'])
-            return render_template("auth/add_error.html")
+        # except:
+        #    db.session.rollback()
+        # error = str(.__dict__['orig'])
+        return render_template("auth/add_error.html")
 
     print("xx")
-    return render_template('auth/users_list.html')
+    return users_data()
 
-@auth.route('/call_add')
+
+@auth.route('/del_success')
+def del_success():
+    return render_template("auth/del_success.html")
+
+
+@auth.route('/call_add', methods=['POST', 'GET'])
 def call_add():
-    return "add_user"
+    form = form_add_call()
+    error = None
+
+    if form.validate_on_submit() and request.method == "POST":
+        new_call = Call(call_equipment_id=request.form.get("call_equipment"),
+                        call_user_id=User.query.filter_by(user_name=request.form.get("call_user")).first().user_id,
+                        call_open=datetime.now().strftime("%d/%b/%y %H:%M:%S"),
+                        )
+        db.session.add(new_call)
+        try:
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error, element="Chamado em " + new_call.call_open)
+
+        return render_template("auth/add_success.html", title="Chamado")
+    elif request.method == "POST":
+        error = "problema ao criar chamado!!"
+
+    return render_template("auth/add_call.html", form=form, error=error)
 
 
+@auth.route('user_edit/<id_user>', methods=['POST', 'GET'])
+def user_edit(id_user):
+    user_to_edit = User.query.filter_by(user_id=id_user).first()
 
+    form_class = form_edit_user(user_to_edit)
+    form = form_class()
+
+    if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
+        try:
+            user_to_edit.user_register = request.form.getlist("user_register"),
+            user_to_edit.user_name = request.form.get("user_name"),
+            user_to_edit.user_team_id = request.form.get("user_team_id"),
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error)
+        return render_template("auth/edit_success.html", title="Usuário Editado")
+    return render_template("auth/user_edit.html", form=form, user_to_edit=user_to_edit.user_id)
+
+
+@auth.route('/edit_item/<id_equip>', methods=['POST', 'GET'])
+def edit_item(id_equip):
+    equip_to_edit = Equipment.query.filter_by(equip_id=id_equip).first()
+
+    if equip_to_edit.type == 'equipments':
+        form_class = form_edit_equip(equip_to_edit)
+        form = form_class()
+        if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
+            try:
+                equip_to_edit.equip_user_id = request.form.getlist("equip_user"),
+                equip_to_edit.patrimony = request.form.get("patrimony"),
+                equip_to_edit.brand = request.form.get("brand"),
+                equip_to_edit.model = request.form.get("model"),
+                equip_to_edit.position = request.form.get("position"),
+                equip_to_edit.general_description = request.form.get("general_description"),
+                db.session.commit()
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                error = str(e.__dict__['orig'])
+                return render_template("auth/add_error.html", error=error)
+            return render_template("auth/edit_success.html", title="Equipamento Editado")
+        return render_template("auth/edit_equip.html", form=form, equip_to_edit=equip_to_edit.equip_id)
+    elif equip_to_edit.type == 'computers':
+        form = form_edit_computer(equip_to_edit)
+        if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
+            try:
+                equip_to_edit.equip_user_id = request.form.getlist("equip_user"),
+                equip_to_edit.patrimony = request.form.get("patrimony"),
+                equip_to_edit.brand = request.form.get("brand"),
+                equip_to_edit.position = request.form.get("position"),
+                equip_to_edit.model = request.form.get("model"),
+                equip_to_edit.general_description = request.form.get("general_description"),
+                equip_to_edit.computer_name = request.form.get("computer_name"),
+                equip_to_edit.computer_cpu = request.form.get("computer_cpu"),
+                equip_to_edit.computer_so = request.form.get("computer_so"),
+                equip_to_edit.computer_bios = request.form.get("computer_bios"),
+                equip_to_edit.computer_memory = request.form.get("computer_memory"),
+                equip_to_edit.computer_hd = request.form.get("computer_hd"),
+                equip_to_edit.computer_vga = request.form.get("computer_vga"),
+                equip_to_edit.computer_macaddress = request.form.get("computer_macaddress"),
+                db.session.commit()
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                error = str(e.__dict__['orig'])
+                return render_template("auth/add_error.html", error=error)
+            return render_template("auth/edit_success.html", title="Equipamento Editado")
+        return render_template("auth/edit_computer.html", form=form, equip_to_edit=equip_to_edit.equip_id)
+    elif equip_to_edit.type == 'monitors':
+        form = form_edit_monitor(equip_to_edit)
+        if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
+            user = User.query.filter_by(user_id=request.form.getlist("equip_user")[0]).first().user_id
+            try:
+                equip_to_edit.equip_user_id = request.form.getlist("equip_user"),
+                equip_to_edit.patrimony = request.form.get("patrimony"),
+                equip_to_edit.brand = request.form.get("brand"),
+                equip_to_edit.position = request.form.get("position"),
+                equip_to_edit.model = request.form.get("model"),
+                equip_to_edit.general_description = request.form.get("general_description"),
+                equip_to_edit.monitor_size = request.form.get("monitor_size"),
+                equip_to_edit.monitor_resolution = request.form.get("monitor_resolution"),
+                db.session.commit()
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                error = str(e.__dict__['orig'])
+                return render_template("auth/add_error.html", error=error)
+            return render_template("auth/edit_success.html", title="Monitor Editado")
+        return render_template("auth/edit_monitor.html", form=form, equip_to_edit=equip_to_edit.equip_id)
+    elif equip_to_edit.type == 'webcams':
+        form = form_edit_webcam(equip_to_edit)
+        if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
+            try:
+                equip_to_edit.equip_user_id = request.form.getlist("equip_user"),
+                equip_to_edit.patrimony = request.form.get("patrimony"),
+                equip_to_edit.brand = request.form.get("brand"),
+                equip_to_edit.position = request.form.get("position"),
+                equip_to_edit.model = request.form.get("model"),
+                equip_to_edit.general_description = request.form.get("general_description"),
+                equip_to_edit.webcam_resolution = request.form.get("webcam_resolution"),
+                db.session.commit()
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                error = str(e.__dict__['orig'])
+                return render_template("auth/add_error.html", error=error)
+            return render_template("auth/edit_success.html", title="WebCam Editada")
+        return render_template("auth/edit_webcam.html", form=form, equip_to_edit=equip_to_edit.equip_id)
+    elif equip_to_edit.type == 'fones':
+        form = form_edit_fone(equip_to_edit)
+        if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
+            try:
+                equip_to_edit.equip_user_id = request.form.getlist("equip_user"),
+                equip_to_edit.patrimony = request.form.get("patrimony"),
+                equip_to_edit.brand = request.form.get("brand"),
+                equip_to_edit.position = request.form.get("position"),
+                equip_to_edit.model = request.form.get("model"),
+                equip_to_edit.general_description = request.form.get("general_description"),
+                equip_to_edit.fone_frequency = request.form.get("fone_frequency"),
+                equip_to_edit.fone_driver = request.form.get("fone_driver"),
+                equip_to_edit.fone_impedance = request.form.get("fone_impedance "),
+                equip_to_edit.fone_noise_cancellation = request.form.get("fone_noise_cancellation"),
+                db.session.commit()
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                error = str(e.__dict__['orig'])
+                return render_template("auth/add_error.html", error=error)
+            return render_template("auth/edit_success.html", title="Fone Editado")
+        return render_template("auth/edit_fone.html", form=form, equip_to_edit=equip_to_edit.equip_id)
+    elif equip_to_edit.type == 'mics':
+        form = form_edit_mic(equip_to_edit)
+        if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
+            try:
+                equip_to_edit.equip_user_id = request.form.getlist("equip_user"),
+                equip_to_edit.patrimony = request.form.get("patrimony"),
+                equip_to_edit.brand = request.form.get("brand"),
+                equip_to_edit.position = request.form.get("position"),
+                equip_to_edit.model = request.form.get("model"),
+                equip_to_edit.general_description = request.form.get("general_description"),
+                equip_to_edit.mic_frequency = request.form.get("mic_frequency"),
+                equip_to_edit.mic_impedance = request.form.get("mic_impedance"),
+                equip_to_edit.mic_noise_cancellation = request.form.get("mic_noise_cancellation"),
+                db.session.commit()
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                error = str(e.__dict__['orig'])
+                return render_template("auth/add_error.html", error=error)
+            return render_template("auth/edit_success.html", title="Microfone Editado")
+        return render_template("auth/edit_mic.html", form=form, equip_to_edit=equip_to_edit.equip_id)
+    else:
+        return "Error line 1053 views"
+
+
+@auth.route('/detail_item/<id_equip>', methods=['POST', 'GET'])
+def detail_item(id_equip):
+    equip_detail = Equipment.query.filter_by(equip_id=id_equip).first()
+
+    if equip_detail.type == "equipments":
+        return render_template("auth/detail_equip.html", equip_detail=equip_detail)
+    elif equip_detail.type == "computers":
+        return render_template("auth/detail_computer.html", equip_detail=equip_detail)
+    elif equip_detail.type == "monitors":
+        return render_template("auth/detail_monitor.html", equip_detail=equip_detail)
+    elif equip_detail.type == "webcams":
+        return render_template("auth/detail_webcam.html", equip_detail=equip_detail)
+    elif equip_detail.type == "fones":
+        return render_template("auth/detail_fone.html", equip_detail=equip_detail)
+    elif equip_detail.type == "mics":
+        return render_template("auth/detail_mic.html", equip_detail=equip_detail)

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block metas %}
-    <meta charset="utf-8">
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
 {% endblock %}
 
 {% block title %}Hardware_Report{% endblock %}
@@ -17,7 +17,16 @@
 {% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-inverse" role="navigation">
+    {% if current_user.is_anonymous %}
+        <div class="navbar navbar-inverse" role="navigation">
+    {% elif not current_user.is_anonymous and not current_user.is_admin() %}
+        <div class="navbar navbar-inverse" role="navigation" style="background-color: cornflowerblue">
+    {% elif current_user.is_admin() and current_user.is_admin() %}
+        <div class="navbar navbar-inverse" role="navigation" style="background-color: crimson">
+    {% else %}
+        <div class="navbar navbar-inverse" role="navigation" style="background-color: blueviolet">
+        <div class="h1">Deu ruim</div>
+    {% endif %}
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -26,13 +35,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ url_for('main.index') }}">Hardware_Report</a>
+            <a class="navbar-brand" style="color: white" href="{{ url_for('main.index') }}">Hardware_Report</a>
         </div>
-        <div class="navbar-collapse">
+        <div  class="navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                 <li class="dropdown">
-                    <a href="#"  data-toggle="dropdown"><h5>{{ current_user.user_name|truncate(20) }}<b class="caret"></b></h5></a>
+                    <a href="#" style="color: white" data-toggle="dropdown"><h5>{{ current_user.user_name|truncate(20) }}<b class="caret"></b></h5></a>
                     <ul class="dropdown-menu">
                         <li><a class="btn bg-danger" href="{{ url_for('auth.logout') }}">Sair</a></li>
                     </ul>

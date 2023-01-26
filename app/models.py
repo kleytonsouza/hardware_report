@@ -11,7 +11,7 @@ class Equipment(db.Model):
     brand = db.Column(db.String(64), nullable=True)
     model = db.Column(db.String(64), nullable=True)
     position = db.Column(db.String(64), nullable=True)
-    equip_registry = db.Column(db.String(64))  # data que o resgitro foi criado
+    equip_registry = db.Column(db.String(64))  # data que o registro foi criado
     general_description = db.Column(db.String(64), nullable=True)
     type = db.Column(db.String(64), nullable=True)
     all_calls = db.relationship("Call", backref="equipments")
@@ -29,6 +29,16 @@ class Equipment(db.Model):
             'type': self.type
 
         }
+
+    def __repr__(self):
+        return str(self.equip_id)
+
+    def is_admin(self):
+        admin = Admin.query.filter(Admin.user_id == self.equip_user_id).first()
+        if admin is not None:
+            return True
+        else:
+            return False
 
     # def edit_equip(self):
     #     equip_new = Equipment.query.filter(Equipment.equip_id == self.equip_id).first()
@@ -49,7 +59,8 @@ class Equipment(db.Model):
 class Computer(Equipment):
     __tablename__ = "computers"
     __mapper_args__ = {'polymorphic_identity': 'computers'}
-    computer_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id', ondelete='CASCADE'), primary_key=True)
+    # computer_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id', ondelete='CASCADE'), primary_key=True)
+    computer_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), primary_key=True)
     computer_name = db.Column(db.String(64), nullable=False, unique=True)
     computer_cpu = db.Column(db.String(64))
     computer_so = db.Column(db.String(64))
@@ -63,7 +74,7 @@ class Computer(Equipment):
 
     def to_dict(self):
         return {
-            'computer_id': self.equip_id,
+            'computer_id': self.computer_id,
             'computer_user': User.query.filter(User.user_id == self.equip_user_id).first().user_name,
             'computer_name': self.computer_name,
             'patrimony': self.patrimony,
@@ -179,9 +190,10 @@ class Call(db.Model):
     call_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     call_equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.equip_id'), nullable=False)
     call_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    call_open = db.Column(db.String(64))
-    call_close = db.Column(db.String(64))
-    call_solution = db.Column(db.String(700))
+    call_open = db.Column(db.String(64), nullable=False)
+    call_close = db.Column(db.String(64), nullable=True)
+    call_technican = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False, server_default="0")
+    call_solution = db.Column(db.String(700), nullable=True)
 
     def to_dict(self):
         return {
@@ -193,6 +205,9 @@ class Call(db.Model):
             'call_user': User.query.filter(User.user_id == self.call_user_id).first().user_name,
 
         }
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 
 class Connection(db.Model):
@@ -227,11 +242,13 @@ class SubTeam(db.Model):
         return '<Nome %r>' % self.subteam_name
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "users"
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
     user_register = db.Column(db.String(64), nullable=True)
     user_name = db.Column(db.String(64), nullable=False)
+    user_pass = db.Column(db.String(64), nullable=False, default="Dia 2 de fevereiro é o dia mais lindo que há")
+    user_equipments = db.relationship("Equipment", backref="users")
     user_team_id = db.Column(db.Integer, db.ForeignKey('teams.team_id'), nullable=False)
     user_subteam_id = db.Column(db.Integer, db.ForeignKey('subteams.subteam_id'), nullable=True)
 
@@ -239,6 +256,28 @@ class User(db.Model):
         db.UniqueConstraint(
             user_register, user_name),
     )
+
+    def is_admin(self):
+        admin = Admin.query.filter(Admin.user_id == self.user_id).first()
+        if admin is not None:
+            return True
+        else:
+            return False
+
+    @property
+    def password(self):
+        raise AttributeError('não é permitido ler a senha')
+
+    def verify_password(self, password):
+        if self.user_pass == password and self.user_pass is not None:
+            return True
+        return False
+
+    def get_id(self):
+        return self.user_id
+
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
 
     def to_dict(self):
         get_subteam_name = self.user_subteam_id
@@ -259,23 +298,11 @@ class User(db.Model):
         return self.user_name
 
 
-class Admin(UserMixin, User):
+class Admin(User):
     __tablename__ = 'admins'
     admin_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), primary_key=True)
     admin_name = db.Column(db.String(64), unique=True, index=True)
-    admin_pass_wd = db.Column(db.String(64), nullable=False)
-
-    @property
-    def password(self):
-        raise AttributeError('não é permitido ler a senha')
-
-    def verify_password(self, password):
-        if self.admin_pass_wd == password and self.admin_pass_wd is not None:
-            return True
-        return False
-
-    def get_id(self):
-        return self.admin_id
+    #admin_pass_wd = db.Column(db.String(64), nullable=False)
 
     def __repr__(self):
         return '<Admin %r>' % self.admin_name
@@ -283,7 +310,7 @@ class Admin(UserMixin, User):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Admin.query.filter_by(admin_id=user_id).first()
+    return User.query.filter_by(user_id=user_id).first()
 
 
 @event.listens_for(Team.__table__, 'after_create')

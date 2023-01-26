@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+{% endblock %}
+
+{% block page_content %}
+    <div class="row panel" >
+        <h3>Usuários</h3>
+    </div>
+    <div class="row panel">
+        <div class="col-md-2 h3" style="margin-top: 25px">
+            <a href="{{ url_for('auth.equips_list' ) }}">
+                <button class="btn btn-default">
+                          Equipamentos
+                </button>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('auth.users_list' ) }}">
+                <button class="btn btn-info">
+                          Usuários
+                </button>
+            </a>
+        </div>
+        <div class="col-md-2 h3" style="margin-top: 25px">
+            <a href="{{ url_for('auth.calls_list' ) }}">
+                <button class="btn btn-default">
+                          Chamados
+                </button>
+            </a>
+        </div>
+        <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
+            <a href="{{ url_for('auth.user_add' ) }}">
+                <button class="btn btn-success">
+                          Adicionar
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <table id="data" class="display">
+        <thead>
+            <tr>
+                <th>ID do Usuário</th>
+                <th>Registro Funcional</th>
+                <th>Nome</th>
+                <th>Coordenção</th>
+                <th>SubCoordenação</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+        <div class="col-md-12" id="result"></div>
+    <div class="col-md-12" id="errormsg"></div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        ajax: '/auth/api/users',
+        serverSide: true,
+        columns: [
+          {data: 'user_id'},
+          {data: 'user_register'},
+          {data: 'user_name'},
+          {data: 'user_team_id'},
+          {data: 'user_subteam_id'},
+          {data: "action", "defaultContent":
+                  {% if (current_user.is_admin()) %}
+                          '<div style="text-align: center"><span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
+                          '<button style="margin-left: 8px" class="btn btn-danger" id="deleteitem">Deletar</button></span></div>'
+                  {% else %}
+                      '<div style="text-align: center"><button class="btn btn-info btnSelect id"detail">Detalhes</button></div>'
+                  {% endif %}
+          }
+        ],
+      });
+    });
+    $("#data").on('click', '.btnSelect', function () {
+        const currentRow = $(this).closest("tr");
+        const id_equip = currentRow.find("td:eq(0)").html();
+        this.id =="edit"
+            ? window.location = '/auth/user_edit/' + id_equip
+            : window.location = '/auth/detail_item/' + id_equip;
+    });
+
+    const csrftoken = $('meta[name=csrf-token]').attr('content')
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
+            }
+        }
+    })
+
+    $('#data').on('click', '#deleteitem', function() {
+        const table = $('#data').DataTable();
+        const user = table.row( $(this).parents('tr') ).data();
+        const user_id = user.user_id;
+
+        console.log(user);
+        console.log(user.user_name);
+
+        if (confirm("Deseja excluir o Usuário: " + user.user_name)) {
+            const request = $.ajax({
+                url: './delete_user/',
+                data: JSON.stringify({user_id: user_id}),
+                contentType: 'application/json;charset=utf-8',
+                type: 'POST',
+                success: function (response) {
+                    table.clear();
+                    table.draw();
+                    console.log(response["data"]);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr, ajaxOptions, thrownError);
+                    $("#errormsg").html('×ATENÇÃO! Contate o suporte técnico.');
+                }
+            })
+        }
+        //}
+        else{}
+    })
+
+    {#
+        $('#data').on('click', '#edititem', function() {
+            const table = $('#data').DataTable();
+            const row = $(this).parents('tr');
+            console.log(table.row( $(this).parents('tr') ).data().user_id);
+        });
+    #}
+
+
+  </script>
+{% endblock %}
