@@ -165,7 +165,7 @@ def users_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['user_id', 'user_register', 'user_name', 'user_team_id', 'user_subteam_id']:
+        if col_name not in ['user_id', 'user_register', 'user_name', 'user_team_id']:
             col_name = 'user_name'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(User, col_name)
@@ -864,8 +864,8 @@ def user_add():
         novo_user = User(
             user_name=request.form.get("user_name"),
             user_register=request.form.get("user_register"),
-            user_team_id=lst_teams[1],  # lst_teams é uma 'string' e não uma lista
-            user_subteam_id=lst_teams[4] if len(lst_teams) == 5 else None
+            user_team_id=lst_teams[1]  # lst_teams é uma 'string' e não uma lista
+
 
         )
         db.session.add(novo_user)

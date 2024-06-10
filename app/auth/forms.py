@@ -24,12 +24,12 @@ def form_add_type_equip():
 def form_add_user():
     class AddUserForm(FlaskForm):
         coords = []
-        for i in Team.query.all():
-            if SubTeam.query.filter(SubTeam.subteam_team_id == i.team_id).first() is not None:
-                for c in SubTeam.query.filter(SubTeam.subteam_team_id == i.team_id).all():
-                    coords.append(([i.team_id, c.subteam_id], i.team_name + " - " + c.subteam_name))
-            else:
-                coords.append((i.team_id, i.team_name))
+        # for i in Team.query.all():
+        #     if SubTeam.query.filter(SubTeam.subteam_team_id == i.team_id).first() is not None:
+        #         for c in SubTeam.query.filter(SubTeam.subteam_team_id == i.team_id).all():
+        #             coords.append(([i.team_id, c.subteam_id], i.team_name + " - " + c.subteam_name))
+        #     else:
+        #         coords.append((i.team_id, i.team_name))
 
         choices = coords
         choices.append((" ", "Selecione a Coordenação"))
@@ -52,12 +52,12 @@ def form_add_user():
 def form_edit_user(user):
     class EditUserForm(FlaskForm):
         coords = []
-        for i in Team.query.all():
-            if SubTeam.query.filter(SubTeam.subteam_team_id == i.team_id).first() is not None:
-                for c in SubTeam.query.filter(SubTeam.subteam_team_id == i.team_id).all():
-                    coords.append(([i.team_id, c.subteam_id], i.team_name + " - " + c.subteam_name))
-            else:
-                coords.append((i.team_id, i.team_name))
+        # for i in Team.query.all():
+        #     if SubTeam.query.filter(SubTeam.subteam_team_id == i.team_id).first() is not None:
+        #         for c in SubTeam.query.filter(SubTeam.subteam_team_id == i.team_id).all():
+        #             coords.append(([i.team_id, c.subteam_id], i.team_name + " - " + c.subteam_name))
+        #     else:
+        #         coords.append((i.team_id, i.team_name))
 
         choices = coords
         choices.append((" ", "Selecione a Coordenação"))
