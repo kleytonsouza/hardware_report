@@ -31,9 +31,9 @@
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 25px">
-            <a href="{{ url_for('auth.calls_list' ) }}">
+            <a href="{{ url_for('auth.list_history' ) }}">
                 <button class="btn btn-default">
-                          Chamados
+                          Histórico
                 </button>
             </a>
         </div>
@@ -50,7 +50,6 @@
         <thead>
             <tr>
                 <th>ID do Usuário</th>
-                <th>Registro Funcional</th>
                 <th>Nome</th>
                 <th>Time</th>
                 <th>Ação</th>
@@ -70,11 +69,9 @@
         ajax: '/auth/api/users',
         serverSide: true,
         columns: [
-          {data: 'user_id'},
-          {data: 'user_register'},
-          {data: 'user_name'},
-          {data: 'user_team_id'},
-          //#{data: 'user_subteam_id'},
+          {data: 'id'},
+          {data: 'name'},
+          {data: 'team_id'},
           {data: "action", "defaultContent":
                   {% if (current_user.is_admin()) %}
                           '<div style="text-align: center"><span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +

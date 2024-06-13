@@ -30,69 +30,67 @@
             </a>
         </div>
         <div class="col-md-2 h3" style="margin-top: 25px">
-            <a href="{{ url_for('auth.calls_list' ) }}">
+            <a href="{{ url_for('auth.list_history' ) }}">
                 <button class="btn btn-default">
-                    Chamados
+                    Histórico
                 </button>
             </a>
         </div>
         <div class="col-md-offset-4 col-md-2 h3 text-right" style="margin-top: 25px">
-            <a href="{{ url_for('auth.choose_equip_type' ) }}">
+            <a href="{{ url_for('auth.add_equip' ) }}">
                 <button class="btn btn-success">
                     Adicionar
                 </button>
             </a>
         </div>
     </div>
-    <div class="row panel">
-        <div class="col-md-2">
-            <a href="{{ url_for('auth.computers_list' ) }}">
-                <button class="btn btn-primary">
-                    Computadores
-                </button>
-            </a>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ url_for('auth.monitors_list' ) }}">
-                <button class="btn btn-primary">
-                    Monitores
-                </button>
-            </a>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ url_for('auth.fones_list' ) }}">
-                <button class="btn btn-primary">
-                    Fones
-                </button>
-            </a>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ url_for('auth.mics_list' ) }}">
-                <button class="btn btn-primary">
-                    Microfones
-                </button>
-            </a>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ url_for('auth.webcams_list' ) }}">
-                <button class="btn btn-primary">
-                    Webcams
-                </button>
-            </a>
-        </div>
-    </div>
+{#    <div class="row panel">#}
+{#        <div class="col-md-2">#}
+{#            <a href="{{ url_for('auth.computers_list' ) }}">#}
+{#                <button class="btn btn-primary">#}
+{#                    Computadores#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{#        <div class="col-md-2">#}
+{#            <a href="{{ url_for('auth.monitors_list' ) }}">#}
+{#                <button class="btn btn-primary">#}
+{#                    Monitores#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{#        <div class="col-md-2">#}
+{#            <a href="{{ url_for('auth.fones_list' ) }}">#}
+{#                <button class="btn btn-primary">#}
+{#                    Fones#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{#        <div class="col-md-2">#}
+{#            <a href="{{ url_for('auth.mics_list' ) }}">#}
+{#                <button class="btn btn-primary">#}
+{#                    Microfones#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{#        <div class="col-md-2">#}
+{#            <a href="{{ url_for('auth.webcams_list' ) }}">#}
+{#                <button class="btn btn-primary">#}
+{#                    Webcams#}
+{#                </button>#}
+{#            </a>#}
+{#        </div>#}
+{#    </div>#}
 
     {% block table_content %}
         <table id="data" class="display">
             <thead>
                 <tr>
-                    <th>Equip.</th>
+                    <th>Id</th>
+                    <th>Equipamento</th>
                     <th>Usuário</th>
-                    <th>Patrimônio</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Data de Registro</th>
                     <th>Tipo</th>
+                    <th>Data de Registro</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -110,13 +108,12 @@
                 ajax: '/auth/api/equips',
                 serverSide: true,
                 columns: [
-                    {data: 'equip_id'},
-                    {data: 'equip_user_id'},
-                    {data: 'patrimony', orderable: false},
-                    {data: 'brand'},
+                    {data: 'id'},
                     {data: 'model'},
-                    {data: 'equip_registry', orderable: false},
+                    //{data: 'patrimony', orderable: false},
+                    {data: 'user_id'},
                     {data: 'type'},
+                    {data: 'registry', orderable: false},
                     {
                         data: "actions", "defaultContent":
                             {% if (current_user.is_admin()) %}
