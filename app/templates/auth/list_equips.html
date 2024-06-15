@@ -6,7 +6,8 @@
     {{ super() }}
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 {% endblock %}
 
@@ -44,55 +45,18 @@
             </a>
         </div>
     </div>
-{#    <div class="row panel">#}
-{#        <div class="col-md-2">#}
-{#            <a href="{{ url_for('auth.computers_list' ) }}">#}
-{#                <button class="btn btn-primary">#}
-{#                    Computadores#}
-{#                </button>#}
-{#            </a>#}
-{#        </div>#}
-{#        <div class="col-md-2">#}
-{#            <a href="{{ url_for('auth.monitors_list' ) }}">#}
-{#                <button class="btn btn-primary">#}
-{#                    Monitores#}
-{#                </button>#}
-{#            </a>#}
-{#        </div>#}
-{#        <div class="col-md-2">#}
-{#            <a href="{{ url_for('auth.fones_list' ) }}">#}
-{#                <button class="btn btn-primary">#}
-{#                    Fones#}
-{#                </button>#}
-{#            </a>#}
-{#        </div>#}
-{#        <div class="col-md-2">#}
-{#            <a href="{{ url_for('auth.mics_list' ) }}">#}
-{#                <button class="btn btn-primary">#}
-{#                    Microfones#}
-{#                </button>#}
-{#            </a>#}
-{#        </div>#}
-{#        <div class="col-md-2">#}
-{#            <a href="{{ url_for('auth.webcams_list' ) }}">#}
-{#                <button class="btn btn-primary">#}
-{#                    Webcams#}
-{#                </button>#}
-{#            </a>#}
-{#        </div>#}
-{#    </div>#}
 
     {% block table_content %}
         <table id="data" class="display">
             <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Equipamento</th>
-                    <th>Usuário</th>
-                    <th>Tipo</th>
-                    <th>Data de Registro</th>
-                    <th>Ação</th>
-                </tr>
+            <tr>
+                <th>Id</th>
+                <th>Equipamento</th>
+                <th>Usuário Atual</th>
+                <th>Tipo</th>
+                <th>Data de Registro</th>
+                <th>Ação</th>
+            </tr>
             </thead>
             <tbody>
             </tbody>
@@ -115,14 +79,16 @@
                     {data: 'type'},
                     {data: 'registry', orderable: false},
                     {
-                        data: "actions", "defaultContent":
+                        data: "actions",
+                        "defaultContent":
                             {% if (current_user.is_admin()) %}
-                                '<div style="text-align: center"><span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
-                                '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span></div>'
+                                    '<div style="text-align: center"><span style="white-space:nowrap"><button class="btn btn-warning btnSelect" id="edit">Editar</button>' +
+                                    '<button style="margin-left: 8px" class="btn btn-info btnSelect" id"detail">Detalhes</button></span></div>'
                             {% else %}
                                 '<div style="text-align: center"><button class="btn btn-info btnSelect id"detail">Detalhes</button></div>'
                             {% endif %}
-                        , orderable: false
+                        ,
+                        orderable: false
                     }
                 ],
             });
@@ -130,7 +96,7 @@
             $("#data").on('click', '.btnSelect', function () {
                 const currentRow = $(this).closest("tr");
                 const id_equip = currentRow.find("td:eq(0)").html();
-                this.id =="edit"
+                this.id === "edit"
                     ? window.location = '/auth/edit_item/' + id_equip
                     : window.location = '/auth/detail_item/' + id_equip;
             });

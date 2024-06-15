@@ -8,22 +8,22 @@
 
 {% block page_content %}
     <div class="row panel" >
-         <h3>Detalhes do Usuário</h3>
+         <h3>Detalhes do Equipamento</h3>
     </div>
        <div class="row panel">
             <div class="form-group col-xs-6 col-sm-6 col-md-4 col-lg-12" style="padding-left:5px; padding-top:20px">
                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                      <label>Número do Patrimônio</label>
+                      <label>Número do Dev ID</label>
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input readonly class="form-control" value="{{ equip_detail.patrimony }}"/>
+                        <input readonly class="form-control" value="{{ equip_detail.devid }}"/>
                       </div>
                   </div>
                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                      <label>Registro do Usuário</label>
+                      <label>Usuário Atual</label>
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input readonly class="form-control" value="{{ equip_detail.equip_user_id }}"/>
+                        <input readonly class="form-control" value="{{ equip_detail.equip_to_dict()["user_id"] }}"/>
                       </div>
                   </div>
                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
@@ -34,10 +34,10 @@
                       </div>
                   </div>
                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                      <label>Posição na Sala</label>
+                      <label>Registrado por</label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
-                          <input readonly class="form-control" value="{{ equip_detail.position }}"/>
+                          <input readonly class="form-control" value="{{ equip_detail.equip_to_dict()["add_for"] }}"/>
                       </div>
                   </div>
                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
@@ -51,7 +51,7 @@
                       <label>Data de Registro</label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-plane"></i></span>
-                          <input readonly class="form-control" value="{{ equip_detail.equip_registry }}"/>
+                          <input readonly class="form-control" value="{{ equip_detail.registry }}"/>
                       </div>
                   </div>
                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
@@ -62,19 +62,19 @@
                       </div>
                   </div>
                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                      <label>Chamados</label>
+                      <label>Tipo</label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                          <input readonly class="form-control" value="{{ equip_detail.all_calls }}"/>
+                          <input readonly class="form-control" value="{{ equip_detail.type }}"/>
                       </div>
                   </div>
-                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                      <label>Conexões</label>
-                      <div class="input-group">
-                          <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                          <input readonly class="form-control" value="{{ equip_detail.all_connections }}"/>
-                      </div>
-                  </div>
+{#                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">#}
+{#                      <label>Conexões</label>#}
+{#                      <div class="input-group">#}
+{#                          <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>#}
+{#                          <input readonly class="form-control" value="{{ equip_detail.all_connections }}"/>#}
+{#                      </div>#}
+{#                  </div>#}
             </div>
        </div>
         <div class="panel-footer" style="background-color: white; border-top:0 ">

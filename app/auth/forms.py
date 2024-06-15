@@ -28,17 +28,17 @@ def form_add_user():
     class AddUserForm(FlaskForm):
         coords = []
         for i in Team.query.all():
-            coords.append((i.team_id, i.team_name))
+            coords.append((i.id, i.name))
 
         choices = coords
         choices.append((" ", "Selecione o Time"))
         # choices_sub = [(t.team_id, t.team_name) for t in SubTeam.query.distinct(SubTeam.subteam_id).all()]
         # choices_sub.append((" ", "Selecione a Subcoordenação"))
-        user_register = IntegerField('Registro Funcional',
+        register = IntegerField('Registro Funcional',
                                      render_kw={"placeholder": "Digite o Registro funcional", "autocomplete": "on"})
-        user_name = StringField('Nome do Usuário',
+        name = StringField('Nome do Usuário',
                                 render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
-        user_team_id = SelectField('Time',
+        team_id = SelectField('Time',
                                    choices=choices, default=" ",
                                    validators=[DataRequired()])
         # User_subteam_id = SelectField('Subcoordenação',
@@ -75,16 +75,20 @@ def form_add_equip():
         choices = [(s.id, s.name) for s in User.query.distinct(User.name).all()]
         # choices.append((" ", "Selecione o Usuário"))
         equip_user = SelectField('Usuário', choices=choices, validators=[DataRequired()])
-        devid = StringField('Tipo',
-                            render_kw={"placeholder": "Digite o DevId", "autocomplete": "on"})
+        devid = StringField('Dev ID',
+                            render_kw={"placeholder": "Digite o DevId", "autocomplete": "on"},
+                            validators=[DataRequired()])
         brand = StringField('Marca',
-                            render_kw={"placeholder": "Digite a Marca", "autocomplete": "on"})
+                            render_kw={"placeholder": "Digite a Marca", "autocomplete": "on"},
+                            validators=[DataRequired()])
         add_for = current_user.id
         model = StringField('Modelo',
-                            render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
-        equip_type = StringField('Tipo',
-                                 render_kw={"placeholder": "O Tipo do Equipamento", "autocomplete": "on"})
-        general_description = StringField('Descrição Geral', validators=[DataRequired()],
+                            render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"},
+                            validators=[DataRequired()])
+        type = StringField('Tipo',
+                           render_kw={"placeholder": "O Tipo do Equipamento", "autocomplete": "on"},
+                           validators=[DataRequired()])
+        general_description = StringField('Descrição Geral',
                                           render_kw={"placeholder": "Anotações pertinentes", "autocomplete": "on"})
         submit = SubmitField("Registrar")
 

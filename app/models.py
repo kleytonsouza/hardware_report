@@ -22,7 +22,7 @@ class Equipment(db.Model):
             'user_id': User.query.filter(User.id == self.user_id).first().name,
             'devid': self.devid,
             'brand': self.brand,
-            'add_for': self.add_for,
+            'add_for': User.query.filter(User.id == self.add_for).first().name,
             'model': self.model,
             'registry': self.registry,
             'general_description': self.general_description,
@@ -57,7 +57,7 @@ class EquipmentUsageHistory(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'equip_id': self.equi_id,
+            'equip_id':  self.equip_id,
             'date_receive': self.open,
             'date_return': self.close,
             'observation': self.observation,
@@ -81,7 +81,7 @@ class Team(db.Model):
 class User(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
-    register = db.Column(db.String(64), nullable=True)
+    # register = db.Column(db.String(64), nullable=True)
     name = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(64), nullable=False, default="Dia 2 de fevereiro é o dia mais lindo que há")
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'), nullable=False)
@@ -93,7 +93,7 @@ class User(UserMixin, db.Model):
     # )
 
     def is_admin(self):
-        admin = Admin.query.filter(Admin.admin_id == self.id).first()
+        admin = Admin.query.filter(Admin.user_id == self.id).first()
         if admin is not None:
             return True
         else:
@@ -118,7 +118,7 @@ class User(UserMixin, db.Model):
 
         return {
             'id': self.id,
-            'register': self.register,
+            # 'register': self.register,
             'name': self.name,
             'team_id': Team.query.filter(Team.id == self.team_id).first().name,
 

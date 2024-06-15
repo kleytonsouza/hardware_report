@@ -85,10 +85,10 @@
     });
     $("#data").on('click', '.btnSelect', function () {
         const currentRow = $(this).closest("tr");
-        const id_equip = currentRow.find("td:eq(0)").html();
-        this.id =="edit"
-            ? window.location = '/auth/user_edit/' + id_equip
-            : window.location = '/auth/detail_item/' + id_equip;
+        const id = currentRow.find("td:eq(0)").html();
+        this.id === "edit"
+            ? window.location = '/auth/user_edit/' + id
+            : window.location = '/auth/detail_user/' + id;
     });
 
     const csrftoken = $('meta[name=csrf-token]').attr('content')
