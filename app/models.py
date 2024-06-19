@@ -81,7 +81,7 @@ class Team(db.Model):
 class User(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
-    # register = db.Column(db.String(64), nullable=True)
+    register = db.Column(db.String(64), nullable=True)
     name = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(64), nullable=False, default="Dia 2 de fevereiro é o dia mais lindo que há")
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'), nullable=False)
