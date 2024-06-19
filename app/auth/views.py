@@ -237,7 +237,7 @@ def add_equip():
             db.session.rollback()
             error = str(e.__dict__['orig'])
             return render_template("auth/add_error.html", error=error)
-        return render_template("auth/add_success.html", title="Equipamento Genérico")
+        return render_template("auth/add_success.html", title="Equipamento")
     return render_template("auth/add_equip.html", form=form)
 
 
