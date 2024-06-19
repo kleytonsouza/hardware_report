@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField, SelectField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, SelectField, TextAreaField, DateField
 from wtforms.validators import DataRequired, Length
 
 from ..models import *
@@ -35,12 +37,12 @@ def form_add_user():
         # choices_sub = [(t.team_id, t.team_name) for t in SubTeam.query.distinct(SubTeam.subteam_id).all()]
         # choices_sub.append((" ", "Selecione a Subcoordenação"))
         register = IntegerField('Registro Funcional',
-                                     render_kw={"placeholder": "Digite o Registro funcional", "autocomplete": "on"})
+                                render_kw={"placeholder": "Digite o Registro funcional", "autocomplete": "on"})
         name = StringField('Nome do Usuário',
-                                render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
+                           render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
         team_id = SelectField('Time',
-                                   choices=choices, default=" ",
-                                   validators=[DataRequired()])
+                              choices=choices, default=" ",
+                              validators=[DataRequired()])
         # User_subteam_id = SelectField('Subcoordenação',
         #                               choices=choices_sub, default=" ",
         #                               validators=[DataRequired()])
@@ -142,14 +144,17 @@ def form_close_history():
 
 def form_open_history():
     class OpenHistoryForm(FlaskForm):
-        history_user = StringField('Identificação do Usuário')
-        history_equipment = SelectField('Identificação do Equipamento', choices=Equipment.query.all(),
-                                        render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
+        user_id = SelectField('Identificação do Usuário', choices=User.query.all(),
+                              render_kw={"placeholder": "Digite o usuário", "autocomplete": "on"})
+
+        equip_id = SelectField('Identificação do Equipamento', choices=Equipment.query.all(),
+                               render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
         # call_technician = SelectField('Coordenação', choices=Admin.query.all())
-        date_receive = TextAreaField('Data de Recebimento', render_kw={"placeholder": "Selecione a data de recebimento",
-                                                                       "autocomplete": "on"},
-                                     validators=[Length(min=10, max=370, message="Min 10 e max 370"),
-                                                 DataRequired()])
+        date_receive = DateField('Data do Recebimento', render_kw={"placeholder": "Selecione a data de recebimento"},
+                                 format="%d-%m-%Y",
+                                 validators=[DataRequired(message="A Data de Recebimento é obrigatória.")])
+        date_return = DateField('Data da Entrega', render_kw={"placeholder": "Selecione a data de entrega"},
+                                format="%d-%m-%Y", validators=[])
         observation = TextAreaField('Observação',
                                     render_kw={"placeholder": "Descreva uma observação (10 a 370 caracs.)",
                                                "autocomplete": "on"},

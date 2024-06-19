@@ -11,21 +11,22 @@
          <h3>Criar Novo Histórico</h3>
     </div>
     <form method="POST" action="{{ url_for('auth.add_history') }}">
-        {{ form.csrf_token }}
+{#        {{ form.csrf_token }}#}
+        {{ form.hidden_tag() }}
        <div class="row panel">
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left:5px; padding-top:20px">
                   <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                      {{ form.history_user.label }}
+                      {{ form.user_id.label }}
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        {{ form.history_user(class="form-control",  value=current_user.name) }}
+                        {{ form.user_id(class="form-control",  value=current_user.name) }}
                       </div>
                   </div>
                   <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                      {{ form.history_equipment.label }}
+                      {{ form.equip_id.label }}
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
-                        {{ form.history_equipment(class="form-control") }}
+                        {{ form.equip_id(class="form-control") }}
                       </div>
                   </div>
             </div>
@@ -33,23 +34,27 @@
                   <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
                       {{ form.date_receive.label }}
                       <div class="input-group">
-                          <span class="input-group-addon"><i class="glyphicon glyphicon-thumbs-down"></i></span>
-{#                          {{ form.problem_description(class="form-control") }}#}
-                          {{ form.date_receive( maxlength="400", cols="auto", rows="7",
-                          class="col-xs-10 col-sm-10 col-md-12 col-lg-12"|safe,
-                          placeholder="Min 10 e Max 370 Caracteres...", **{'data-ls-module':'charCounter'}) }}
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-thumbs-up"></i></span>
+                          {{ form.date_receive(class="form-control") }}
                       </div>
                   </div>
                   <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                      {{ form.observation.label }}
+                      {{ form.date_return.label }}
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-thumbs-up"></i></span>
-{#                          {{ form.fix_description(class="form-control") }}#}
-                          {{ form.observation( maxlength="400", cols="auto", rows="7",
-                          class="col-xs-10 col-sm-10 col-md-12 col-lg-12"|safe,
-                          placeholder="Min 10 e Max 370 Caracteres...", **{'data-ls-module':'charCounter'}) }}
+                          {{ form.date_return(class="form-control") }}
                       </div>
                   </div>
+                    <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                          {{ form.observation.label }}
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-thumbs-up"></i></span>
+{#                              {{ form.observation(class="form-control") }}#}
+                              {{ form.observation( maxlength="400", cols="auto", rows="7",
+                              class="form-control col-xs-10 col-sm-10 col-md-12 col-lg-12"|safe,
+                              placeholder="Min 10 e Max 370 Caracteres...", **{'data-ls-module':'charCounter'}) }}
+                          </div>
+                      </div>
             </div>
        </div>
         <div class="panel-footer" style="background-color: white; border-top:0 ">

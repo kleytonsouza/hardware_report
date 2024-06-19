@@ -47,12 +47,11 @@
     <table id="data" class="display">
         <thead>
         <tr>
-            <th>ID do Histórico</th>
             <th>Usuário</th>
             <th>Equipamento</th>
             <th>Recebido</th>
             <th>Devolvido</th>
-            <th>Observação</th>
+            <th>Açoes</th>
         </tr>
         </thead>
         <tbody>
@@ -67,20 +66,18 @@
                 ajax: '/auth/api/list_equipment_usage_history',
                 serverSide: true,
                 columns: [
-                    {data: 'id'},
-                    {data: 'equip_id'},
                     {data: 'user_id'},
+                    {data: 'equip_id'},
                     {data: 'date_receive'},
                     {data: 'date_return'},
-                    {data: 'observation'},
                     {
                         data: "actions", "defaultContent":
                             {% if (current_user.is_admin()) %}
                                     '<div style="text-align: center"><span style="white-space:nowrap;"><button class="btn btn-info btnSelect" id="edit">Detalhes</button>' +
-                                    '<button style="margin-left: 8px" class="btn btn-warning btnSelect" id"detail">Editar</button>' +
+                                    '<button style="margin-left: 8px" class="btn btn-warning btnSelect" id"detail">Entregar</button>' +
                                     '<button style="margin-left: 8px" class="btn btn-danger btnSelect" id"detail">Fechar</button></span></div>'
                             {% else %}
-                                '<button class="btn btn-info btnSelect id"detail">Detalhes</button>'
+                                '<button class="btn btn-info btnSelect" id"detail">Detalhes</button>'
                             {% endif %}
                         , orderable: false
                     }

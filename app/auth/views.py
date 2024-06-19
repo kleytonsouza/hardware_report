@@ -57,8 +57,8 @@ def users_list():
 @login_required
 @auth.route('/list_history', methods=['GET', 'POST'])
 def list_history():
-    history = EquipmentUsageHistory.query
-    return render_template('auth/list_history.html', history=history)
+    # history = EquipmentUsageHistory.query
+    return render_template('auth/list_history.html') #, history=history)
 
 
 @auth.route('/api/equips')
@@ -178,8 +178,8 @@ def list_equipment_usage_history():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['id', 'date_receive', 'date_return', 'name']:
-            col_name = 'call_id'
+        if col_name not in ['id', 'date_receive', 'date_return', 'user_id']:
+            col_name = 'id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(EquipmentUsageHistory, col_name)
         if descending:
@@ -195,8 +195,9 @@ def list_equipment_usage_history():
     query = query.offset(start).limit(length)
 
     # response
+
     return {
-        'data': [call.to_dict() for call in query],
+        'data': [history.to_dict() for history in query],
         'recordsFiltered': total_filtered,
         'recordsTotal': EquipmentUsageHistory.query.count(),
         'draw': request.args.get('draw', type=int),
@@ -301,22 +302,29 @@ def add_history():
     form = form_open_history()
     error = None
 
-    if form.validate_on_submit() and request.method == "POST":
+    print(form.validate_on_submit())
+    print(form.errors)
+    print(form.data)
+    if request.method == "POST":
         new_history = EquipmentUsageHistory(id=request.form.get("call_equipment"),
-                                            user_id=User.query.filter_by(name=request.form.get("call_user")).first().id,
-                                            open=datetime.now().strftime("%d/%b/%y %H:%M:%S"),
+                                            user_id=User.query.filter_by(name=request.form.get("user_id")).first().id,
+                                            equip_id=Equipment.query.filter_by(
+                                                id=request.form.get("equip_id")).first().id,
+                                            date_receive=request.form.get("date_receive"),
+                                            observation=request.form.get("observation"),
+                                            date_return=request.form.get("date_return"),
                                             )
         db.session.add(new_history)
         try:
             db.session.commit()
+            flash('Histórico criado com sucesso!', 'success')
+            return render_template("auth/add_success.html", title="Histórico")
         except SQLAlchemyError as e:
             db.session.rollback()
             error = str(e.__dict__['orig'])
             return render_template("auth/add_error.html", error=error, element="Histórico em " + new_history.id)
-
-        return render_template("auth/add_success.html", title="Histórico")
     elif request.method == "POST":
-        error = "problema ao criar chamado!!"
+        error = "problema ao criar histórico!!"
 
     return render_template("auth/add_history.html", form=form, error=error)
 

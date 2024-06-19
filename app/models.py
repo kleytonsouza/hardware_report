@@ -58,10 +58,10 @@ class EquipmentUsageHistory(db.Model):
         return {
             'id': self.id,
             'equip_id':  self.equip_id,
-            'date_receive': self.open,
-            'date_return': self.close,
+            'date_receive': self.date_receive,
+            'date_return': self.date_return,
             'observation': self.observation,
-            'user_id': User.query.filter(User.user_id == self.user_id).first().name,
+            'user_id': User.query.filter(User.id == self.user_id).first().name,
         }
 
     def __init__(self, **kwargs):

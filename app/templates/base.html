@@ -41,7 +41,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                 <li class="dropdown">
-                    <a href="#" style="color: white" data-toggle="dropdown"><h5>{{ current_user.user_name|truncate(20) }}<b class="caret"></b></h5></a>
+                    <a href="#" style="color: white" data-toggle="dropdown"><h5>{{ current_user.name|truncate(20) }}<b class="caret"></b></h5></a>
                     <ul class="dropdown-menu">
                         <li><a class="btn bg-danger" href="{{ url_for('auth.logout') }}">Sair</a></li>
                     </ul>
