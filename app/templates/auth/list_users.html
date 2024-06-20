@@ -68,6 +68,7 @@
       $('#data').DataTable({
         ajax: '/auth/api/users',
         serverSide: true,
+        pageLength: 25,
         columns: [
           {data: 'id'},
           {data: 'name'},
@@ -87,7 +88,7 @@
         const currentRow = $(this).closest("tr");
         const id = currentRow.find("td:eq(0)").html();
         this.id === "edit"
-            ? window.location = '/auth/user_edit/' + id
+            ? window.location = '/auth/edit_user/' + id
             : window.location = '/auth/detail_user/' + id;
     });
 
@@ -104,15 +105,15 @@
     $('#data').on('click', '#deleteitem', function() {
         const table = $('#data').DataTable();
         const user = table.row( $(this).parents('tr') ).data();
-        const user_id = user.user_id;
+        const id = user.id;
 
         console.log(user);
-        console.log(user.user_name);
+        console.log(user.name);
 
-        if (confirm("Deseja excluir o Usuário: " + user.user_name)) {
+        if (confirm("Deseja excluir o Usuário: " + user.name)) {
             const request = $.ajax({
                 url: './delete_user/',
-                data: JSON.stringify({user_id: user_id}),
+                data: JSON.stringify({id: id}),
                 contentType: 'application/json;charset=utf-8',
                 type: 'POST',
                 success: function (response) {

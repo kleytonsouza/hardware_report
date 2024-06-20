@@ -54,19 +54,15 @@ def form_edit_user(user):
     class EditUserForm(FlaskForm):
         coords = []
         for i in Team.query.all():
-            coords.append((i.team_id, i.team_name))
+            coords.append((i.id, i.name))
 
         choices = coords
-        choices.append((" ", "Selecione a Coordenação"))
-        # choices_sub = [(t.team_id, t.team_name) for t in SubTeam.query.distinct(SubTeam.subteam_id).all()]
-        # choices_sub.append((" ", "Selecione a Subcoordenação"))
-        # user_register = IntegerField('Registro Funcional', default=user.user_register,
-        #                              render_kw={"placeholder": "Digite o Registro funcional", "autocomplete": "on"})
-        user_name = StringField('Nome do Usuário', default=user.user_name,
-                                render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
-        user_team_id = SelectField('Time', default=user.user_team_id,
-                                   choices=choices,
-                                   validators=[DataRequired()])
+        choices.append((" ", "Selecione o Time"))
+        name = StringField('Nome do Usuário', default=user.name,
+                           render_kw={"placeholder": "Digite o nome", "autocomplete": "on"})
+        team_id = SelectField('Time', default=user.team_id,
+                              choices=choices,
+                              validators=[DataRequired()])
         submit = SubmitField("Registrar")
 
     return EditUserForm
@@ -99,19 +95,19 @@ def form_add_equip():
 
 def form_edit_equip(equip):
     class EditEquipForm(FlaskForm):
-        choices = [(s.user_id, s.user_name) for s in User.query.distinct(User.user_name).all()]
+        choices = [(s.id, s.name) for s in User.query.distinct(User.name).all()]
         # choices.append((" ", "Selecione o Usuário"))
         equip_user = SelectField('Usuário',
-                                 choices=choices, default=equip.equip_user_id,
+                                 choices=choices, default=equip.user_id,
                                  validators=[DataRequired()])
-        patrimony = StringField('Patrimonio', default=equip.patrimony,
-                                render_kw={"placeholder": "Digite o Patrimonio", "autocomplete": "on"})
         brand = StringField('Marca', default=equip.brand,
                             render_kw={"placeholder": "Digite a Marca", "autocomplete": "on"})
+        devid = StringField('DevId', default=equip.devid,
+                            render_kw={"placeholder": "Digite o DevI", "autocomplete": "on"})
         model = StringField('Modelo', default=equip.model,
                             render_kw={"placeholder": "Digite o modelo", "autocomplete": "on"})
-        position = StringField('Posição', default=equip.position,
-                               render_kw={"placeholder": "Posição do Equipamento", "autocomplete": "on"})
+        type = StringField('Tipo', default=equip.type,
+                           render_kw={"placeholder": "Tipo do Equipamento", "autocomplete": "on"})
         general_description = StringField('Descrição Geral', validators=[DataRequired()],
                                           default=equip.general_description,
                                           render_kw={"placeholder": "Descreva caracteristicas", "autocomplete": "on"})

@@ -10,15 +10,15 @@
     <div class="row panel" >
          <h3>Editar Usuário</h3>
     </div>
-    <form method="POST" action="{{ url_for('auth.user_edit', id_user=user_to_edit) }}">
+    <form method="POST" action="{{ url_for('auth.edit_user', id_user=user_to_edit) }}">
         {{ form.csrf_token }}
        <div class="row panel">
             <div class="form-group col-xs-6 col-sm-6 col-md-4 col-lg-12" style="padding-left:5px; padding-top:20px">
                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                      {{ form.user_name.label }}
+                      {{ form.name.label }}
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        {{ form.user_name(class="form-control", default="Selecione") }}
+                        {{ form.name(class="form-control", default="Selecione") }}
                       </div>
                   </div>
 {#                  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">#}
@@ -29,10 +29,10 @@
 {#                      </div>#}
 {#                  </div>#}
                   <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                      {{ form.user_team_id.label }}
+                      {{ form.team_id.label }}
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
-                          {{ form.user_team_id(class="form-control") }}
+                          {{ form.team_id(class="form-control") }}
                       </div>
                   </div>
             </div>

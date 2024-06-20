@@ -11,7 +11,7 @@ class Equipment(db.Model):
     devid = db.Column(db.String(64), nullable=True, unique=True)
     brand = db.Column(db.String(64), nullable=True)
     model = db.Column(db.String(64), nullable=True)
-    add_for = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    # add_for = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     registry = db.Column(db.String(64))
     general_description = db.Column(db.String(64), nullable=True)
     type = db.Column(db.String(64), nullable=True)
@@ -23,7 +23,7 @@ class Equipment(db.Model):
             'user_id': User.query.filter(User.id == self.user_id).first().name,
             'devid': self.devid,
             'brand': self.brand,
-            'add_for': User.query.filter(User.id == self.add_for).first().name,
+            # 'add_for': User.query.filter(User.id == self.add_for).first().name,
             'model': self.model,
             'registry': self.registry,
             'general_description': self.general_description,
@@ -86,7 +86,8 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(64), nullable=False, default="Dia 2 de fevereiro é o dia mais lindo que há")
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'), nullable=False)
-    all_equipments = db.relationship("Equipment", backref="equipments", foreign_keys='Equipment.user_id')
+    all_equipments = db.relationship("EquipmentUsageHistory", backref="equipment_usage_histories",
+                                     foreign_keys='EquipmentUsageHistory.user_id')
 
     # __table_args__ = (
     #     db.UniqueConstraint(

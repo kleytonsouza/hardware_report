@@ -58,7 +58,7 @@ def users_list():
 @auth.route('/list_history', methods=['GET', 'POST'])
 def list_history():
     # history = EquipmentUsageHistory.query
-    return render_template('auth/list_history.html') #, history=history)
+    return render_template('auth/list_history.html')  # , history=history)
 
 
 @auth.route('/api/equips')
@@ -70,7 +70,6 @@ def equips_data():
         query = db.session.query(Equipment).join(User).filter(db.or_(
             Equipment.id.like(f'%{search}%'),
             Equipment.type.like(f'%{search}%'),
-            Equipment.registry.like(f'%{search}%'),
             Equipment.model.like(f'%{search}%'),
             User.name.like(f'%{search}%')
         ))
@@ -84,7 +83,7 @@ def equips_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['id', 'type', 'model', 'registry', 'user_id']:
+        if col_name not in ['id', 'type', 'model', 'user_id']:
             col_name = 'id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(Equipment, col_name)
@@ -117,7 +116,6 @@ def users_data():
     if search:
         query = db.session.query(User).join(Team).filter(db.or_(
             User.name.like(f'%{search}%'),
-            User.register.like(f'%{search}%'),
             Team.name.like(f'%{search}%')
         ))
 
@@ -130,7 +128,7 @@ def users_data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['id', 'register', 'name', 'team_id']:
+        if col_name not in ['id', 'name', 'team_id']:
             col_name = 'name'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(User, col_name)
@@ -268,25 +266,21 @@ def user_add():
 
 @auth.route('/delete_user/', methods=['POST', 'GET'])
 def delete_user():
-    print(1)
     if request.method == 'POST':
+        error = ""
+        user_id = request.get_json()["id"]
+        user = User.query.filter_by(id=user_id).first()
 
-        user_id = request.get_json()["user_id"]
-
-        user = User.query.filter_by(user_id=user_id).first()
-
-        if Equipment.query.filter_by(equip_user_id=user_id).first():
-            print(3)
-            print("mememe")
-            return make_response('Hello, World', 201)
+        if Equipment.query.filter_by(user_id=user_id).first():
+            return make_response('Usuário possui equipamento(s)', 201)
 
         db.session.delete(user)
-        # try:
-        db.session.commit()
-        # except:
-        #    db.session.rollback()
-        # error = str(.__dict__['orig'])
-        return render_template("auth/add_error.html")
+        try:
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+        return render_template("auth/add_error.html", error=error, element="")
 
     print("xx")
     return users_data()
@@ -329,9 +323,9 @@ def add_history():
     return render_template("auth/add_history.html", form=form, error=error)
 
 
-@auth.route('user_edit/<id_user>', methods=['POST', 'GET'])
-def user_edit(id_user):
-    user_to_edit = User.query.filter_by(user_id=id_user).first()
+@auth.route('edit_user/<id_user>', methods=['POST', 'GET'])
+def edit_user(id_user):
+    user_to_edit = User.query.filter_by(id=id_user).first()
 
     form_class = form_edit_user(user_to_edit)
     form = form_class()
@@ -339,41 +333,39 @@ def user_edit(id_user):
     if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
         try:
             # user_to_edit.user_register = request.form.getlist("user_register"),
-            user_to_edit.user_name = request.form.get("user_name"),
-            user_to_edit.user_team_id = request.form.get("user_team_id"),
+            user_to_edit.name = request.form.get("name"),
+            user_to_edit.team_id = request.form.get("team_id"),
             db.session.commit()
         except SQLAlchemyError as e:
             db.session.rollback()
             error = str(e.__dict__['orig'])
             return render_template("auth/add_error.html", error=error)
         return render_template("auth/edit_success.html", title="Usuário Editado")
-    return render_template("auth/user_edit.html", form=form, user_to_edit=user_to_edit.user_id)
+    return render_template("auth/edit_user.html", form=form, user_to_edit=user_to_edit.id)
 
 
 @auth.route('/edit_item/<id_equip>', methods=['POST', 'GET'])
 def edit_item(id_equip):
     equip_to_edit = Equipment.query.filter_by(id=id_equip).first()
 
-    if equip_to_edit.type == 'equipments':
-        form_class = form_edit_equip(equip_to_edit)
-        form = form_class()
-        if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
-            try:
-                equip_to_edit.user_id = request.form.getlist("equip_user"),
-                equip_to_edit.type = request.form.get("type"),
-                equip_to_edit.brand = request.form.get("brand"),
-                equip_to_edit.model = request.form.get("model"),
-                equip_to_edit.position = request.form.get("position"),
-                equip_to_edit.general_description = request.form.get("general_description"),
-                db.session.commit()
-            except SQLAlchemyError as e:
-                db.session.rollback()
-                error = str(e.__dict__['orig'])
-                return render_template("auth/add_error.html", error=error)
-            return render_template("auth/edit_success.html", title="Equipamento Editado")
-        return render_template("auth/edit_equip.html", form=form, equip_to_edit=equip_to_edit.equip_id)
-    else:
-        return "Error line 1053 views"
+    form_class = form_edit_equip(equip_to_edit)
+    form = form_class()
+
+    if form.validate_on_submit() and request.method == 'POST' and current_user.is_admin():
+        try:
+            # equip_to_edit.user_id = request.form.getlist("equip_user"),
+            equip_to_edit.type = request.form.get("type"),
+            equip_to_edit.brand = request.form.get("brand"),
+            equip_to_edit.model = request.form.get("model"),
+            equip_to_edit.devid = request.form.get("devid"),
+            equip_to_edit.general_description = request.form.get("general_description"),
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            error = str(e.__dict__['orig'])
+            return render_template("auth/add_error.html", error=error)
+        return render_template("auth/edit_success.html", title="Equipamento Editado")
+    return render_template("auth/edit_equip.html", form=form, equip_to_edit=equip_to_edit)
 
 
 @auth.route('/detail_item/<id_equip>', methods=['POST', 'GET'])
