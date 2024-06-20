@@ -1,6 +1,7 @@
-from . import db, login_manager
 from flask_login import UserMixin
 from sqlalchemy import event
+
+from . import db, login_manager
 
 
 class Equipment(db.Model):
@@ -57,7 +58,7 @@ class EquipmentUsageHistory(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'equip_id':  self.equip_id,
+            'equip_id': self.equip_id,
             'date_receive': self.date_receive,
             'date_return': self.date_return,
             'observation': self.observation,
@@ -93,7 +94,7 @@ class User(UserMixin, db.Model):
     # )
 
     def is_admin(self):
-        admin = Admin.query.filter(Admin.user_id == self.id).first()
+        admin = Admin.query.filter(Admin.admin_id == self.id).first()
         if admin is not None:
             return True
         else:
@@ -130,8 +131,9 @@ class User(UserMixin, db.Model):
 
 class Admin(User):
     __tablename__ = 'admins'
-    admin_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    # admin_id = db.Column(db.Integer, autoincrement=True, primary_key=True, nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    admin_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     admin_name = db.Column(db.String(64), unique=True)
 
     # admin_pass_wd = db.Column(db.String(64), nullable=False)
@@ -151,7 +153,7 @@ def insert_initial_values(*args, **kwargs):
     db.session.add(Team(id=2, name="Linkin Dart", leader="Rodrigo"))
     db.session.add(Team(id=3, name="QA", leader="Diana Souza"))
     db.session.add(Team(id=4, name="Produto", leader="Produto"))
-    db.session.add(Team(id=5, name="Generico", leader="Generico"))
+    db.session.add(Team(id=5, name="Genérico", leader="Genérico"))
     db.session.add(Team(id=6, name="PO", leader="Valeria Villaverde"))
     db.session.add(Team(id=7, name="SM", leader="Uriel Boscolo"))
     db.session.commit()
@@ -159,28 +161,27 @@ def insert_initial_values(*args, **kwargs):
 
 @event.listens_for(User.__table__, 'after_create')
 def insert_initial_values3(*ars, **kwargs):
-    db.session.add(User(register="1",
-                        name="Alexandre Maesato", team_id=1))
-    db.session.add(User(register="2",
-                        name="Uriel Boscolo", team_id=7))
-    db.session.add(User(register="3",
-                        name="Rodrigo Knop", team_id=1))
-    db.session.add(User(register="4",
-                        name="Jean Will", team_id=1))
-    db.session.add(User(register="5",
-                        name="Altieres ", team_id=1))
-    db.session.add(User(register="6",
-                        name="Douglas Novaki", team_id=1))
-    db.session.add(User(register="7",
-                        name="Kleyton Lucas de Souza", team_id=1))
-    db.session.add(User(register="8",
-                        name="Igor Alfredo Fortti", team_id=1))
-    db.session.add(User(register="9", name="Andrew Oliveira", team_id=1))
-    db.session.add(User(register="10", name="Diana Souza", team_id=3))
-    db.session.add(User(register="11", name="Sarah Silva", team_id=3))
-    db.session.add(User(register="12",
-                        name="Alessandra Silva", team_id=3))
-    db.session.add(User(register="13", name="Nelson Gonzales", team_id=3))
-    db.session.add(User(register="14",
-                        name="Valeria VillaVerde", team_id=6))
+    db.session.add(User(
+        name="Alexandre Maesato", team_id=1))
+    db.session.add(User(
+        name="Uriel Boscolo", team_id=7))
+    db.session.add(User(
+        name="Rodrigo Knop", team_id=1))
+    db.session.add(User(
+        name="Jean Will", team_id=1))
+    db.session.add(User(
+        name="Altieres ", team_id=1))
+    db.session.add(User(
+        name="Douglas Novaki", team_id=1))
+    db.session.add(User(
+        name="Kleyton Lucas de Souza", team_id=1))
+    db.session.add(User(
+        name="Igor Alfredo Fortti", team_id=1))
+    db.session.add(User(name="Andrew Oliveira", team_id=1))
+    db.session.add(User(name="Diana Souza", team_id=3))
+    db.session.add(User(name="Sarah Silva", team_id=3))
+    db.session.add(User(
+        name="Alessandra Silva", team_id=3))
+    db.session.add(User(name="Nelson Gonzales", team_id=3))
+    db.session.add(User(name="Valeria VillaVerde", team_id=6))
     db.session.commit()
